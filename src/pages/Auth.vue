@@ -112,8 +112,8 @@ import HeaderTop from '../components/app/HeaderTop'
 
 export default {
   data: () => ({
-    form: true,
     response: [],
+    preloaderMessage : 'Подождите,идет авторизация пользователя',
     authData: {
       email: '',
       password: ''

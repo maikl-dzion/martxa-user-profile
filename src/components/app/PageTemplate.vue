@@ -5,7 +5,9 @@
     <HeaderPanel/>
     <!-- heared area end -->
 
-    <slot></slot>
+    <div class="container" >
+      <slot></slot>
+    </div>
 
     <!-- footer-area start  -->
     <Footer/>

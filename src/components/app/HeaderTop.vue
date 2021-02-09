@@ -13,8 +13,11 @@
             <div class="header-top-right text-right">
               <ul>
                 <li><router-link tag="a" to="/page/register" >Регистрация</router-link></li>
+                <li><span style="color:white" >|</span></li>
                 <template v-if="userId" >
                   <li><a @click="logout" href="#" >Выход</a></li>
+                  <li><span style="color:white" >|</span></li>
+                  <li> <UserInfoPanel style="color:white" /> </li>
                 </template>
                 <template v-else >
                   <li><router-link tag="a" to="/page/auth" >Войти</router-link></li>
@@ -38,6 +41,9 @@
 </template>
 
 <script>
+
+import UserInfoPanel from '../../components/app/UserInfoPanel'
+
 export default {
   name: 'Header',
   data () {
@@ -45,6 +51,10 @@ export default {
       userId: 0,
       userName : '',
     }
+  },
+
+  components : {
+    UserInfoPanel
   },
 
   created () {

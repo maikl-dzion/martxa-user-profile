@@ -103,11 +103,9 @@ export default {
   }),
 
   created: function () {
-    this.userId = this.store('user_id')
-    if (!this.userId)
-      this.$router.push('/page/auth')
 
-    this.userName = this.store('user_name')
+    this.getCurrentUserInfo()
+
     this.linkItem.user_id = this.userId
     this.getLinksByUserId()
   },
