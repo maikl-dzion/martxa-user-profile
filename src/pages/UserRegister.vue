@@ -21,11 +21,11 @@
       >Перейти на страницу авторизации</router-link>
 
 
-      <h3 class="sidebar-title">Регистрация</h3>
+      <h3 class="sidebar-title" style="margin-top:10px" >Регистрация</h3>
       <hr/>
 
       <div class="col-md-12 col-xs-12">
-        <div class="faq-form form-style">
+        <div class="faq-form form-style" style="border:0px red solid; margin-bottom:20px;">
 
           <form id="cf" @submit.prevent="">
             <div class="row">
@@ -94,13 +94,10 @@
                 </div>
               </div>
 
-              <!--            <div class="col-xs-12">-->
-              <!--              <span>Your Questions</span>-->
-              <!--              <textarea class="contact-textarea" placeholder="Questions" id="msg" name="msg"></textarea>-->
-              <!--            </div>-->
+              <div class="col-xs-12"> <hr/></div>
 
               <div class="col-xs-12">
-                <hr/>
+
                 <button @click="save()" id="submit"
                         class="cont-submit btn-contact btn-style" name="submit">Сохранить
                 </button>

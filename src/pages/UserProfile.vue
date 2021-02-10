@@ -25,9 +25,11 @@
                 <div class="author-wrap">
                   <div class="author-img">
                     <img src="/assets/images/user-not-photo.jpg" alt="" style="border-radius: 0px" >
+                    <span>Загрузить фото</span>
+                    <input type="file" name="user-avatar" placeholder="Загрузить фото">
                   </div>
                   <div class="author-info">
-                    <h3>{{userInfo.name}}</h3>
+                    <h4>{{userInfo.name}}</h4>
                     <span>логин : {{userInfo.login}}</span>
 <!--                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat, molestiae.</p>-->
                     <p>Дата регистрации: <br>{{userInfo.created_at}}</p>
@@ -88,7 +90,7 @@
                             <div class="input-label"><div>Новый пароль</div></div>
                           </div>
                           <div class="col-xs-5">
-                            <input v-model="newPassword.new_password"
+                            <input v-model="newPassword.password"
                                    required="true" type="text" placeholder="Новый пароль">
                           </div>
                         </div>
@@ -100,10 +102,14 @@
                             <div class="input-label"><div>Повторить пароль</div></div>
                           </div>
                           <div class="col-xs-5">
-                            <input v-model="newPassword.repeat_password"
+                            <input v-model="newPassword.repeat_pwd"
                                    required="true" type="text" placeholder="Новый пароль">
                           </div>
                         </div>
+                      </div>
+
+                      <div class="col-xs-12" style="color:red" >
+                         {{newPwdCompareWarn}}
                       </div>
 
                       <div class="col-xs-12"><hr/>
@@ -148,8 +154,12 @@
                                   <div style="color:red; font-weight: bold; margin-left:10px;">*</div>
                                 </div>
                               </div>
-                              <div class="col-xs-8">
+                              <div class="col-xs-6">
                                 <input v-model="userInfo.email" required="true" type="text" placeholder="Email">
+                              </div>
+                              <div class="col-xs-2">
+                                <a @click="emailVerify()" style="cursor:pointer"
+                                        class="cont-submit btn-contact btn-style" >Заверить</a>
                               </div>
                             </div>
                           </div>
@@ -170,8 +180,12 @@
                               <div class="col-xs-4">
                                 <div class="input-label">Телефон</div>
                               </div>
-                              <div class="col-xs-8">
+                              <div class="col-xs-6">
                                 <input v-model="userInfo.phone" type="text" placeholder="Телефон">
+                              </div>
+                              <div class="col-xs-2">
+                                <a @click="phoneVerify()" style="cursor:pointer"
+                                   class="cont-submit btn-contact btn-style" >Заверить</a>
                               </div>
                             </div>
                           </div>
@@ -198,8 +212,8 @@
                           <div class="col-xs-12"><hr/></div>
 
                           <div class="col-xs-12">
-                            <button @click="saveUserInfo()" class="cont-submit btn-contact btn-style" name="submit">
-                              Сохранить</button>
+                            <button @click="saveUserInfo()"
+                                    class="cont-submit btn-contact btn-style" >Сохранить</button>
                           </div>
 
                         </div>
@@ -245,8 +259,8 @@ export default {
   data: () => ({
     tab: null,
     newPassword: {
-      new_password: '',
-      repeat_password: ''
+      password: '',
+      repeat_pwd: ''
     }
   }),
 
@@ -259,25 +273,54 @@ export default {
     this.getUsersList()
   },
 
+  computed : {
+      newPwdCompareWarn() {
+          return this.compareNewPassword()
+      }
+  },
+
   methods: {
 
-    save () {
+    // save () {
+    //
+    // },
+    //
+    // saveResponseHandle (response) {
+    //   const resp = this.saveResponse(response)
+    //   if (resp.status) {
+    //     alert('Успешное изменение')
+    //   } else {
+    //     alert('Не удалось изменить -' + resp.error)
+    //   }
+    //   this.afterSaveActions()
+    // },
+    //
+    // afterSaveActions () {},
+
+    emailVerify() {
 
     },
 
-    saveResponseHandle (response) {
-      const resp = this.saveResponse(response)
-      if (resp.status) {
-        alert('Успешное изменение')
-      } else {
-        alert('Не удалось изменить -' + resp.error)
-      }
-      this.afterSaveActions()
+    phoneVerify() {
+
     },
 
-    afterSaveActions () {},
+    compareNewPassword() {
+      if(this.newPassword.password != this.newPassword.repeat_pwd)
+        return 'Пароли не совпадают'
+      return ''
+    },
 
     changePassword () {
+
+      let message = this.compareNewPassword()
+
+      if(message) {
+        this.responseMessage = message
+        this.responseColor = 'red'
+        return false
+      }
+
       this.preloader = true
       this.responseColor = ''
       const data = this.newPassword
@@ -307,7 +350,10 @@ export default {
     },
 
     responseUserInfoHandle(response) {
+
       this.preloader = false
+      this.getUserInfo()
+
       const state = this.saveResponse(response)
       if (!state.status) {
         this.responseMessage = 'Не удалось обновить данные пользователя -' + state.error

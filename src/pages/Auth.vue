@@ -18,10 +18,11 @@
       ><div v-if="response.error" >{{response.error}}</div>
       </InfoMessage>
 
-      <h3 class="sidebar-title">Авторизация</h3><hr/>
+      <h3 class="sidebar-title" style="margin-top:10px" >Авторизация</h3><hr/>
 
-      <div class="col-md-12 col-xs-12"><div class="faq-form form-style">
-        <form id="cf" @submit.prevent="" ><div class="row">
+      <div class="col-md-12 col-xs-12">
+        <div class="faq-form form-style" style="border:0px red solid; margin-bottom:20px;">
+        <form  @submit.prevent="" ><div class="row">
 
               <div class="col-xs-12">
                 <div class="row">
@@ -36,7 +37,7 @@
                 </div>
               </div>
 
-              <div class="col-xs-12">
+              <div v-if="!forgotPwd" class="col-xs-12">
                 <div class="row">
                   <div class="col-xs-2">
                     <div class="input-label">
@@ -49,10 +50,28 @@
                 </div>
               </div>
 
-              <div class="col-xs-12"><hr/>
-                <button @click="auth()" id="submit"
-                        class="cont-submit btn-contact btn-style" name="submit">Войти
-                </button>
+              <div class="col-xs-12"><hr/></div>
+
+              <div v-if="!forgotPwd" class="col-xs-12">
+                <div class="row">
+                  <div class="col-xs-3">
+                     <button @click="auth()" name="submit"
+                            class="cont-submit btn-contact btn-style" > Войти</button>
+                  </div>
+                  <div class="col-xs-9">
+                     <a @click="forgotPwd = true"
+                            class="cont-submit btn-contact btn-style" > Забыли пароль? </a>
+                  </div>
+                </div>
+              </div>
+
+              <div v-if="forgotPwd" class="col-xs-12">
+                <div class="row">
+                  <div class="col-xs-4">
+                    <button @click="forgotYouPwd()"
+                            class="cont-submit btn-contact btn-style" > Сбросить пароль</button>
+                  </div>
+                </div>
               </div>
 
         </div></form>
@@ -112,8 +131,9 @@ import HeaderTop from '../components/app/HeaderTop'
 
 export default {
   data: () => ({
+    forgotPwd : false,
     response: [],
-    preloaderMessage : 'Подождите,идет авторизация пользователя',
+    preloaderMessage : 'Подождите,идет запрос к серверу',
     authData: {
       email: '',
       password: ''
@@ -132,6 +152,15 @@ export default {
       const postData = this.authData
       const apiUrl = '/post/auth/login'
       this.send(apiUrl, 'post', postData).then(this.authResponseHandle)
+    },
+
+    forgotYouPwd() {
+        this.preloader = true
+        const apiUrl = '/user/forgot-password/' + this.authData.email
+        this.send(apiUrl).then(response => {
+             this.preloader = false
+             let resp = response;
+        })
     },
 
     authResponseHandle(resp) {
