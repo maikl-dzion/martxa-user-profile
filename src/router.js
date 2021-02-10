@@ -21,7 +21,7 @@ export default new Router({
 
     {
       path: '/page/user-admin-list',
-      component: () => import('./pages/UserAdminList')
+      component: () => import('./pages/AdminPage')
     },
 
     {

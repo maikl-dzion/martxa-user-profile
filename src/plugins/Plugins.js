@@ -18,8 +18,11 @@ const Plugins = {
           preloader: false,
           preloaderMessage: 'Подождите, идет сохранение',
 
-          userId: '',
-          userName: ''
+          userId: 0,
+          userName: '',
+
+          userInfo: {},
+          usersList : [],
         }
       },
       methods: {
@@ -34,7 +37,22 @@ const Plugins = {
             this.$router.push('/page/auth')
           }
           this.userName = this.store('user_name')
-        }
+        },
+
+        getUserInfo () {
+          const userId = this.userId
+          const apiUrl = '/get/user/' + userId + '/user_id'
+          this.send(apiUrl).then(response => {
+            this.userInfo = response
+          })
+        },
+
+        getUsersList () {
+          const apiUrl = '/get/users'
+          this.send(apiUrl).then(response => {
+            this.usersList = response
+          })
+        },
 
       } // --- Methods
     }) // --- Mixin
