@@ -1,40 +1,58 @@
 <template>
 <page-template>
 
+      <!-- breadcumb-area start -->
+<!--      <div class="breadcumb-area black-opacity bg-img-6">-->
+<!--        <div class="container">-->
+<!--          <div class="row">-->
+<!--            <div class="col-xs-12">-->
+<!--              <div class="breadcumb-wrap">-->
+<!--                <h2>Blog Post</h2>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="breadcumb-menu">-->
+<!--          <div class="container">-->
+<!--            <div class="row">-->
+<!--              <div class="col-xs-12">-->
+<!--                <ul>-->
+<!--                  <li><a href="index.html">Home</a></li>-->
+<!--                  <li>/</li>-->
+<!--                  <li><a href="blog.html">Blog</a></li>-->
+<!--                  <li>/</li>-->
+<!--                  <li>Blog Post</li>-->
+<!--                </ul>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+      <!-- breadcumb-area end -->
+
       <!-- blog-details-area start -->
-      <section class="blog-details-area ptb-10" style="border:0px red solid; " >
-
-        <Preloader
-          :preloader="preloader"
-          :message="preloaderMessage"
-        ></Preloader>
-
-        <InfoMessage
-          :message="responseMessage"
-          :color="responseColor"
-        ></InfoMessage>
+      <section class="blog-details-area ptb-10" style="border:0px red solid " >
 
         <div class="container">
           <div class="row">
 
             <!--- ЛЕВАЯ ПАНЕЛЬ ---->
-            <div class="col-md-3 col-sm-6 col-xs-12" style="border:0px red solid "  >
+            <div class="col-md-4 col-sm-6 col-xs-12 col" style="border:0px red solid "  >
               <aside class="left-sidebar">
 
                 <!--- Avatar --->
                 <div class="author-wrap">
                   <div class="author-img">
-                    <img src="/assets/images/user-not-photo.jpg" alt="" style="border-radius: 0px" >
+                    <img src="/assets/images/author.jpg" alt="" style="border-radius: 0px" >
                   </div>
                   <div class="author-info">
-                    <h3>{{userInfo.name}}</h3>
-                    <span>логин : {{userInfo.login}}</span>
-<!--                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat, molestiae.</p>-->
-                    <p>Дата регистрации: <br>{{userInfo.created_at}}</p>
+                    <h3>{{userName}}</h3>
+                    <span>Founder of Innovate</span>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat, molestiae.</p>
                   </div>
                 </div>
 
-                <div class="search-sidebar mb-20">
+                <div class="search-sidebar mb-30">
                   <form action="#">
                     <input type="text" name="search" placeholder="Search Here">
                     <button type="button" name="button"><i class="fa fa-search"></i></button>
@@ -42,7 +60,7 @@
                 </div>
 
                 <div class="category-wrap mb-30 user-menu">
-                  <h3 class="sidebar-title">Меню пользователя</h3>
+                  <h3 class="sidebar-title">Меню</h3>
                   <ul>
                     <li><a @click="tab = 'user_info'"    >Основная информация</a></li>
                     <li><a @click="tab = 'info_details'" >Подробная информация</a></li>
@@ -53,11 +71,67 @@
                   </ul>
                 </div>
 
+<!--                <div class="related-post mb-30">-->
+<!--                  <h3 class="sidebar-title">Related Postt</h3>-->
+<!--                  <ul>-->
+<!--                    <li class="related-post-items">-->
+<!--                      <div class="post-img">-->
+<!--                        <img src="assets/images/post/1.jpg" alt="">-->
+<!--                      </div>-->
+<!--                      <div class="post-info">-->
+<!--                        <a href="blog-post.html">Adipisicing dolor sit amet consectetur  elit Lorem ipsum dolor</a>-->
+<!--                        <p>20/08/2017</p>-->
+<!--                      </div>-->
+<!--                    </li>-->
+<!--                    <li class="related-post-items">-->
+<!--                      <div class="post-img">-->
+<!--                        <img src="assets/images/post/2.jpg" alt="">-->
+<!--                      </div>-->
+<!--                      <div class="post-info">-->
+<!--                        <a href="blog-post.html">Sit Lorem ipsum dolor amet adipisicing elit Lorem ipsum dolor</a>-->
+<!--                        <p>25/08/2017</p>-->
+<!--                      </div>-->
+<!--                    </li>-->
+<!--                    <li class="related-post-items">-->
+<!--                      <div class="post-img">-->
+<!--                        <img src="assets/images/post/3.jpg" alt="">-->
+<!--                      </div>-->
+<!--                      <div class="post-info">-->
+<!--                        <a href="blog-post.html">Dolor sit amet consectetur adipisicing elit Lorem ipsum dolor</a>-->
+<!--                        <p>30/09/2017</p>-->
+<!--                      </div>-->
+<!--                    </li>-->
+<!--                  </ul>-->
+<!--                </div>-->
+<!--                <div class="archive-wrap mb-30">-->
+<!--                  <h3 class="sidebar-title">archive</h3>-->
+<!--                  <ul>-->
+<!--                    <li><a href="#">November 2017 <span class="pull-right">(25)</span></a></li>-->
+<!--                    <li><a href="#">August 2017 <span class="pull-right">(25)</span></a></li>-->
+<!--                    <li><a href="#">September 2017  <span class="pull-right">(25)</span></a></li>-->
+<!--                    <li><a href="#">Octeber 2017 <span class="pull-right">(25)</span></a></li>-->
+<!--                    <li><a href="#">December 2017  <span class="pull-right">(25)</span></a></li>-->
+<!--                  </ul>-->
+<!--                </div>-->
+<!--                <div class="tags-wrap">-->
+<!--                  <h3 class="sidebar-title">Post Tags</h3>-->
+<!--                  <ul>-->
+<!--                    <li><a href="#">html</a></li>-->
+<!--                    <li><a href="#">css</a></li>-->
+<!--                    <li><a href="#">javascript</a></li>-->
+<!--                    <li><a href="#">business</a></li>-->
+<!--                    <li><a href="#">corporate</a></li>-->
+<!--                    <li><a href="#">php</a></li>-->
+<!--                    <li><a href="#">dolor</a></li>-->
+<!--                    <li><a href="#">amet</a></li>-->
+<!--                  </ul>-->
+<!--                </div>-->
+
               </aside>
             </div>
 
             <!--- ПРАВАЯ ПАНЕЛЬ ---->
-            <div class="col-md-9 col-xs-12">
+            <div class="col-md-8 col-xs-12">
               <div class="blog-details-wrap">
 
 <!--                <div class="blog-details-img">-->
@@ -77,14 +151,13 @@
                   user_orders
                 </template>
                 <template v-else-if="tab == 'change_password'" >
-
                   <h3 class="sidebar-title" style="font-style: italic; font-size: 17px" >Изменить пароль</h3><hr/>
                   <div class="col-md-12 col-xs-12"><div class="faq-form form-style">
                     <form @submit.prevent="" ><div class="row">
 
                       <div class="col-xs-12">
                         <div class="row">
-                          <div class="col-xs-3">
+                          <div class="col-xs-2">
                             <div class="input-label"><div>Новый пароль</div></div>
                           </div>
                           <div class="col-xs-5">
@@ -96,7 +169,7 @@
 
                       <div class="col-xs-12">
                         <div class="row">
-                          <div class="col-xs-3">
+                          <div class="col-xs-2">
                             <div class="input-label"><div>Повторить пароль</div></div>
                           </div>
                           <div class="col-xs-5">
@@ -114,13 +187,34 @@
 
                     </div></form>
                   </div></div>
-
                 </template>
                 <template v-else >
 
                   <div class="blog-details-content">
 
                     <h3 class="sidebar-title" style="font-style: italic; font-size: 17px" >Основная информация</h3><hr/>
+
+<!--                    <div class="contact-wrap form-style">-->
+<!--                      <form action="mail.php" method="post" id="cf">-->
+<!--                        <div class="row">-->
+<!--                          <div class="col-sm-6 col-xs-12">-->
+<!--                            <input type="text" placeholder="Name" id="fname" name="fname">-->
+<!--                          </div>-->
+<!--                          <div class="col-sm-6 col-xs-12">-->
+<!--                            <input type="text" placeholder="Email" id="email" name="email">-->
+<!--                          </div>-->
+<!--                          <div class="col-xs-12">-->
+<!--                            <input type="text" placeholder="Subject" id="subject" name="subject">-->
+<!--                          </div>-->
+<!--                          <div class="col-xs-12">-->
+<!--                            <textarea class="contact-textarea" placeholder="Message" id="msg" name="msg"></textarea>-->
+<!--                          </div>-->
+<!--                          <div class="col-xs-12">-->
+<!--                            <button id="submit" class="cont-submit btn-contact" name="submit">SEND MESSAGE</button>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </form>-->
+<!--                    </div>-->
 
                     <div class="faq-form form-style" style="border:0px red solid; margin-bottom:20px;" >
                       <form id="user-general-info" @submit.prevent="">
@@ -153,6 +247,20 @@
                               </div>
                             </div>
                           </div>
+
+                          <!--                                  <div class="col-xs-12">-->
+                          <!--                                    <div class="row">-->
+                          <!--                                      <div class="col-xs-4">-->
+                          <!--                                        <div class="input-label">-->
+                          <!--                                          <div>Пароль</div>-->
+                          <!--                                          <div style="color:red; font-weight: bold; margin-left:10px;">*</div>-->
+                          <!--                                        </div>-->
+                          <!--                                      </div>-->
+                          <!--                                      <div class="col-xs-8">-->
+                          <!--                                        <input v-model="userInfo.password" required="true" type="text" placeholder="Пароль">-->
+                          <!--                                      </div>-->
+                          <!--                                    </div>-->
+                          <!--                                  </div>-->
 
                           <div class="col-xs-12">
                             <div class="row">
@@ -189,7 +297,7 @@
                             <div class="row">
                               <div class="col-xs-4"><div class="input-label">О себе</div></div>
                               <div class="col-xs-8">
-                                 <textarea v-model="userInfo.note" class="contact-textarea"
+                                 <textarea class="contact-textarea"
                                            placeholder="О себе" id="msg" name="msg"></textarea>
                               </div>
                             </div>
@@ -198,8 +306,9 @@
                           <div class="col-xs-12"><hr/></div>
 
                           <div class="col-xs-12">
-                            <button @click="saveUserInfo()" class="cont-submit btn-contact btn-style" name="submit">
-                              Сохранить</button>
+                            <button id="submit"
+                                    class="cont-submit btn-contact btn-style" name="submit">Сохранить
+                            </button>
                           </div>
 
                         </div>
@@ -207,6 +316,7 @@
                     </div>
 
                     <pre>{{userInfo}}</pre>
+
                     <pre>{{usersList}}</pre>
 
                     <p>This is Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Exce</p>
@@ -244,25 +354,34 @@ export default {
 
   data: () => ({
     tab: null,
-    newPassword: {
-      new_password: '',
-      repeat_password: ''
+    saveType: 'add',
+    newPassword : {
+       new_password : '',
+       repeat_password : '',
     }
   }),
 
-  created () {
+  created() {
     this.getCurrentUserInfo()
   },
 
   mounted () {
     this.getUserInfo()
-    this.getUsersList()
+    this.getUsersList ()
   },
 
   methods: {
 
     save () {
+      switch (this.saveType) {
+        case 'add' :
+          //this.addlink()
+          break
 
+        case 'update' :
+          //this.updatelink()
+          break
+      }
     },
 
     saveResponseHandle (response) {
@@ -277,45 +396,13 @@ export default {
 
     afterSaveActions () {},
 
-    changePassword () {
-      this.preloader = true
-      this.responseColor = ''
+    changePassword() {
       const data = this.newPassword
+      const apiUrl = '/post/user/change-password'
+      this.send(apiUrl, 'post', data).then(response => {
 
-      const apiUrl = '/post/user/change-password/' + this.userId
-      this.send(apiUrl, 'put', data).then(response => {
-        this.preloader = false
-        const resp = this.saveResponse(response)
-        if (resp.status) {
-          this.responseMessage = 'Пароль успешно изменен'
-        } else {
-          this.responseMessage = 'Не удалось изменить -' + resp.error
-          this.responseColor = 'red'
-        }
       })
-    },
-
-    saveUserInfo() {
-
-        this.responseColor = ''
-        this.preloader = true
-
-        const data = this.userInfo
-        const apiUrl = '/post/user/update/' + this.userId
-        this.send(apiUrl, 'put', data).then(this.responseUserInfoHandle)
-
-    },
-
-    responseUserInfoHandle(response) {
-      this.preloader = false
-      const state = this.saveResponse(response)
-      if (!state.status) {
-        this.responseMessage = 'Не удалось обновить данные пользователя -' + state.error
-        this.responseColor = 'red'
-        return false
-      }
-      this.responseMessage = `Данные пользователя обновлены`
-    },
+    }
 
     // reset () {
     //   let linkItem = { link: '', code: '', user_id: 0 }
