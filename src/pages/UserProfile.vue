@@ -43,7 +43,7 @@
                   </form>
                 </div>
 
-                <div class="category-wrap mb-30 user-menu">
+                <div class="mb-20 about-wrap user-menu">
                   <h3 class="sidebar-title">Меню пользователя</h3>
                   <ul>
                     <li><a @click="tab = 'user_info'"    >Основная информация</a></li>
@@ -158,19 +158,23 @@
                                 <input v-model="userInfo.email" required="true" type="text" placeholder="Email">
                               </div>
                               <div class="col-xs-2">
-                                <a @click="emailVerify()" style="cursor:pointer"
-                                        class="cont-submit btn-contact btn-style" >Заверить</a>
+                                <div class="portfolio-menu text-center" >
+                                   <button @click="emailVerify('send')" style="height: 38px" >Заверить</button>
+                                </div>
                               </div>
                             </div>
                           </div>
 
-                          <div class="col-xs-12">
+                          <div v-if="emailVerifyState" class="col-xs-12">
                             <div class="row">
-                              <div class="col-xs-4">
-                                <div class="input-label">Логин</div>
+                              <div class="col-xs-4">На ваш почтовый ящик отправлено письмо с кодом</div>
+                              <div class="col-xs-6">
+                                 <input v-model="emailVerifyCode" required="true" type="text" placeholder="Code">
                               </div>
-                              <div class="col-xs-8">
-                                <input v-model="userInfo.login" type="text" placeholder="Логин">
+                              <div class="col-xs-2">
+                                <div class="portfolio-menu text-center" >
+                                  <button @click="emailVerify('check')" style="height: 38px" >Подтвердить</button>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -183,9 +187,21 @@
                               <div class="col-xs-6">
                                 <input v-model="userInfo.phone" type="text" placeholder="Телефон">
                               </div>
-                              <div class="col-xs-2">
-                                <a @click="phoneVerify()" style="cursor:pointer"
-                                   class="cont-submit btn-contact btn-style" >Заверить</a>
+                              <div class="col-xs-2"  >
+                                <div class="portfolio-menu text-center" >
+                                  <button @click="phoneVerify()" style="height: 38px" >Заверить</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-xs-12">
+                            <div class="row">
+                              <div class="col-xs-4">
+                                <div class="input-label">Логин</div>
+                              </div>
+                              <div class="col-xs-8">
+                                <input v-model="userInfo.login" type="text" placeholder="Логин">
                               </div>
                             </div>
                           </div>
@@ -220,8 +236,8 @@
                       </form>
                     </div>
 
-                    <pre>{{userInfo}}</pre>
-                    <pre>{{usersList}}</pre>
+<!--                    <pre>{{userInfo}}</pre>-->
+<!--                    <pre>{{usersList}}</pre>-->
 
                     <p>This is Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Exce</p>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad dolorum aspernatur ipsam, cumque. Quod autem iste dolorem explicabo nobis neque unde, laboriosam voluptatum cupiditate quam, corrupti ipsum accusantium sed eaque!</p>
@@ -258,6 +274,11 @@ export default {
 
   data: () => ({
     tab: null,
+
+    emailVerifyCode  : '',
+    emailVerifyState : false,
+
+    phoneVerifyState : false,
     newPassword: {
       password: '',
       repeat_pwd: ''
@@ -297,8 +318,24 @@ export default {
     //
     // afterSaveActions () {},
 
-    emailVerify() {
+    emailVerify(type) {
+        const apiUrl = '/user/email-verify/' + type + '/' + this.userInfo.user_id
+        this.send(apiUrl, 'get').then(response => {
+             switch (type) {
+                case 'send' :
+                  if(response) {
+                    this.emailVerifyState = true
+                  }
+                  break
 
+               case 'check' :
+                 if(response) {
+                   this.emailVerifyState = false
+                 }
+                 break
+             }
+
+        })
     },
 
     phoneVerify() {
@@ -406,6 +443,8 @@ export default {
 
 .user-menu ul li {
     cursor: pointer;
+    line-height: 30px;
+    border-bottom: 1px solid #f1f1f1;
 }
 
 .input-label {
