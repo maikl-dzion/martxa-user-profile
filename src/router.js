@@ -20,7 +20,7 @@ export default new Router({
     },
 
     {
-      path: '/page/user-admin-list',
+      path: '/page/users-list',
       component: () => import('./pages/AdminPage')
     },
 

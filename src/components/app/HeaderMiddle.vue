@@ -1,6 +1,6 @@
 <template>
 
-  <div class="header-middle bg-2" style="height: 90px; padding: 0px; margin: 0px;">
+  <div class="header-middle bg-2" style="height: 65px; padding: 0px; margin: 0px;">
     <div class="container" style="height: 100%; padding-top: 0px;" >
       <div class="row">
         <div class="col-md-3 hidden-sm hidden-xs">

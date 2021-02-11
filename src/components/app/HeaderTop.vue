@@ -1,8 +1,6 @@
 <template>
-  <header class="header-area">
-
-    <div class="header-top bg-2" style="height: 60px; padding: 0px; margin: 0px;">
-      <div class="container" style="height: 100%; padding-top: 0px;" >
+    <div class="header-top bg-2" style="height: 40px; padding: 0px 0px 0px 0px; margin: 0px;">
+      <div class="container" style="height: 100%; padding-top: 5px;" >
         <div class="row" >
           <div class="col-md-6 col-sm-8 col-xs-12" >
             <div class="header-top-left" >
@@ -12,6 +10,8 @@
           <div class="col-md-6 col-sm-4 col-xs-12">
             <div class="header-top-right text-right">
               <ul>
+                <li><router-link tag="a" to="/" >На главную</router-link></li>
+                <li><span style="color:white" >|</span></li>
                 <li><router-link tag="a" to="/page/register" >Регистрация</router-link></li>
                 <li><span style="color:white" >|</span></li>
                 <template v-if="userId" >
@@ -34,10 +34,6 @@
         </div>
       </div>
     </div>
-
-
-
-  </header>
 </template>
 
 <script>

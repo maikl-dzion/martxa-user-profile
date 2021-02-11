@@ -54,6 +54,11 @@ const Plugins = {
           })
         },
 
+        respInfoClear() {
+          this.responseMessage = ''
+          this.responseColor   = ''
+        },
+
       } // --- Methods
     }) // --- Mixin
 

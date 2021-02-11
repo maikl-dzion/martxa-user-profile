@@ -6,7 +6,8 @@
     <!-- heared area end -->
 
     <div class="container" >
-      <slot></slot>
+       <div style="height: 20px; background: none"></div>
+       <slot></slot>
     </div>
 
     <!-- footer-area start  -->
