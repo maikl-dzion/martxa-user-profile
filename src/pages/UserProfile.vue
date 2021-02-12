@@ -72,9 +72,30 @@
                 user_info_details
               </template>
               <template v-else-if="tab == 'photos'">
-                 <FilesUploader/>
+
+                 <MultiFilesUploader
+                   @files_load="filesLoaded"
+                 ></MultiFilesUploader>
+
                  <div>
-                   <img :src="rootPath + 'users/u_1/rJgQu0zLmk3NwUzCyzc6o4544EerFyKYNPOf9Vms.jpeg'" alt="">
+                   <div v-if="userFiles.length" class="mb-10 about-wrap user-menu">
+                       <h5 class="sidebar-title">Фотографии пользователя</h5>
+                   </div>
+
+                   <div class="row">
+                     <div class="col-md-12 col-sm-6 col-xs-12 col">
+                       <div class="footer-widget instagram-wrap">
+                         <ul><li v-for="(file) in userFiles" style="width:150px; border:1px gainsboro solid" >
+                             <a href="#" :key="file.file_id">
+                                 <img :src="rootPath + file.path" class="img-preview" style="width:100%;">
+                             </a>
+                             <div><button @click="deleteFile(file.file_id)" class="btn-style" style="width: 100%; border:0px;" >удалить</button></div>
+                         </li></ul>
+                       </div>
+                     </div>
+                   </div>
+
+                   <div><hr></div>
                  </div>
               </template>
               <template v-else-if="tab == 'articles'">
@@ -139,10 +160,13 @@
                 </div>
                 <!---  ./ Изменение пароля  --->
               </template>
-              <template v-else>
+              <template v-else-if="tab == 'user_info'">
                 <!---  Основная информация о пользователе --->
                 <UserGeneralInfo/>
                 <!--- ./ Основная информация о пользователе --->
+              </template>
+              <template v-else>
+                   в разработке
               </template>
 
             </div>
@@ -159,12 +183,12 @@
 <script>
 
 import UserGeneralInfo from '@/components/user/UserGeneralInfo'
-import FilesUploader from '@/components/FilesUploader'
+import MultiFilesUploader from '@/components/MultiFilesUploader'
 
 export default {
 
   data: () => ({
-    tab: null,
+    tab: 'user_info',
 
     emailVerifyCode: '',
     emailVerifyState: false,
@@ -173,12 +197,14 @@ export default {
     newPassword: {
       password: '',
       repeat_pwd: ''
-    }
+    },
+
+    userFiles : [],
   }),
 
   components: {
     UserGeneralInfo,
-    FilesUploader
+    MultiFilesUploader
   },
 
   created () {
@@ -189,6 +215,7 @@ export default {
   mounted () {
     this.getUserInfo()
     this.getUsersList()
+    this.getUserFiles()
   },
 
   computed: {
@@ -198,6 +225,21 @@ export default {
   },
 
   methods: {
+
+    filesLoaded(response) {
+       this.getUserFiles()
+       this.responseStatusHandle(response,
+                    'Файлы успешно загружены',
+                      'Не удалось загрузить файлы')
+    },
+
+    deleteFile(fileId) {
+      const apiUrl = '/delete/file/' + fileId
+      this.send(apiUrl, 'delete').then(response => {
+         this.getUserFiles()
+         this.responseStatusHandle(response, 'Файл удален', 'Файл не получилось удалить')
+      })
+    },
 
     compareNewPassword () {
       if (this.newPassword.password != this.newPassword.repeat_pwd) {
@@ -255,41 +297,14 @@ export default {
         return false
       }
       return true
-    }
+    },
 
-    // reset () {
-    //   let linkItem = { link: '', code: '', user_id: 0 }
-    //   this.linkItem = Object.assign({}, linkItem)
-    // },
-
-    // selectLink (item) {
-    //   this.linkItem = Object.assign({}, item)
-    //   this.saveType = 'update'
-    //   this.selectLinkId = item.link_id
-    // },
-    //
-    // addlink () {
-    //   const apiUrl = '/post/add/link'
-    //   this.send(apiUrl, 'post', this.linkItem).then(this.saveResponseHandle)
-    // },
-    //
-    // updatelink () {
-    //   const apiUrl = '/post/update/link/' + this.selectLinkId
-    //   this.send(apiUrl, 'put', this.linkItem).then(this.saveResponseHandle)
-    // },
-    //
-    // deletelink (linkId) {
-    //   const apiUrl = '/post/delete/link/' + linkId
-    //   this.send(apiUrl, 'delete', this.linkItem).then(this.saveResponseHandle)
-    // },
-    //
-    // getLinksByUserId () {
-    //   if (!this.userId) return false
-    //   const apiUrl = '/get/links/' + this.userId
-    //   this.send(apiUrl).then(response => {
-    //     this.userLinkItems = response.result
-    //   })
-    // },
+    getUserFiles() {
+        const apiUrl = '/user/get-files/' + this.userId
+        this.send(apiUrl).then(response => {
+            this.userFiles = response
+        })
+    },
 
   }
 
