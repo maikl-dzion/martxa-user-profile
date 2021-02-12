@@ -8,7 +8,8 @@ const axiosHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': '*',
   'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
-  "X-Requested-With": "XMLHttpRequest",
+  'X-Requested-With': 'XMLHttpRequest',
+  'Content-Type': 'multipart/form-data',
 }
 
 axiosHeaders[HEADER_JWT_TOKEN_NAME] = null

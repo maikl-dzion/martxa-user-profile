@@ -48,9 +48,11 @@
                 <ul>
                   <li><a @click="tab = 'user_info'">Основная информация</a></li>
                   <li><a @click="tab = 'change_password'">Изменить пароль</a></li>
+                  <li><a @click="tab = 'photos'">Фотографии</a></li>
                   <li><a @click="tab = 'info_details'">Подробная информация</a></li>
                   <li><a @click="tab = 'articles'">Статьи</a></li>
-                  <li><a @click="tab = 'photos'">Фотографии</a></li>
+                  <li><a @click="tab = 'messages'">Сообщения</a></li>
+                  <li><a @click="tab = 'declaration'">Объявления</a></li>
                   <li><a @click="tab = 'orders'">Заказы</a></li>
                 </ul>
               </div>
@@ -70,7 +72,10 @@
                 user_info_details
               </template>
               <template v-else-if="tab == 'photos'">
-                user_photos
+                 <FilesUploader/>
+                 <div>
+                   <img :src="rootPath + 'users/u_1/rJgQu0zLmk3NwUzCyzc6o4544EerFyKYNPOf9Vms.jpeg'" alt="">
+                 </div>
               </template>
               <template v-else-if="tab == 'articles'">
                 user_articles
@@ -154,6 +159,7 @@
 <script>
 
 import UserGeneralInfo from '@/components/user/UserGeneralInfo'
+import FilesUploader from '@/components/FilesUploader'
 
 export default {
 
@@ -171,11 +177,13 @@ export default {
   }),
 
   components: {
-    UserGeneralInfo
+    UserGeneralInfo,
+    FilesUploader
   },
 
   created () {
     this.getCurrentUserInfo()
+    this.getRootFilesPath()
   },
 
   mounted () {

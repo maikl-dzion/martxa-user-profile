@@ -23,6 +23,8 @@ const Plugins = {
 
           userInfo: {},
           usersList : [],
+
+          rootPath : '',
         }
       },
       methods: {
@@ -54,9 +56,20 @@ const Plugins = {
           })
         },
 
+        setRootFilesPath () {
+          const apiUrl = '/root/files/path'
+          this.send(apiUrl).then(response => {
+             this.store('root_path', response.root_path)
+          })
+        },
+
+        getRootFilesPath () {
+            this.rootPath = this.store('root_path')
+        },
+
         respInfoClear() {
-          this.responseMessage = ''
-          this.responseColor   = ''
+            this.responseMessage = ''
+            this.responseColor   = ''
         },
 
       } // --- Methods
