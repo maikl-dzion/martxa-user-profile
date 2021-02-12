@@ -1,3 +1,3 @@
 module.exports = {
-  baseUrl: '/foldin-test-app/front'
+  baseUrl: '/user-profile/front'
 }
