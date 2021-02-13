@@ -22,6 +22,10 @@
                 <router-link tag="a" :to="menu.url">{{ menu.title }}</router-link>
               </li>
 
+<!--              <li >-->
+<!--                 <a href="http://bolderfest.ru/user-profile/tests" target="_blank" >Tests</a>-->
+<!--              </li>-->
+
             </ul>
           </div>
         </div>
@@ -53,6 +57,7 @@ export default {
         {url: '/page/profile', title: 'Профиль'},
         {url: '/page/register', title: 'Регистрация'},
         {url: '/page/admin-panel', title: 'Admin'},
+        {url: '/page/tests', title: 'Tests'},
       ]
     }
   },

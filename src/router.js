@@ -37,5 +37,10 @@ export default new Router({
       path: '/page/admin-panel',
       component: () => import('./pages/AdminPanel')
     },
+
+    {
+      path: '/page/tests',
+      component: () => import('./pages/TestsPanel')
+    },
   ]
 })
