@@ -1,12 +1,12 @@
 <template>
   <page-template>
-    UserAdminList
+    AdminPanel
   </page-template>
 </template>
 
 <script>
 export default {
-  name: "UserAdminList",
+  name: "AdminPanel",
   data() {
     return {
 

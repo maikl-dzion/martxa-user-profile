@@ -2,19 +2,19 @@
   <page-template>
 
     <!-- blog-details-area start -->
-    <section class="blog-details-area ptb-10" style="border:0px red solid; ">
+    <section class="blog-details-area1 ptb-101" style="border:0px red solid; ">
 
-      <Preloader
-        :preloader="preloader"
+      <Preloading
+        :preloader="preloaderState"
         :message="preloaderMessage"
-      ></Preloader>
+      ></Preloading>
 
       <InfoMessage
         :message="responseMessage"
         :color="responseColor"
       ></InfoMessage>
 
-      <div class="container">
+      <div class="container-fluid">
         <div class="row">
 
           <!--- ЛЕВАЯ ПАНЕЛЬ ---->
@@ -22,19 +22,10 @@
             <aside class="left-sidebar">
 
               <!--- Avatar --->
-              <div class="author-wrap">
-                <div class="author-img">
-                  <img src="/assets/images/user-not-photo.jpg" alt="" style="border-radius: 0px">
-                  <span>Загрузить фото</span>
-                  <input type="file" name="user-avatar" placeholder="Загрузить фото">
-                </div>
-                <div class="author-info">
-                  <h4>{{ userInfo.name }}</h4>
-                  <span>логин : {{ userInfo.login }}</span>
-                  <!--                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat, molestiae.</p>-->
-                  <p>Дата регистрации: <br>{{ userInfo.created_at }}</p>
-                </div>
-              </div>
+              <UserAvatar
+                :user="userInfo"
+                :user_id="userId"
+              ></UserAvatar>
 
               <div class="search-sidebar mb-20">
                 <form action="#">
@@ -74,6 +65,8 @@
               <template v-else-if="tab == 'photos'">
 
                  <MultiFilesUploader
+                   type="user"
+                   :uid="userId"
                    @files_load="filesLoaded"
                  ></MultiFilesUploader>
 
@@ -183,28 +176,30 @@
 <script>
 
 import UserGeneralInfo from '@/components/user/UserGeneralInfo'
+import UserAvatar from '@/components/user/UserAvatar'
 import MultiFilesUploader from '@/components/MultiFilesUploader'
 
 export default {
 
   data: () => ({
     tab: 'user_info',
-
     emailVerifyCode: '',
     emailVerifyState: false,
-
     phoneVerifyState: false,
+
     newPassword: {
       password: '',
       repeat_pwd: ''
     },
 
     userFiles : [],
+
   }),
 
   components: {
     UserGeneralInfo,
-    MultiFilesUploader
+    MultiFilesUploader,
+    UserAvatar
   },
 
   created () {
@@ -234,8 +229,10 @@ export default {
     },
 
     deleteFile(fileId) {
+      this.preloaderState = true
       const apiUrl = '/delete/file/' + fileId
       this.send(apiUrl, 'delete').then(response => {
+         this.preloaderState = false
          this.getUserFiles()
          this.responseStatusHandle(response, 'Файл удален', 'Файл не получилось удалить')
       })
@@ -254,7 +251,7 @@ export default {
         return false
       }
 
-      this.preloader = true
+      this.preloaderState = true
       const data = this.newPassword
 
       const apiUrl = '/post/user/change-password/' + this.userId
@@ -283,7 +280,7 @@ export default {
     },
 
     responseStatusHandle (response, successMessage = null, errorMessage = null, fn = null) {
-      this.preloader = false
+      this.preloaderState = false
       const r = this.saveResponse(response)
       if (r.status) {
         this.responseMessage = successMessage

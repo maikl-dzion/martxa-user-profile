@@ -21,7 +21,7 @@ export default new Router({
 
     {
       path: '/page/users-list',
-      component: () => import('./pages/AdminPage')
+      component: () => import('./pages/UsersList')
     },
 
     {
@@ -31,6 +31,11 @@ export default new Router({
     {
       path: '/page/profile',
       component: () => import('./pages/UserProfile')
-    }
+    },
+
+    {
+      path: '/page/admin-panel',
+      component: () => import('./pages/AdminPanel')
+    },
   ]
 })

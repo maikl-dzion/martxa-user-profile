@@ -5,10 +5,10 @@
       <HeaderTop/>
     </header>
 
-    <Preloader
-      :preloader="preloader"
+    <Preloading
+      :preloader="preloaderState"
       :message="preloaderMessage"
-    ></Preloader>
+    ></Preloading>
 
     <div class="container">
 
@@ -131,7 +131,7 @@ export default {
 
       respMessage: '',
       respColor: '',
-      preloader: false,
+      preloaderState: false,
       preloaderMessage: 'Подождите, идет сохранение',
 
       user: {
@@ -156,7 +156,7 @@ export default {
         return false
       }
 
-      this.preloader = true
+      this.preloaderState = true
       const postData = this.user
       const apiUrl = '/post/user/register'
       this.send(apiUrl, 'post', postData)
@@ -187,7 +187,7 @@ export default {
     },
 
     saveResponseHandle(response) {
-      this.preloader = false
+      this.preloaderState = false
       const resp = this.saveResponse(response)
       this.respColor = ''
       this.respMessage = `Новый пользователь успешно создан`

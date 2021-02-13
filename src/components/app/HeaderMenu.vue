@@ -47,6 +47,7 @@ export default {
          { url : '/page/users-list', title : 'Пользователи' },
          { url : '/page/profile'   , title : 'Профиль' },
          { url : '/page/register'  , title : 'Регистрация' },
+         { url : '/page/admin-panel'  , title : 'Admin' },
 
        ]
     }

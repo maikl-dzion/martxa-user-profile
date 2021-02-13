@@ -1,0 +1,179 @@
+<template>
+<page-template >
+
+  <section class="blog-area1 ptb-1403 bg-3" style="border: 0px red solid" >
+      <div class="container-fluid" style="border: 0px green solid">
+        <div class="row" style="border: 0px blue solid" >
+
+<!--          <pre>{{usersList}}</pre>-->
+
+<!--          {-->
+<!--          "user_id": 1,-->
+<!--          "name": "Maikl",-->
+<!--          "email": "dzion67@mail.ru",-->
+<!--          "password": "$2y$10$nvl.QHnAQip8tVnWYVrvPuMDdp.QXqPgDc0TdeBAFae/80BbxmAwC",-->
+<!--          "login": "maikl",-->
+<!--          "phone": "89062486209",-->
+<!--          "role": null,-->
+<!--          "active": null,-->
+<!--          "email_verified_at": null,-->
+<!--          "created_at": "2021-02-06 17:04:53",-->
+<!--          "updated_at": "2021-02-12 16:39:54",-->
+<!--          "photo": null,-->
+<!--          "note": "rtyyyyy",-->
+<!--          "email_verify": 1,-->
+<!--          "phone_verify": 1,-->
+<!--          "public_key": null,-->
+<!--          "private_key": null,-->
+<!--          "email_code": "EAm7",-->
+<!--          "phone_code": "6Ed7"-->
+<!--          }-->
+
+          <div class="col-md-9 col-xs-12" >
+            <div class="row">
+
+              <template v-for="(user) in usersList" >
+                   <div class="col-sm-4 col-xs-12 col">
+                      <div class="blog-wrap mb-30">
+
+                        <div class="blog-img">
+<!--                          <img :src="/assets/images/blog/1.jpg" alt="">-->
+                          <img v-if="user.photo" :src="user.photo" style="width: 255px; height:255px;" >
+                          <img v-else src="/assets/images/user-not-photo.jpg" style="width: 255px; height:255px;" >
+
+                        </div>
+
+                        <div class="blog-content">
+                          <div class="blog-meta">
+                              <ul>
+                                <li><a href="#"><i class="fa fa-user"></i> {{user.login}}</a></li>
+                                <li><a href="#"><i class="fa fa-comment"></i> 5 Comment</a></li>
+                                <li><a href="#"><i class="fa fa-heart"></i> {{user.phone}}</a></li>
+                              </ul>
+                          </div>
+
+                          <h3><a href="blog.html">{{user.name}}</a></h3>
+                          <p>{{user.note}}</p>
+                          <a href="blog.html" class="btn-style">Подробнее</a>
+
+                        </div>
+                      </div>
+                   </div>
+              </template>
+
+
+
+<!--              <div class="col-xs-12">-->
+<!--                <div class="pagination-wrap">-->
+<!--                  <ul>-->
+<!--                    <li><a href="#"><i class="fa fa-angle-left"></i></a></li>-->
+<!--                    <li class="active"><a href="#">1</a></li>-->
+<!--                    <li><a href="#">2</a></li>-->
+<!--                    <li><a href="#">3</a></li>-->
+<!--                    <li><a href="#">4</a></li>-->
+<!--                    <li><a href="#">5</a></li>-->
+<!--                    <li><a href=""><i class="fa fa-angle-right"></i></a></li>-->
+<!--                  </ul>-->
+<!--                </div>-->
+<!--              </div>-->
+
+            </div>
+          </div>
+
+          <div class="col-md-3 col-sm-6 col-xs-12 col" >
+            <aside class="right-sidebar1">
+              <div class="search-sidebar mb-30">
+                <form action="#">
+                  <input type="text" name="search" placeholder="Search Here">
+                  <button type="button" name="button"><i class="fa fa-search"></i></button>
+                </form>
+              </div>
+
+              <div class="category-wrap mb-30">
+                <h3 class="sidebar-title">Category</h3>
+                <ul>
+                  <li><a href="#">Investments</a></li>
+                  <li><a href="#">Budgets</a></li>
+                  <li><a href="#">Accounting</a></li>
+                  <li><a href="#">Portfolios</a></li>
+                  <li><a href="#">Wealth</a></li>
+                  <li><a href="#">Business</a></li>
+                  <li><a href="#">Corporate</a></li>
+                </ul>
+              </div>
+              <div class="related-post mb-30">
+
+              </div>
+
+              <div class="archive-wrap mb-30">
+
+              </div>
+
+              <div class="tags-wrap">
+                <h3 class="sidebar-title">Post Tags</h3>
+                <ul>
+                  <li><a href="#">html</a></li>
+                  <li><a href="#">css</a></li>
+                  <li><a href="#">javascript</a></li>
+                  <li><a href="#">business</a></li>
+                  <li><a href="#">corporate</a></li>
+                  <li><a href="#">php</a></li>
+                  <li><a href="#">dolor</a></li>
+                  <li><a href="#">amet</a></li>
+                </ul>
+              </div>
+
+            </aside>
+          </div>
+
+        </div>
+      </div>
+  </section>
+
+</page-template>
+</template>
+
+<script>
+export default {
+  name: "UsersList",
+
+  created () {
+    this.getCurrentUserInfo()
+    this.getRootFilesPath()
+    this.getUsersList()
+  },
+
+  methods: {
+
+    async getUserAvatar(userId) {
+      const apiUrl = '/user/get-avatar/' + userId
+      const response = await this.send(apiUrl)
+      let avatar = '/assets/images/user-not-photo.jpg'
+      if(response)
+        avatar = response
+      return avatar
+    },
+
+  },
+
+  mounted () {
+
+    this.getUserInfo()
+
+    setTimeout(() => {
+      for(let key in this.usersList) {
+        let userId = this.usersList[key].user_id
+        this.getUserAvatar(userId).then(avatar => {
+          this.usersList[key].photo = avatar
+        })
+      }
+    }, 1000)
+
+  },
+
+}
+</script>
+
+<style scoped>
+
+</style>

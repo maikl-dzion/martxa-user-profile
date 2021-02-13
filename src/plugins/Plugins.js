@@ -1,5 +1,5 @@
 import InfoMessage from '../components/app/InfoMessage'
-import Preloader from '../components/app/Preloader'
+import Preloading from '../components/app/Preloading'
 import PageTemplate from '../components/app/PageTemplate'
 
 const Plugins = {
@@ -7,7 +7,7 @@ const Plugins = {
 
     Vue.component('PageTemplate', PageTemplate)
     Vue.component('InfoMessage', InfoMessage)
-    Vue.component('Preloader', Preloader)
+    Vue.component('Preloading', Preloading)
 
     Vue.mixin({
       data () {
@@ -15,7 +15,7 @@ const Plugins = {
           responseMessage: '',
           responseColor: '',
 
-          preloader: false,
+          preloaderState: false,
           preloaderMessage: 'Подождите, идет сохранение',
 
           userId: 0,

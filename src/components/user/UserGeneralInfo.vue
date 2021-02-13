@@ -1,10 +1,10 @@
 <template>
   <div class="blog-details-content">
 
-    <Preloader
-      :preloader="preloader"
+    <Preloading
+      :preloader="preloaderState"
       :message="preloaderMessage"
-    ></Preloader>
+    ></Preloading>
 
     <InfoMessage
       :message="responseMessage"
@@ -196,7 +196,7 @@ export default {
       const apiUrl = '/user/email-verify/' + type + '/' + userId + '/' + code
       let response = await this.send(apiUrl)
 
-      this.preloader = false
+      this.preloaderState = false
       this.emailVerifyState = false
       this.emailVerifyCode = ''
 
@@ -218,7 +218,7 @@ export default {
     },
 
     async phoneVerify (type) {
-      this.preloader = true
+      this.preloaderState = true
       if (type == 'send')
         this.phoneVerifyCode = 0
 
@@ -228,7 +228,7 @@ export default {
       const apiUrl = '/user/phone-verify/' + type + '/' + userId + '/' + code
       let response = await this.send(apiUrl)
 
-      this.preloader = false
+      this.preloaderState = false
       this.phoneVerifyState = false
       this.phoneVerifyCode = ''
 
@@ -252,7 +252,7 @@ export default {
     saveUserInfo () {
 
       this.respInfoClear()
-      this.preloader = true
+      this.preloaderState = true
 
       const data = this.userInfo
       const userId = this.userId
@@ -262,7 +262,7 @@ export default {
     },
 
     responseUserInfoHandle (response) {
-      this.preloader = false
+      this.preloaderState = false
       this.getUserInfo()
       const r = this.saveResponse(response)
       if (!r.status) {

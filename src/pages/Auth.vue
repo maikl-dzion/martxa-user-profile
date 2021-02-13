@@ -5,10 +5,10 @@
       <HeaderTop/>
     </header>
 
-    <Preloader
-      :preloader="preloader"
+    <Preloading
+      :preloader="preloaderState"
       :message="preloaderMessage"
-    ></Preloader>
+    ></Preloading>
 
     <div class="container">
 
@@ -148,23 +148,23 @@ export default {
   methods: {
 
     auth() {
-      this.preloader = true
+      this.preloaderState = true
       const postData = this.authData
       const apiUrl = '/post/auth/login'
       this.send(apiUrl, 'post', postData).then(this.authResponseHandle)
     },
 
     forgotYouPwd() {
-        this.preloader = true
+        this.preloaderState = true
         const apiUrl = '/user/forgot-password/' + this.authData.email
         this.send(apiUrl).then(response => {
-             this.preloader = false
+             this.preloaderState = false
              let resp = response;
         })
     },
 
     authResponseHandle(resp) {
-      this.preloader = false
+      this.preloaderState = false
       this.response = resp
       if (!resp.status || !resp.token) {
         this.responseMessage = 'Не удалось авторизовать пользователя, попробуйте еще раз'

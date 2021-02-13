@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  name: "Preloader",
+  name: "Preloading",
   props : ['preloader', 'message'],
   computed : {
       getPreloader() {

@@ -1,10 +1,10 @@
 <template>
   <div>
 
-    <Preloader
-      :preloader="preloader"
-      :message="preloaderMessage"
-    ></Preloader>
+    <Preloading
+      :preloader="preloaderState"
+      :message="preloaderStateMessage"
+    ></Preloading>
 
     <input type="file" id="files" ref="files" multiple @change="handleFilesUpload()"/>
 
@@ -53,7 +53,7 @@
 <script>
 
 export default {
-
+  props: ['type', 'uid'],
   data () {
     return {
       filesFolderName: '',
@@ -93,7 +93,7 @@ export default {
 
     // Отправка файлов на сервер
     submitFilesToServer () {
-      this.preloader = true
+      this.preloaderState = true
       this.preloaderMessage = 'Загружаем файлы на сервер'
       let formData = new FormData()
       formData.append('folder_name', this.filesFolderName)
@@ -101,10 +101,10 @@ export default {
         let file = this.files[i]
         formData.append('files[' + i + ']', file)
       }
-      const apiUrl = '/post/upload-files/user/' + this.userId
+      const apiUrl = '/post/upload-files/' + this.type+ '/' + this.uid
       this.send(apiUrl, 'post', formData).then(response => {
          this.files = []
-         this.preloader = false
+         this.preloaderState = false
          this.$emit('files_load', response)
       })
     },
