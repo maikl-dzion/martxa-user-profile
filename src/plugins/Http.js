@@ -23,7 +23,8 @@ const Http = {
 
       data() {
         return {
-          apiUrl: 'http://bolderfest.ru/foldin-test-app/api/v1'
+          apiUrl: 'http://bolderfest.ru/user-profile/api/v1'
+          // apiUrl: 'http://bolderfest.ru/foldin-test-app/api/v1'
           // apiUrl: 'http://laravel.my/foldin-test-app/api/v1'
         }
       },

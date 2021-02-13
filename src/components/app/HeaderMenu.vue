@@ -1,6 +1,6 @@
 <template>
   <div class="header-bottom" id="sticky-header"
-       style="height: 72px; padding: 0px; margin: 0px; border-top:1px #296dc1 solid; border-bottom:1px #296dc1 solid" >
+       style="height: 72px; padding: 0px; margin: 0px; border-top:1px #296dc1 solid; border-bottom:1px #296dc1 solid">
 
     <div class="container" style="padding: 0px;">
       <div class="row" style="margin: 0px !important; padding: -20px 0px 0px 0px !important; border:0px red solid;">
@@ -9,22 +9,28 @@
           <div class="logo"><h1><a href="index.html">Martxa</a></h1></div>
         </div>
 
-        <div class="col-md-11 hidden-sm hidden-xs" style="border:0px red solid; margin: -5px 0px 0px 0px; padding: 0px;">
-          <div class="mainmenu" style="border:0px red solid;" >
+        <div class="col-md-11 hidden-sm hidden-xs"
+             style="border:0px red solid; margin: -5px 0px 0px 0px; padding: 0px;">
+          <div class="mainmenu" style="border:0px red solid;">
             <ul id="navigation" style="border:0px red solid;">
-              <li class="active" >
-                  <router-link tag="a" to="/" >Главная</router-link>
+
+              <li class="active">
+                <router-link tag="a" to="/">Главная</router-link>
               </li>
-              <li v-for="(menu) in topMenu" >
-                  <router-link tag="a" :to="menu.url" >{{menu.title}}</router-link>
+
+              <li v-for="(menu) in topMenu">
+                <router-link tag="a" :to="menu.url">{{ menu.title }}</router-link>
               </li>
+
             </ul>
           </div>
         </div>
 
         <div class="col-md-1 col-sm-2 col-xs-3" style="margin: -5px 0px 0px 0px; padding: 0px;">
           <div class="search-wrap text-right">
-            <ul><li><a href="#"><i class="fa fa-search"></i></a></li></ul>
+            <ul>
+              <li><a href="#"><i class="fa fa-search"></i></a></li>
+            </ul>
           </div>
         </div>
 
@@ -40,17 +46,26 @@
 export default {
   name: "HeaderMenu",
 
-  data () {
+  data() {
     return {
-       topMenu : [
-
-         { url : '/page/users-list', title : 'Пользователи' },
-         { url : '/page/profile'   , title : 'Профиль' },
-         { url : '/page/register'  , title : 'Регистрация' },
-         { url : '/page/admin-panel'  , title : 'Admin' },
-
-       ]
+      topMenu: [
+        {url: '/page/users-list', title: 'Пользователи'},
+        {url: '/page/profile', title: 'Профиль'},
+        {url: '/page/register', title: 'Регистрация'},
+        {url: '/page/admin-panel', title: 'Admin'},
+      ]
     }
+  },
+
+  mounted() {
+    $(document).ready(function () {
+
+      $(".mainmenu li").click(function () {
+        // $(".mainmenu > #navigation > ul > li").removeClass( "active")
+        // $(this).addClass("active")
+      })
+
+    })
   }
 
 }

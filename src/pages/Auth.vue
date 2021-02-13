@@ -75,6 +75,11 @@
               </div>
 
         </div></form>
+
+        <div style="margin:15px; font-style: italic" >
+          Можно войти по гостевой роли email: test-test@mail.ru  | пароль: 1111
+        </div>
+
       </div></div>
 
     </div> <!--- form container -->

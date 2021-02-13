@@ -44,6 +44,7 @@
                   <li><a @click="tab = 'articles'">Статьи</a></li>
                   <li><a @click="tab = 'messages'">Сообщения</a></li>
                   <li><a @click="tab = 'declaration'">Объявления</a></li>
+                  <li><a @click="tab = 'documents'">Документы</a></li>
                   <li><a @click="tab = 'orders'">Заказы</a></li>
                 </ul>
               </div>
