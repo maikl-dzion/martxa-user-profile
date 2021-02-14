@@ -1,15 +1,15 @@
 <template>
   <div class="blog-details-content">
 
-    <Preloading
-      :preloader="preloaderState"
-      :message="preloaderMessage"
-    ></Preloading>
+<!--    <Preloading-->
+<!--      :preloader="preloaderState"-->
+<!--      :message="preloaderMessage"-->
+<!--    ></Preloading>-->
 
-    <InfoMessage
-      :message="responseMessage"
-      :color="responseColor"
-    ></InfoMessage>
+<!--    <InfoMessage-->
+<!--      :message="responseMessage"-->
+<!--      :color="responseColor"-->
+<!--    ></InfoMessage>-->
 
     <h3 class="sidebar-title" style="font-style: italic; font-size: 17px">Основная информация</h3>
     <hr/>
@@ -159,6 +159,8 @@
 <script>
 
 
+import {mapActions} from "vuex";
+
 export default {
   name: 'UserGenerealInfo',
   data: () => ({
@@ -184,6 +186,14 @@ export default {
   computed: {},
 
   methods: {
+
+    ...mapActions([
+      'fetchUser',
+      'fetchUsers',
+      'setUserId',
+      'setPreloader',
+      'setAlertInfo',
+    ]),
 
     async emailVerify (type) {
       this.preloader = true
@@ -252,7 +262,7 @@ export default {
     saveUserInfo () {
 
       this.respInfoClear()
-      this.preloaderState = true
+      this.setPreloader(true)
 
       const data = this.userInfo
       const userId = this.userId
@@ -262,16 +272,15 @@ export default {
     },
 
     responseUserInfoHandle (response) {
-      this.preloaderState = false
+      this.setPreloader(false)
       this.getUserInfo()
       const r = this.saveResponse(response)
+      let alert = { message : 'Данные пользователя обновлены'}
       if (!r.status) {
-        this.responseMessage = 'Не удалось обновить данные пользователя '
-        this.responseColor = 'red'
         console.log(r.error)
-        return false
+        alert = { color : 'red', message : 'Не удалось обновить данные пользователя '}
       }
-      this.responseMessage = `Данные пользователя обновлены`
+      this.setAlertInfo(alert);
     },
 
   }

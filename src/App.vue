@@ -1,16 +1,9 @@
 <template>
   <div>
 
-    <!-- preloder-wrap -->
-<!--      <div id="cssLoader3" class="preloder-wrap">-->
-<!--          <div class="loader">-->
-<!--              <div class="child-common child4"></div>-->
-<!--              <div class="child-common child3"></div>-->
-<!--              <div class="child-common child2"></div>-->
-<!--              <div class="child-common child1"></div>-->
-<!--          </div>-->
-<!--      </div>-->
-    <!-- preloder-wrap -->
+    <NewPreloader/>
+
+    <AlertMessage/>
 
     <!-- search-area -->
     <div class="search-area">
@@ -37,6 +30,8 @@
 
 <script>
 
+import NewPreloader from '@/components/app/NewPreloader'
+import AlertMessage from '@/components/app/AlertMessage'
 
 export default {
   name: 'App',
@@ -63,11 +58,13 @@ export default {
 
   },
 
+  components : { NewPreloader, AlertMessage },
+
   mounted() {
     this.getEventBus('auth_event', resp => {
       this.userId = resp.user_id
     })
-  }
+  },
 }
 </script>
 

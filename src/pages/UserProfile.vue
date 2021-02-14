@@ -4,15 +4,15 @@
     <!-- blog-details-area start -->
     <section class="blog-details-area1 ptb-101" style="border:0px red solid; ">
 
-      <Preloading
-        :preloader="preloaderState"
-        :message="preloaderMessage"
-      ></Preloading>
+<!--      <Preloading-->
+<!--        :preloader="preloaderState"-->
+<!--        :message="preloaderMessage"-->
+<!--      ></Preloading>-->
 
-      <InfoMessage
-        :message="responseMessage"
-        :color="responseColor"
-      ></InfoMessage>
+<!--      <InfoMessage-->
+<!--        :message="responseMessage"-->
+<!--        :color="responseColor"-->
+<!--      ></InfoMessage>-->
 
       <div class="container-fluid">
         <div class="row">
@@ -30,7 +30,7 @@
               <div class="search-sidebar mb-20">
                 <form action="#">
                   <input type="text" name="search" placeholder="Search Here">
-                  <button type="button" name="button"><i class="fa fa-search"></i></button>
+                  <button @click="getUsers" type="button" name="button"><i class="fa fa-search"></i></button>
                 </form>
               </div>
 
@@ -62,6 +62,7 @@
 
               <template v-if="tab == 'info_details'">
                 user_info_details
+                {{userTest}}
               </template>
               <template v-else-if="tab == 'photos'">
 
@@ -176,6 +177,8 @@
 
 <script>
 
+import { mapGetters, mapActions } from 'vuex'
+
 import UserGeneralInfo from '@/components/user/UserGeneralInfo'
 import UserAvatar from '@/components/user/UserAvatar'
 import MultiFilesUploader from '@/components/MultiFilesUploader'
@@ -204,23 +207,48 @@ export default {
   },
 
   created () {
-    this.getCurrentUserInfo()
-    this.getRootFilesPath()
+    this.getCurrentUserInfo();
+    this.getRootFilesPath();
+
+    this.fetchUsers();
+    // this.getUsers();
   },
 
   mounted () {
-    this.getUserInfo()
-    this.getUsersList()
+    // this.getUserInfo()
+    // this.fetchUser();
+    // this.getUsersList()
     this.getUserFiles()
   },
 
   computed: {
+
+    ...mapGetters([
+        'userInfo',
+        // 'getUser',
+        'getUsers',
+    ]),
+
     newPwdCompareWarn () {
       return this.compareNewPassword()
     }
   },
 
   methods: {
+
+    ...mapActions([
+      'fetchUser',
+      'fetchUsers',
+      'setUserId',
+      'setPreloader',
+      'setAlertInfo',
+    ]),
+
+    // async getUsers() {
+    //    await this.$store.dispatch('fetchUsers')
+    //    let users  = this.$store.getters.getUsers
+    //    this.userTest = users
+    // },
 
     filesLoaded(response) {
        this.getUserFiles()

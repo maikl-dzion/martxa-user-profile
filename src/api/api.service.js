@@ -1,106 +1,145 @@
-import Vue from "vue";
 import axios from "axios";
-import VueAxios from "vue-axios";
-import JwtService from "@/common/jwt.service";
-import { API_URL } from "@/common/config";
 
-const ApiService = {
-  init() {
-    Vue.use(VueAxios, axios);
-    Vue.axios.defaults.baseURL = API_URL;
-  },
+const API_URL = 'http://bolderfest.ru/user-profile/api/v1';
+const AXIOS_HEADERS = {
+  'Accept': 'application/json',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': '*',
+  'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+  'X-Requested-With': 'XMLHttpRequest',
+  'Content-Type': 'multipart/form-data, apllication/json',
+  'X-User-Jwt-Token' : '',
+}
 
-  setHeader() {
-    Vue.axios.defaults.headers.common[
-      "Authorization"
-    ] = `Token ${JwtService.getToken()}`;
-  },
+axios.defaults.headers = AXIOS_HEADERS;
 
-  query(resource, params) {
-    return Vue.axios.get(resource, params).catch(error => {
-      throw new Error(`[RWV] ApiService ${error}`);
-    });
-  },
+// axios.defaults.headers['Access-Control-Allow-Origin'] = '*'
+// axios.defaults.headers.common['Accept'] = 'application/json'
+// axios.defaults.headers.common['Content-Type'] = 'application/json'
+// axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN'
+// axios.defaults.xsrfCookieName = 'csrftoken'
 
-  get(resource, slug = "") {
-    return Vue.axios.get(`${resource}/${slug}`).catch(error => {
-      throw new Error(`[RWV] ApiService ${error}`);
-    });
-  },
+class ApiService {
 
-  post(resource, params) {
-    return Vue.axios.post(`${resource}`, params);
-  },
+  API_URL  = API_URL;
+  HTTP_HEADERS = AXIOS_HEADERS;
 
-  update(resource, slug, params) {
-    return Vue.axios.put(`${resource}/${slug}`, params);
-  },
-
-  put(resource, params) {
-    return Vue.axios.put(`${resource}`, params);
-  },
-
-  delete(resource) {
-    return Vue.axios.delete(resource).catch(error => {
-      throw new Error(`[RWV] ApiService ${error}`);
-    });
+  constructor(token='') {
+      this.http = axios
+      this.token = token
   }
-};
 
-export default ApiService;
+  /**
+   * Returns a axios configuration object given the following parameters
+   * @param {String} method       HTTP Method
+   * @param {String} url          Target URL
+   * @param {Object} data         [Optional]: Body of the HTTP Post request
+   * @param {Object} params       [Optional]: HTTP GET Parameters
+   * @param {Object} extraConfig  [Optional]: Extra Axios configuration
+   * @param {Object} headers      [Optional]: HTTP requests headers
+   * @param {String} token        [Optional]: JWT Token
+   *
+   * @returns {Object}            Axios configuration object
+   */
+  makeAxiosConfig(method, url, { data={}, params={}, extraConfig={}, headers={}, token='' }) {
 
-export const TagsService = {
-  get() {
-    return ApiService.get("tags");
+    headers = { ...headers, ...this.HTTP_HEADERS }
+
+    if (token)
+      headers['X-User-Jwt-Token'] = token
+
+    return { method,  url, params, data, headers, ...extraConfig, }
   }
-};
 
-export const ArticlesService = {
-  query(type, params) {
-    return ApiService.query("articles" + (type === "feed" ? "/feed" : ""), {
-      params: params
-    });
-  },
-  get(slug) {
-    return ApiService.get("articles", slug);
-  },
-  create(params) {
-    return ApiService.post("articles", { article: params });
-  },
-  update(slug, params) {
-    return ApiService.update("articles", slug, { article: params });
-  },
-  destroy(slug) {
-    return ApiService.delete(`articles/${slug}`);
-  }
-};
+  /**
+   * Makes a HTTP request
+   * @param {String} method             HTTP Method
+   * @param {String} url                Target URL
+   * @param {Object} data               [Optional]: Body of the HTTP Post request
+   * @param {Object} params             [Optional]: HTTP GET Parameters
+   * @param {Object} extraConfig        [Optional]: Extra Axios configuration
+   * @param {Object} headers            [Optional]: HTTP requests headers
+   * @param {String} token              [Optional]: JWT Token
+   * @param {String} responseProperty   [Optional]: Response property to return
+   *
+   * @returns {Object}            Response data from the server
+   * @throws                      Exception to be captured
+   */
+  async request(method, url, { data={}, params={}, config={}, headers={}, token='', responseProperty='data' }) {
+    const axiosConfig = this.makeAxiosConfig(method, url, { data, params, extraConfig: config, headers, token })
 
-export const CommentsService = {
-  get(slug) {
-    if (typeof slug !== "string") {
-      throw new Error(
-        "[RWV] CommentsService.get() article slug required to fetch comments"
-      );
+    try {
+      const response = await this.http(axiosConfig)
+      return response[responseProperty];
+    } catch (error) {
+      console.log('HTTP_ERROR', error);
+      throw new Error(`[HTTP_ERROR] ApiService ${error}`);
     }
-    return ApiService.get("articles", `${slug}/comments`);
-  },
-
-  post(slug, payload) {
-    return ApiService.post(`articles/${slug}/comments`, {
-      comment: { body: payload }
-    });
-  },
-
-  destroy(slug, commentId) {
-    return ApiService.delete(`articles/${slug}/comments/${commentId}`);
   }
-};
 
-export const FavoriteService = {
-  add(slug) {
-    return ApiService.post(`articles/${slug}/favorite`);
-  },
-  remove(slug) {
-    return ApiService.delete(`articles/${slug}/favorite`);
+  getToken() {
+    return this.token
   }
-};
+
+  setToken(token) {
+    this.token = token
+  }
+
+  getResourceUrl(url) {
+    return this.API_URL + url
+  }
+
+  async get(uri) {
+    const options = { token: this.getToken() }
+    const url = this.getResourceUrl(uri)
+    return this.request('GET', url, options)
+  }
+
+  async retrieve(uri) {
+    const options = { token: this.getToken() }
+    const url = this.getResourceUrl(uri)
+    return this.request('GET', url, options)
+  }
+
+  async post(uri, data) {
+    const options = { data , token: this.getToken() }
+    const url = this.getResourceUrl(uri)
+    return this.request('POST', url, options)
+  }
+
+  async put(uri, data) {
+    const options = { data, token: this.getToken() }
+    const url = this.getResourceUrl(uri)
+    return this.request('PUT', url, options)
+  }
+
+  async delete(uri) {
+    const options = { token: this.getToken() }
+    const url = this.getResourceUrl(uri)
+    return this.request('DELETE', url, options)
+  }
+
+  // handleError(error) {
+  //   switch (error.response.status) {
+  //     case 401:
+  //       this.redirectTo(document, '/')
+  //       break;
+  //     case 404:
+  //       this.redirectTo(document, '/404')
+  //       break;
+  //     default:
+  //       this.redirectTo(document, '/500')
+  //       break;
+  //   }
+  //   return Promise.reject(error)
+  // }
+  //
+  // redirectTo(document, path) {
+  //   document.location = path
+  // }
+
+}
+
+export default ApiService
+
+

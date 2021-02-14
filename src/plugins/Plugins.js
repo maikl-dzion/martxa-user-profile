@@ -1,6 +1,7 @@
 import InfoMessage from '../components/app/InfoMessage'
 import Preloading from '../components/app/Preloading'
 import PageTemplate from '../components/app/PageTemplate'
+import { mapGetters, mapActions } from 'vuex'
 
 const Plugins = {
   install (Vue) {
@@ -10,6 +11,7 @@ const Plugins = {
     Vue.component('Preloading', Preloading)
 
     Vue.mixin({
+
       data () {
         return {
           responseMessage: '',
@@ -27,7 +29,16 @@ const Plugins = {
           rootPath : '',
         }
       },
+
       methods: {
+
+        ...mapActions([
+          'fetchUser',
+          'fetchUsers',
+          'setUserId',
+          'setPreloader',
+          'setAlertInfo',
+        ]),
 
         setTimer (fn, timer = 3000) {
           setTimeout(fn, timer)

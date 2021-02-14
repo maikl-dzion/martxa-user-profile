@@ -5,11 +5,6 @@
       <HeaderTop/>
     </header>
 
-    <Preloading
-      :preloader="preloaderState"
-      :message="preloaderMessage"
-    ></Preloading>
-
     <div class="container">
 
       <InfoMessage
@@ -131,8 +126,8 @@
 
 <script>
 
+import { mapActions } from 'vuex'
 import HeaderTop from '../components/app/HeaderTop'
-//import Footer from '../components/app/Footer'
 
 export default {
   data: () => ({
@@ -152,24 +147,35 @@ export default {
 
   methods: {
 
+    ...mapActions([
+      'fetchUser',
+      'fetchUsers',
+      'setUserId',
+      'setPreloader',
+      'setAlertInfo',
+    ]),
+
+    forgotYouPwd() {
+      this.setPreloader(true);
+      const apiUrl = '/user/forgot-password/' + this.authData.email
+      this.send(apiUrl).then(response => {
+        this.setPreloader(false);
+        let resp = response;
+      })
+    },
+
     auth() {
-      this.preloaderState = true
+      this.setPreloader(true);
+      // this.preloaderState = true
       const postData = this.authData
       const apiUrl = '/post/auth/login'
       this.send(apiUrl, 'post', postData).then(this.authResponseHandle)
     },
 
-    forgotYouPwd() {
-        this.preloaderState = true
-        const apiUrl = '/user/forgot-password/' + this.authData.email
-        this.send(apiUrl).then(response => {
-             this.preloaderState = false
-             let resp = response;
-        })
-    },
-
     authResponseHandle(resp) {
-      this.preloaderState = false
+
+      this.setPreloader(false);
+
       this.response = resp
       if (!resp.status || !resp.token) {
         this.responseMessage = 'Не удалось авторизовать пользователя, попробуйте еще раз'
@@ -177,11 +183,17 @@ export default {
         return false
       }
 
+      this.setUserId(resp.user.user_id);
+      this.fetchUser(resp.user.user_id);
+      this.fetchUsers();
+
       this.setToken(resp.token)
       this.store('user_name', resp.user.name)
       this.store('user_id', resp.user.user_id)
       this.sendEventBus('auth_event', {user_id: resp.user.user_id})
+
       this.$router.push('/page/profile')
+
     },
 
   } // methods
