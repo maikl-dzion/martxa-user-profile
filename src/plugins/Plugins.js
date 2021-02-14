@@ -30,6 +30,13 @@ const Plugins = {
         }
       },
 
+      computed : {
+        ...mapGetters([
+          'userInfo',
+          'getUsers',
+        ]),
+      },
+
       methods: {
 
         ...mapActions([
