@@ -47,7 +47,7 @@ const Http = {
           return localStorage.getItem(HEADER_JWT_TOKEN_NAME)
         },
 
-        // --- EVENT BUS
+        // --- EVENT BUS -----
         sendEventBus(eventName, data = null) {
           this.$eventBus.$emit(eventName, data)
         },
@@ -72,18 +72,18 @@ const Http = {
         },
 
         saveResponse(response) {
-          let status = false
-          let info = {}
-          let error = {}
-          if (response.save_result) {
-            status = response.save_result
-          } else {
-            if (response.error)
-              error = response.error
-          }
-          return {
-            status, error, info
-          }
+		  let status = false
+		  let info = {}
+		  let error = {}
+		  if (response.save_result) {
+			status = response.save_result
+		  } else {
+			if (response.error)
+			  error = response.error
+		  }
+		  return {
+			status, error, info
+		  }
         }
 
       } // --- Methods --
