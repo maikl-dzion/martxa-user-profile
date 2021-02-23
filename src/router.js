@@ -28,6 +28,17 @@ export default new Router({
       path: '/page/register',
       component: () => import('./pages/UserRegister')
     },
+
+    {
+      path: '/page/bulliten-board',
+      component: () => import('./pages/BulletinBoard')
+    },
+
+    {
+      path: '/page/task-board',
+      component: () => import('./pages/TaskBoard')
+    },
+
     {
       path: '/page/profile',
       component: () => import('./pages/UserProfile')

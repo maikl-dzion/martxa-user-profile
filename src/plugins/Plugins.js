@@ -1,14 +1,16 @@
 import InfoMessage from '../components/app/InfoMessage'
 import Preloading from '../components/app/Preloading'
 import PageTemplate from '../components/app/PageTemplate'
+import PreViewJson from '../components/app/PreViewJson'
 import { mapGetters, mapActions } from 'vuex'
 
 const Plugins = {
   install (Vue) {
 
     Vue.component('PageTemplate', PageTemplate)
-    Vue.component('InfoMessage', InfoMessage)
-    Vue.component('Preloading', Preloading)
+    Vue.component('InfoMessage' , InfoMessage)
+    Vue.component('Preloading'  , Preloading)
+    Vue.component('PreViewJson' , PreViewJson)
 
     Vue.mixin({
 

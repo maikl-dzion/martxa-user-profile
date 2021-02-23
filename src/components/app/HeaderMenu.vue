@@ -22,7 +22,7 @@
                 <ul id="navigation" >
                     <template v-for="(menu) in topMenu" >
                         <router-link tag="li" :to="menu.url" active-class="active"  >
-                             <a style="">{{ menu.title }}</a>
+                             <a style="font-size: 14px;">{{ menu.title }}</a>
                         </router-link>
                     </template>
                 </ul>
@@ -54,8 +54,10 @@ export default {
         // {url: '/', title: 'Главная'},
         {url: '/page/profile', title: 'Профиль'},
         {url: '/page/users-list', title: 'Пользователи'},
+        {url: '/page/bulliten-board', title: 'Доска объявлений'},
+        {url: '/page/task-board', title: 'Доска задач'},
         // {url: '/page/register', title: 'Регистрация'},
-        {url: '/page/admin-panel', title: 'Admin'},
+        {url: '/page/admin-panel', title: 'Admin Page'},
         {url: '/page/tests', title: 'Tests'},
       ]
     }
