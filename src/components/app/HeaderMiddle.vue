@@ -1,15 +1,19 @@
 <template>
 
-  <div class="header-middle bg-2" style="height: 65px; padding: 0px; margin: 0px;">
-    <div class="container" style="height: 100%; padding-top: 0px;" >
-      <div class="row">
-        <div class="col-md-3 hidden-sm hidden-xs">
-          <div class="logo">
-            <h1><a href="index.html">Bolderfest.ru</a></h1>
+  <div class="header-middle bg-2" style="height: 55px; padding: 0px; margin: 0px;">
+    <div class="container" style="height: 100%; padding-top: 0px;">
+      <div class="row" >
+
+        <div class="col-md-3 hidden-sm hidden-xs" >
+          <div class="logo" style=" position: absolute; height: 55px;" >
+            <h1 style="padding:14px 0px;">
+              <router-link tag="a" to="/">Bolderfest.ru</router-link>
+            </h1>
           </div>
         </div>
+
         <div class="col-md-9 col-xs-12">
-          <div class="header-middle-right">
+          <div class="header-middle-right" style="margin: 6px 0;" >
             <ul>
               <li>
                 <div class="contact-icon">
@@ -49,10 +53,15 @@
 
 <script>
 export default {
-name: "HeaderInfo"
+  name: "HeaderInfo"
 }
 </script>
 
 <style scoped>
-
+/* На верхнем уровне кода */
+@media screen and (max-width: 400px) {
+  .header-middle-right {
+     /*display: none !important;*/
+  }
+}
 </style>

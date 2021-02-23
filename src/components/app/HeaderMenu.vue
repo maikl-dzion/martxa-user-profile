@@ -1,46 +1,44 @@
 <template>
-  <div class="header-bottom" id="sticky-header"
-       style="height: 72px; padding: 0px; margin: 0px; border-top:1px #296dc1 solid; border-bottom:1px #296dc1 solid">
+  <div class="header-bottom" id="sticky-header">
 
     <div class="container" style="padding: 0px;">
-      <div class="row" style="margin: 0px !important; padding: -20px 0px 0px 0px !important; border:0px red solid;">
+      <div class="row" style="margin:0px !important; padding:0px !important; border:0px red solid;">
 
         <div class="hidden-md hidden-lg col-sm-8 col-xs-6">
-          <div class="logo"><h1><a href="index.html">Martxa</a></h1></div>
+            <div class="logo" style="font-size: 14px"><h1>
+              <router-link tag="a" to="/" >На главную</router-link>
+            </h1></div>
+            <div style="margin: 0px 0px 20px 0px" ><ul>
+                <template v-for="(menu) in topMenu" >
+                  <router-link tag="li" :to="menu.url" active-class="active"  >
+                    <a style="font-size: 17px" >{{ menu.title }}</a>
+                  </router-link>
+                </template>
+            </ul></div>
         </div>
 
-        <div class="col-md-11 hidden-sm hidden-xs"
-             style="border:0px red solid; margin: -5px 0px 0px 0px; padding: 0px;">
-          <div class="mainmenu" style="border:0px red solid;">
-            <ul id="navigation" style="border:0px red solid;">
-
-              <li class="active">
-                <router-link tag="a" to="/">Главная</router-link>
-              </li>
-
-              <li v-for="(menu) in topMenu">
-                <router-link tag="a" :to="menu.url">{{ menu.title }}</router-link>
-              </li>
-
-<!--              <li >-->
-<!--                 <a href="http://bolderfest.ru/user-profile/tests" target="_blank" >Tests</a>-->
-<!--              </li>-->
-
-            </ul>
-          </div>
+        <div  class="col-md-11 hidden-sm hidden-xs" >
+              <div class="mainmenu" >
+                <ul id="navigation" >
+                    <template v-for="(menu) in topMenu" >
+                        <router-link tag="li" :to="menu.url" active-class="active"  >
+                             <a style="">{{ menu.title }}</a>
+                        </router-link>
+                    </template>
+                </ul>
+              </div>
         </div>
 
         <div class="col-md-1 col-sm-2 col-xs-3" style="margin: -5px 0px 0px 0px; padding: 0px;">
           <div class="search-wrap text-right">
-            <ul>
-              <li><a href="#"><i class="fa fa-search"></i></a></li>
-            </ul>
+            <ul><li><a href="#"><i class="fa fa-search"></i></a></li></ul>
           </div>
         </div>
 
         <div class="col-sm-2 clear col-xs-3 hidden-md hidden-lg">
           <div class="responsive-menu-wrap floatright"></div>
         </div>
+
       </div>
     </div>
   </div>
@@ -53,63 +51,56 @@ export default {
   data() {
     return {
       topMenu: [
-        {url: '/page/users-list', title: 'Пользователи'},
+        // {url: '/', title: 'Главная'},
         {url: '/page/profile', title: 'Профиль'},
-        {url: '/page/register', title: 'Регистрация'},
+        {url: '/page/users-list', title: 'Пользователи'},
+        // {url: '/page/register', title: 'Регистрация'},
         {url: '/page/admin-panel', title: 'Admin'},
         {url: '/page/tests', title: 'Tests'},
       ]
     }
   },
 
-  mounted() {
-    $(document).ready(function () {
-
-      $(".mainmenu li").click(function () {
-        // $(".mainmenu > #navigation > ul > li").removeClass( "active")
-        // $(this).addClass("active")
-      })
-
-    })
-  }
-
 }
 </script>
 
 <style scoped>
 
+.header-bottom {
+  height: 55px;
+  padding: 0px; margin: 0px;
+  border-top:1px #296dc1 solid;
+  border-bottom:1px #296dc1 solid;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
+}
+
+.col-md-11 {
+  border:0px red solid; margin:-2px 0px; padding:0px;
+}
+
+.mainmenu ul li > a:hover {
+  background: none;
+  color: #296dc1;
+  background: lightgray;
+}
+
+.mainmenu ul li > a {
+  font-weight: 500;
+  padding: 13px 14px;
+}
+
+.search-wrap ul li {
+  height: 57px;
+  line-height: 57px;
+  margin: 0px; padding: 0px;
+}
+
+.mainmenu ul li > a:before {
+  bottom: 18px;
+}
+
+.mainmenu ul li > a:after {
+  bottom: 14px;
+}
+
 </style>
-
-
-<!--              <li><a href="service.html">Service <i class="fa fa-angle-down"></i></a>-->
-<!--                <ul class="submenu">-->
-<!--                  <li><a href="service.html">service One</a></li>-->
-<!--                  <li><a href="service2.html">service Two</a></li>-->
-<!--                  <li><a href="single-service.html">service Single</a></li>-->
-<!--                </ul>-->
-<!--              </li>-->
-
-<!--              <li><a href="#">Pages <i class="fa fa-angle-down"></i></a>-->
-<!--                <ul class="megamenu">-->
-<!--                  <li>-->
-<!--                      <a class="mega-title" href="#">MegaMenu Title</a>-->
-<!--                      <ul>-->
-<!--                        <li><a href="about.html">About One</a></li>-->
-<!--                        <li><a href="about2.html">About Two</a></li>-->
-<!--                        <li><a href="service.html">service One</a></li>-->
-<!--                        <li><a href="service2.html">service Two</a></li>-->
-<!--                        <li><a href="single-service.html">service Single</a></li>-->
-<!--                      </ul>-->
-<!--                  </li>-->
-
-<!--                  <li>-->
-<!--                      <a class="mega-title" href="#">MegaMenu Title</a>-->
-<!--                      <ul>-->
-<!--                        <li><a href="testmonial.html">Testmonial One</a></li>-->
-<!--                        <li><a href="team.html">Team page</a></li>-->
-<!--                        <li><a href="commingsoon.html">Comming Soon</a></li>-->
-<!--                      </ul>-->
-<!--                  </li>-->
-
-<!--                </ul>-->
-<!--              </li>-->

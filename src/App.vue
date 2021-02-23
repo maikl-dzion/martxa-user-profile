@@ -23,7 +23,9 @@
     </div>
     <!-- search-area -->
 
-    <router-view></router-view>
+    <transition name="fade-app">
+       <router-view></router-view>
+    </transition>
 
   </div>
 </template>
@@ -68,7 +70,26 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
+.fade-app-enter-active, .fade-app-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-app-enter, .fade-app-leave-to  {
+  opacity: 0.9;
+}
+
+/* Анимации появления и исчезновения могут иметь */
+/* различные продолжительности и динамику.       */
+/*.fade-appe-enter-active {*/
+/*  transition: all .3s ease;*/
+/*}*/
+/*.fade-app-leave-active {*/
+/*  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);*/
+/*}*/
+/*.fade-app-enter, .fade-app-leave-to {*/
+/*  transform: translateX(10px);*/
+/*  opacity: 0;*/
+/*}*/
 
 </style>

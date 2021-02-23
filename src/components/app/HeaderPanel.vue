@@ -1,10 +1,8 @@
 <template>
 <header class="header-area">
-
    <HeaderTop/>
    <HeaderMiddle/>
    <HeaderMenu/>
-
 </header>
 </template>
 
