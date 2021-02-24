@@ -18,20 +18,19 @@ axios.defaults.headers = axiosHeaders
 
 const Http = {
 
-  install(Vue) {
+  install (Vue) {
     Vue.mixin({
 
-      data() {
+      data () {
         return {
           apiUrl: 'http://bolderfest.ru/user-profile/api/v1'
-          // apiUrl: 'http://bolderfest.ru/foldin-test-app/api/v1'
           // apiUrl: 'http://laravel.my/foldin-test-app/api/v1'
         }
       },
 
       methods: {
 
-        async send(url, method = 'get', data = null) {
+        async send (url, method = 'get', data = null) {
           const _url = this.apiUrl + url
           const token = this.getToken()
           axios.defaults.headers[HEADER_JWT_TOKEN_NAME] = token
@@ -39,27 +38,27 @@ const Http = {
           return response.data
         },
 
-        setToken(token) {
+        setToken (token) {
           localStorage.setItem(HEADER_JWT_TOKEN_NAME, token)
         },
 
-        getToken() {
+        getToken () {
           return localStorage.getItem(HEADER_JWT_TOKEN_NAME)
         },
 
         // --- EVENT BUS -----
-        sendEventBus(eventName, data = null) {
+        sendEventBus (eventName, data = null) {
           this.$eventBus.$emit(eventName, data)
         },
 
-        getEventBus(eventName, callBack) {
+        getEventBus (eventName, callBack) {
           this.$eventBus.$on(eventName, (item) => {
             callBack(item)
           })
         },
 
         // -- LOCAL STORE SERVICE
-        store(key, value = null) {
+        store (key, value = null) {
           if (value) {
             localStorage.setItem(key, value)
           } else {
@@ -67,23 +66,43 @@ const Http = {
           }
         },
 
-        storeRemove(key) {
+        storeRemove (key) {
           localStorage.removeItem(key)
         },
 
-        saveResponse(response) {
-		  let status = false
-		  let info = {}
-		  let error = {}
-		  if (response.save_result) {
-			status = response.save_result
-		  } else {
-			if (response.error)
-			  error = response.error
-		  }
-		  return {
-			status, error, info
-		  }
+        saveResponse (response, successMessage = null, errorMessage = null, param = null) {
+
+          this.setPreloader(false)
+
+          let status = false
+          let info   = {}
+          let error  = {}
+          let json   = {}
+
+          let messageInfo = { message : successMessage, json : null }
+          if(param && param.color)
+            messageInfo['color'] = param.color;
+
+          let errorJson   = { message : errorMessage, color : 'red' };
+
+          if (response.error) {
+            error = response.error
+            console.log('Error Message : ', error);
+            errorJson['json'] = error
+            messageInfo = errorJson
+            alert(error);
+          } else {
+            if (response.save_result)
+              status = response.save_result
+            else
+              messageInfo = errorJson
+          }
+
+          this.setAlertInfo(messageInfo);
+
+          return {
+            status, error, info
+          }
         }
 
       } // --- Methods --

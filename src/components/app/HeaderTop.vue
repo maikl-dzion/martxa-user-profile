@@ -1,4 +1,5 @@
 <template>
+
     <div class="header-top bg-2" style="height: 40px; padding: 0px 0px 0px 0px; margin: 0px;">
       <div class="container" style="height: 100%; padding-top: 5px;" >
         <div class="row" >
@@ -17,7 +18,9 @@
                 <template v-if="userId" >
                   <li><a @click="logout" href="#" >Выход</a></li>
                   <li><span style="color:white" >|</span></li>
-                  <li> <UserInfoPanel style="color:white" /> </li>
+                  <li> <div style="color:white;">
+                       <i class="fa fa-user" > {{userInfo.username}} ({{userInfo.user_id}})</i>
+                  </div> </li>
                 </template>
                 <template v-else >
                   <li><router-link tag="a" to="/page/auth" >Войти</router-link></li>
@@ -28,6 +31,7 @@
 <!--                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>-->
 <!--                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>-->
 <!--                <li><a href="#"><i class="fa fa-youtube"></i></a></li>-->
+
               </ul>
             </div>
           </div>
@@ -38,41 +42,29 @@
 
 <script>
 
-import UserInfoPanel from '../../components/app/UserInfoPanel'
-
 export default {
   name: 'Header',
-  data () {
-    return {
-      userId: 0,
+  data () { return {
+      userId   : 0,
       userName : '',
-    }
-  },
-
-  components : {
-    UserInfoPanel
-  },
-
-  created () {
-    this.userId = this.store('user_id')
-    this.userName = this.store('user_name')
-  },
+  }},
 
   methods: {
 
     logout () {
-      this.userId = 0
-      this.storeRemove('user_name')
-      this.storeRemove('user_id')
-      this.setToken(null)
-      this.$router.push('/page/auth')
+        this.userId = 0
+        this.storeRemove('user_name')
+        this.storeRemove('user_id')
+        this.setToken(null)
+        this.fetchUser(0)
+        this.$router.push('/page/auth')
     }
 
   },
 
   mounted () {
     this.getEventBus('auth_event', resp => {
-      this.userId = resp.user_id
+       this.userId = resp.user_id
     })
   }
 }

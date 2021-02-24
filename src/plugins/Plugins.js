@@ -14,39 +14,43 @@ const Plugins = {
 
     Vue.mixin({
 
-      data () {
-        return {
-          responseMessage: '',
-          responseColor: '',
+      data () { return {
 
+          responseMessage: '',
+          responseColor  : '',
           preloaderState: false,
           preloaderMessage: 'Подождите, идет сохранение',
 
-          userId: 0,
-          userName: '',
+          userId    : 0,
+          userName  : '',
+          rootPath  : '',
 
-          userInfo: {},
           usersList : [],
 
-          rootPath : '',
-        }
+      } },
+
+      created () {
+          this.setStoreUserInfo();
+          this.getRootFilesPath();
+          this.fetchUsers();
       },
 
       computed : {
         ...mapGetters([
-          'userInfo',
-          'getUsers',
+            'userInfo',
+            'getUsers',
+            'getUsersList',
         ]),
       },
 
       methods: {
 
         ...mapActions([
-          'fetchUser',
-          'fetchUsers',
-          'setUserId',
-          'setPreloader',
-          'setAlertInfo',
+            'fetchUser',
+            'fetchUsers',
+            'setUserId',
+            'setPreloader',
+            'setAlertInfo',
         ]),
 
         setTimer (fn, timer = 3000) {
@@ -54,12 +58,22 @@ const Plugins = {
         },
 
         getCurrentUserInfo () {
-          this.userId = this.store('user_id')
-          if (!this.userId) {
-            this.$router.push('/page/auth')
-          }
-          this.userName = this.store('user_name')
+            this.userId = this.store('user_id')
+            if (!this.userId) {
+              this.$router.push('/page/auth')
+            }
+            this.fetchUser(this.userId);
+            this.userName = this.store('user_name')
         },
+
+        setStoreUserInfo () {
+            this.userId = this.store('user_id')
+            if (!this.userId)
+              this.$router.push('/page/auth')
+            this.fetchUser(this.userId);
+            this.userName = this.store('user_name')
+        },
+
 
         getUserInfo () {
           const userId = this.userId

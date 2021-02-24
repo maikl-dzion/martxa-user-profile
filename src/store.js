@@ -8,10 +8,11 @@ export default new Vuex.Store({
   //----------
   state: {
      preloder : false,
-     preloaderMessage : 'Подождите,идет запрос к серверу',
+     preloaderMessage : 'Подождите, идет запрос к серверу',
 
      _alertColor   : 'green',
      _alertMessage : '',
+     _alertJson    : {},
   },
   //----------
   mutations: {},
@@ -23,15 +24,19 @@ export default new Vuex.Store({
     },
 
     setAlertInfo(context, data ) {
-      const color = (data.color) ? data.color : 'green'
-      const timer = (data.timer) ? data.timer : 5000;
 
-      context.state._alertColor = color
+      const color = (data.color) ? data.color : 'green'
+      const timer = (data.timer) ? data.timer : 10000;
+      const json  = (data.json)  ? data.json  : {};
+
+      context.state._alertColor   = color
       context.state._alertMessage = data.message;
+      context.state._alertJson    = json
 
       setTimeout(() => {
-        context.state._alertColor = 'green';
+        context.state._alertColor   = 'green';
         context.state._alertMessage = '';
+        context.state._alertJson    = {};
       }, timer)
     },
 
@@ -53,6 +58,13 @@ export default new Vuex.Store({
 
     alertMessage: state => {
       return state._alertMessage
+    },
+
+    alertJson: state => {
+      if (Object.keys(state._alertJson).length == 0) {
+        return null;
+      }
+      return state._alertJson
     },
 
   },

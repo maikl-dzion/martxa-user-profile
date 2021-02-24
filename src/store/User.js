@@ -38,6 +38,12 @@ const user = {
       },
 
       fetchUser(context, userId) {
+
+        if(!userId) {
+          context.commit('setUser', []);
+          return false;
+        }
+
         const url = '/get/user-by-id/' + userId
         api.get(url).then(data => {
            context.commit('setUser', data);
@@ -63,6 +69,10 @@ const user = {
       },
 
       getUsers: state => {
+        return state.users
+      },
+
+      getUsersList: state => {
         return state.users
       },
 

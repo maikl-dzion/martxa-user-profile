@@ -39,7 +39,7 @@
                     </div>
                   </div>
                   <div class="col-xs-8">
-                    <input v-model="user.name" required="true" type="text" placeholder="Имя">
+                    <input v-model="user.username" required="true" type="text" placeholder="Имя">
                   </div>
                 </div>
               </div>
@@ -135,7 +135,7 @@ export default {
       preloaderMessage: 'Подождите, идет сохранение',
 
       user: {
-        name: '',
+        username: '',
         email: '',
         password: '',
         login: '',
@@ -151,16 +151,13 @@ export default {
   methods: {
 
     save() {
-
-      if (!this.validate()) {
+      if (!this.validate())
         return false
-      }
 
-      this.preloaderState = true
+      this.setPreloader(true)
       const postData = this.user
       const apiUrl = '/post/user/register'
-      this.send(apiUrl, 'post', postData)
-        .then(this.saveResponseHandle)
+      this.send(apiUrl, 'post', postData).then(this.registerResponseHandle)
     },
 
     validate() {
@@ -174,37 +171,22 @@ export default {
         return false
       }
 
-      if (!this.user.name) {
+      if (!this.user.username) {
         alert('Вы не прописали имя, это обязательное поле')
         return false
       }
 
       if (!this.user.login) {
-        this.user.login = this.user.name
+        this.user.login = this.user.username
       }
 
       return true
     },
 
-    saveResponseHandle(response) {
-      this.preloaderState = false
-      const resp = this.saveResponse(response)
-      this.respColor = ''
-      this.respMessage = `Новый пользователь успешно создан`
-      if (!resp.status) {
-        this.respMessage = 'Не удалось создать пользователя -' + resp.error
-        this.respColor = 'red'
-        return false
-      }
-      // this.saveRespClear()
-      // this.$router.push('/page/auth')
-    },
-
-    saveRespClear() {
-      this.setTimer(() => {
-        this.respMessage = ''
-        this.respColor = ''
-      })
+    registerResponseHandle(response) {
+      const res = this.saveResponse(response, `Новый пользователь успешно создан`, 'Не удалось создать пользователя')
+      if(res.status)
+        this.$router.push('/page/auth')
     },
 
   } // --- methods

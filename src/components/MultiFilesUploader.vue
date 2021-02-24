@@ -18,11 +18,11 @@
 
     <div>
       <button @click="selectFiles()"
-              class="cont-submit btn-contact btn-style" name="button"> Выбрать файлы
+              class="cont-submit btn-contact btn-style" name="button" style="border: 1px gainsboro solid" > Выбрать файлы
       </button>
 
       <button @click="submitFilesToServer()"
-              class="cont-submit btn-contact btn-style" name="button" style="margin-left: 20px"> Загрузить на сервер
+              class="cont-submit btn-contact btn-style" name="button" style="margin-left: 20px; border: 1px gainsboro solid"> Загрузить на сервер
       </button>
     </div>
     <br/>

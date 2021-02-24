@@ -4,16 +4,6 @@
     <!-- blog-details-area start -->
     <section class="blog-details-area1 ptb-101" style="border:0px red solid; ">
 
-<!--      <Preloading-->
-<!--        :preloader="preloaderState"-->
-<!--        :message="preloaderMessage"-->
-<!--      ></Preloading>-->
-
-<!--      <InfoMessage-->
-<!--        :message="responseMessage"-->
-<!--        :color="responseColor"-->
-<!--      ></InfoMessage>-->
-
       <div class="container-fluid">
         <div class="row">
 
@@ -21,7 +11,6 @@
           <div class="col-md-3 col-sm-6 col-xs-12" style="border:0px red solid ">
             <aside class="left-sidebar">
 
-              <!--- Avatar --->
               <UserAvatar
                 :user="userInfo"
                 :user_id="userId"
@@ -55,10 +44,6 @@
           <!--- ПРАВАЯ ПАНЕЛЬ ---->
           <div class="col-md-9 col-xs-12">
             <div class="blog-details-wrap">
-
-              <!--                <div class="blog-details-img">-->
-              <!--                  <img src="/assets/images/blog/blog-details.jpg" alt="">-->
-              <!--                </div>-->
 
               <template v-if="tab == 'info_details'">
                 user_info_details
@@ -102,8 +87,7 @@
               <template v-else-if="tab == 'change_password'">
                 <!---  Изменение пароля  --->
                 <div class="blog-details-content">
-                  <h3 class="sidebar-title" style="font-style: italic; font-size: 17px">Изменить пароль</h3>
-                  <hr/>
+                  <h3 class="sidebar-title" style="font-style: italic; font-size: 17px">Изменить пароль</h3><hr/>
                   <div class="col-md-12 col-xs-12">
                     <div class="faq-form form-style">
                       <form @submit.prevent="">
@@ -187,17 +171,14 @@ export default {
 
   data: () => ({
     tab: 'user_info',
-    emailVerifyCode: '',
+    emailVerifyCode : null,
     emailVerifyState: false,
     phoneVerifyState: false,
-
     newPassword: {
       password: '',
       repeat_pwd: ''
     },
-
     userFiles : [],
-
   }),
 
   components: {
@@ -209,26 +190,14 @@ export default {
   created () {
     this.getCurrentUserInfo();
     this.getRootFilesPath();
-
     this.fetchUsers();
-    // this.getUsers();
   },
 
   mounted () {
-    // this.getUserInfo()
-    // this.fetchUser();
-    // this.getUsersList()
     this.getUserFiles()
   },
 
   computed: {
-
-    ...mapGetters([
-        'userInfo',
-        // 'getUser',
-        'getUsers',
-    ]),
-
     newPwdCompareWarn () {
       return this.compareNewPassword()
     }
@@ -237,33 +206,24 @@ export default {
   methods: {
 
     ...mapActions([
-      'fetchUser',
-      'fetchUsers',
-      'setUserId',
-      'setPreloader',
-      'setAlertInfo',
+        'fetchUser',
+        'fetchUsers',
+        'setUserId',
+        'setPreloader',
+        'setAlertInfo',
     ]),
-
-    // async getUsers() {
-    //    await this.$store.dispatch('fetchUsers')
-    //    let users  = this.$store.getters.getUsers
-    //    this.userTest = users
-    // },
 
     filesLoaded(response) {
        this.getUserFiles()
-       this.responseStatusHandle(response,
-                    'Файлы успешно загружены',
-                      'Не удалось загрузить файлы')
+       this.saveResponse(response, 'Файлы успешно загружены', 'Не удалось загрузить файлы')
     },
 
     deleteFile(fileId) {
-      this.preloaderState = true
+      this.setPreloader(true)
       const apiUrl = '/delete/file/' + fileId
       this.send(apiUrl, 'delete').then(response => {
-         this.preloaderState = false
          this.getUserFiles()
-         this.responseStatusHandle(response, 'Файл удален', 'Файл не получилось удалить')
+         this.saveResponse(response, 'Файл удален', 'Файл не получилось удалить')
       })
     },
 
@@ -275,53 +235,31 @@ export default {
     },
 
     changePassword () {
-
-      if (!this.changePasswordValidate()) {
-        return false
-      }
-
-      this.preloaderState = true
+      if (!this.changePasswordValidate()) return false
       const data = this.newPassword
-
       const apiUrl = '/post/user/change-password/' + this.userId
+      this.setPreloader(true)
       this.send(apiUrl, 'put', data).then(response => {
-        this.responseStatusHandle(response, 'Пароль успешно изменен', 'Не удалось изменить пароль')
+        this.saveResponse(response, 'Пароль успешно изменен', 'Не удалось изменить пароль')
       })
     },
 
     changePasswordValidate () {
-
-      if (!this.newPassword.password) {
-        return false
-      }
-
-      let message = this.compareNewPassword()
-
-      if (message) {
-        this.responseMessage = message
-        this.responseColor = 'red'
-        return false
-      }
-
-      this.respInfoClear()
-
-      return true
+        if (!this.newPassword.password)
+          return false
+        let message = this.compareNewPassword()
+        if (message) {
+          this.responseMessage = message
+          this.responseColor = 'red'
+          return false
+        }
+        this.respInfoClear()
+        return true
     },
 
     responseStatusHandle (response, successMessage = null, errorMessage = null, fn = null) {
-      this.preloaderState = false
-      const r = this.saveResponse(response)
-      if (r.status) {
-        this.responseMessage = successMessage
-        if (fn) {
-          fn(response)
-        }
-      } else {
-        this.responseMessage = errorMessage
-        this.responseColor = 'red'
-        console.log(r.error)
-        return false
-      }
+      const res = this.saveResponse(response, successMessage, errorMessage)
+      if(fn) fn(res)
       return true
     },
 
