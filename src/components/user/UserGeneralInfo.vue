@@ -5,144 +5,256 @@
     <hr/>
 
     <div class="faq-form form-style" style="border:0px red solid; margin-bottom:20px;">
-      <form id="user-general-info" @submit.prevent="">
-        <div class="row">
+      <form id="user-general-info" @submit.prevent=""><div class="row">
 
-          <div class="col-xs-12">
-            <div class="row">
-              <div class="col-xs-4">
-                <div class="input-label">
-                  <div>Имя пользователя</div>
-                  <div style="color:red; font-weight: bold; margin-left:10px;">*</div>
-                </div>
-              </div>
-              <div class="col-xs-8">
-                <input v-model="userInfo.username" required="true" type="text" placeholder="Имя">
-              </div>
-            </div>
-          </div>
+         <template v-for="(item, fname) in userModel" >
 
-          <div class="col-xs-12">
-            <div class="row">
-              <div class="col-xs-4">
-                <div class="input-label">
-                  <div>Email</div>
-                  <div style="color:red; font-weight: bold; margin-left:10px;">*</div>
-                  <div style="position: absolute; margin:-20px 0px 0px -10px"><i v-if="userInfo.email_verify"
-                          class="fa fa-check-square-o" style="color:green"></i></div>
-                </div>
-              </div>
-              <div class="col-xs-6">
-                <input v-model="userInfo.email" required="true" type="text" placeholder="Email">
-              </div>
-              <div class="col-xs-2">
-                <div class="portfolio-menu text-center">
-                  <button @click="emailVerify('send')" class="btn-style" style="height: 38px">Заверить</button>
-                </div>
-              </div>
-            </div>
-          </div>
+               <div class="col-xs-12"><div class="row">
 
-          <div v-if="emailVerifyState" class="col-xs-12">
-            <div class="row" style="border:1px #77adef solid; margin:0px 0px 14px 0px; padding:4px;
-                                    -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
-                                    -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
-                                    box-shadow: 4px 4px 8px 4px rgba(34, 60, 80, 0.2);">
-              <div class="col-xs-4">
-                На ваш почтовый ящик отправлено письмо с кодом, <br>
-                нужно ввести этот код в поле и отправить на сервер
-              </div>
-              <div class="col-xs-4">
-                <input v-model="emailVerifyCode" required="true" type="text" placeholder="Code">
-                <button @click="emailVerify('check')"
-                        class="btn-style" style="width: 100%">Подтвердить
-                </button>
-              </div>
-            </div>
-          </div>
+                   <template v-if="fname == 'email'">
 
-          <div class="col-xs-12">
-            <div class="row">
-              <div class="col-xs-4">
-                <div class="input-label">Телефон</div>
-                <div style="position: absolute; margin:-43px 0px 0px -10px">
-                  <i v-if="userInfo.phone_verify"
-                         class="fa fa-check-square-o" style="color:green"></i></div>
-              </div>
-              <div class="col-xs-6">
-                <input v-model="userInfo.phone" type="text" placeholder="Телефон">
-              </div>
-              <div class="col-xs-2">
-                <div class="portfolio-menu text-center">
-                  <button @click="phoneVerify('send')" class="btn-style" style="height: 38px">Заверить</button>
-                </div>
-              </div>
-            </div>
-          </div>
+                         <div class="col-xs-4">
+                           <div class="input-label">
+                             <div>Email</div>
+                             <div style="color:red; font-weight: bold; margin-left:10px;">*</div>
+                             <div style="position: absolute; margin:-20px 0px 0px -10px">
+                               <i v-if="userInfo.email_verify" class="fa fa-check-square-o" style="color:green"></i>
+                             </div>
+                           </div>
+                         </div>
 
-          <div v-if="phoneVerifyState" class="col-xs-12">
-            <div class="row" style="border:1px #77adef solid; margin:0px 0px 14px 0px; padding:4px;
-                                    -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
-                                    -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
-                                    box-shadow: 4px 4px 8px 4px rgba(34, 60, 80, 0.2);">
-              <div class="col-xs-4">
-                На ваш телефон отправлено sms с кодом, <br>
-                нужно ввести этот код в поле и отправить на сервер
-              </div>
-              <div class="col-xs-4">
-                <input v-model="phoneVerifyCode" required="true" type="text" placeholder="Code">
-                <button @click="phoneVerify('check')"
-                        class="btn-style" style="width: 100%">Подтвердить
-                </button>
-              </div>
-            </div>
-          </div>
+                         <div class="col-xs-6">
+                           <input v-model="userInfo.email" required="true" type="text" placeholder="Email">
+                         </div>
 
-          <div class="col-xs-12">
-            <div class="row">
-              <div class="col-xs-4">
-                <div class="input-label">Логин</div>
-              </div>
-              <div class="col-xs-8">
-                <input v-model="userInfo.login" type="text" placeholder="Логин">
-              </div>
-            </div>
-          </div>
+                         <div class="col-xs-2">
+                           <div class="portfolio-menu text-center">
+                             <button @click="emailVerify('send')" class="btn-style" style="height: 38px">Заверить</button>
+                           </div>
+                         </div>
 
-          <div class="col-xs-12">
-            <div class="row">
-              <div class="col-xs-4">
-                <div class="input-label">Роль</div>
-              </div>
-              <div class="col-xs-8">
-                <input v-model="userInfo.role" type="text" placeholder="Роль" disabled>
-              </div>
-            </div>
-          </div>
+                         <div v-if="emailVerifyState" class="col-xs-12">
+                           <div class="row send-box" style="">
+                             <div class="col-xs-4">
+                               На ваш почтовый ящик отправлено письмо с кодом, <br>
+                               нужно ввести этот код в поле и отправить на сервер
+                             </div>
+                             <div class="col-xs-4">
+                               <input v-model="emailVerifyCode" required="true" type="text" placeholder="Code">
+                               <button @click="emailVerify('check')"
+                                       class="btn-style" style="width: 100%">Подтвердить
+                               </button>
+                             </div>
+                           </div>
+                         </div>
 
-          <div class="col-xs-12">
-            <div class="row">
-              <div class="col-xs-4">
-                <div class="input-label">Дата рождения</div>
-              </div>
-              <div class="col-xs-8">
-                <input v-model="userInfo.date_of_birth" type="text" placeholder="Дата рождения" >
-              </div>
-            </div>
-          </div>
+                   </template>
+                   <template v-if="fname == 'phone'">
 
-          <div class="col-xs-12">
-            <div class="row">
-              <div class="col-xs-4">
-                <div class="input-label">О себе</div>
-              </div>
-              <div class="col-xs-8">
-                                 <textarea v-model="userInfo.note" class="contact-textarea"
-                                           placeholder="О себе" id="msg" name="msg"></textarea>
-              </div>
-            </div>
-          </div>
+                         <div class="col-xs-12">
+                           <div class="row">
+                             <div class="col-xs-4">
+                               <div class="input-label">Телефон</div>
+                               <div style="position: absolute; margin:-43px 0px 0px -10px">
+                                 <i v-if="userInfo.phone_verify"
+                                    class="fa fa-check-square-o" style="color:green"></i></div>
+                             </div>
+                             <div class="col-xs-6">
+                               <input v-model="userInfo.phone" type="text" placeholder="Телефон">
+                             </div>
+                             <div class="col-xs-2">
+                               <div class="portfolio-menu text-center">
+                                 <button @click="phoneVerify('send')" class="btn-style" style="height: 38px">Заверить</button>
+                               </div>
+                             </div>
+                           </div>
+                         </div>
 
+                         <div v-if="phoneVerifyState" class="col-xs-12">
+                           <div  class="row send-box" >
+                             <div class="col-xs-4">
+                               На ваш телефон отправлено sms с кодом, <br>
+                               нужно ввести этот код в поле и отправить на сервер
+                             </div>
+                             <div class="col-xs-4">
+                               <input v-model="phoneVerifyCode" required="true" type="text" placeholder="Code">
+                               <button @click="phoneVerify('check')"
+                                       class="btn-style" style="width: 100%">Подтвердить
+                               </button>
+                             </div>
+                           </div>
+                         </div>
+
+                   </template>
+                   <template v-else >
+
+                         <div class="col-xs-4" >
+                           <div class="input-label">
+                             <div>{{item.label}}</div>
+                             <div v-if="fname == 'username' || fname == 'email'"
+                                  style="color:red; font-weight: bold; margin-left:10px;">*</div>
+                           </div>
+                         </div>
+
+                         <div class="col-xs-8" >
+                           <template v-if="item.type == 'textarea'">
+                               <textarea v-model="userInfo[fname]" class="contact-textarea"
+                                         :placeholder="item.label"  ></textarea>
+                           </template>
+                           <template v-else >
+                              <input v-if="fname == 'username' || fname == 'email'"
+                                     v-model="userInfo[fname]"  :type="item.type"  required="true" :placeholder="item.label">
+                              <input v-else-if="fname == 'role'"
+                                    v-model="userInfo[fname]"  :type="item.type" :placeholder="item.label" disabled>
+                              <input v-else
+                                    v-model="userInfo[fname]"  :type="item.type" :placeholder="item.label" >
+                           </template>
+
+                         </div>
+
+                   </template>
+
+               </div></div>
+
+         </template>
+
+
+<!--          <div class="col-xs-12">-->
+<!--            <div class="row">-->
+<!--              <div class="col-xs-4">-->
+<!--                <div class="input-label">-->
+<!--                  <div>Имя пользователя</div>-->
+<!--                  <div style="color:red; font-weight: bold; margin-left:10px;">*</div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="col-xs-8">-->
+<!--                <input v-model="userInfo.username" required="true" type="text" placeholder="Имя">-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <div class="col-xs-12">-->
+<!--            <div class="row">-->
+<!--              <div class="col-xs-4">-->
+<!--                <div class="input-label">-->
+<!--                  <div>Email</div>-->
+<!--                  <div style="color:red; font-weight: bold; margin-left:10px;">*</div>-->
+<!--                  <div style="position: absolute; margin:-20px 0px 0px -10px"><i v-if="userInfo.email_verify"-->
+<!--                          class="fa fa-check-square-o" style="color:green"></i></div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="col-xs-6">-->
+<!--                <input v-model="userInfo.email" required="true" type="text" placeholder="Email">-->
+<!--              </div>-->
+<!--              <div class="col-xs-2">-->
+<!--                <div class="portfolio-menu text-center">-->
+<!--                  <button @click="emailVerify('send')" class="btn-style" style="height: 38px">Заверить</button>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <div v-if="emailVerifyState" class="col-xs-12">-->
+<!--            <div class="row" style="border:1px #77adef solid; margin:0px 0px 14px 0px; padding:4px;-->
+<!--                                    -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);-->
+<!--                                    -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);-->
+<!--                                    box-shadow: 4px 4px 8px 4px rgba(34, 60, 80, 0.2);">-->
+<!--              <div class="col-xs-4">-->
+<!--                На ваш почтовый ящик отправлено письмо с кодом, <br>-->
+<!--                нужно ввести этот код в поле и отправить на сервер-->
+<!--              </div>-->
+<!--              <div class="col-xs-4">-->
+<!--                <input v-model="emailVerifyCode" required="true" type="text" placeholder="Code">-->
+<!--                <button @click="emailVerify('check')"-->
+<!--                        class="btn-style" style="width: 100%">Подтвердить-->
+<!--                </button>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <div class="col-xs-12">-->
+<!--            <div class="row">-->
+<!--              <div class="col-xs-4">-->
+<!--                <div class="input-label">Телефон</div>-->
+<!--                <div style="position: absolute; margin:-43px 0px 0px -10px">-->
+<!--                  <i v-if="userInfo.phone_verify"-->
+<!--                         class="fa fa-check-square-o" style="color:green"></i></div>-->
+<!--              </div>-->
+<!--              <div class="col-xs-6">-->
+<!--                <input v-model="userInfo.phone" type="text" placeholder="Телефон">-->
+<!--              </div>-->
+<!--              <div class="col-xs-2">-->
+<!--                <div class="portfolio-menu text-center">-->
+<!--                  <button @click="phoneVerify('send')" class="btn-style" style="height: 38px">Заверить</button>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <div v-if="phoneVerifyState" class="col-xs-12">-->
+<!--            <div class="row" style="border:1px #77adef solid; margin:0px 0px 14px 0px; padding:4px;-->
+<!--                                    -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);-->
+<!--                                    -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);-->
+<!--                                    box-shadow: 4px 4px 8px 4px rgba(34, 60, 80, 0.2);">-->
+<!--              <div class="col-xs-4">-->
+<!--                На ваш телефон отправлено sms с кодом, <br>-->
+<!--                нужно ввести этот код в поле и отправить на сервер-->
+<!--              </div>-->
+<!--              <div class="col-xs-4">-->
+<!--                <input v-model="phoneVerifyCode" required="true" type="text" placeholder="Code">-->
+<!--                <button @click="phoneVerify('check')"-->
+<!--                        class="btn-style" style="width: 100%">Подтвердить-->
+<!--                </button>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <div class="col-xs-12">-->
+<!--            <div class="row">-->
+<!--              <div class="col-xs-4">-->
+<!--                <div class="input-label">Логин</div>-->
+<!--              </div>-->
+<!--              <div class="col-xs-8">-->
+<!--                <input v-model="userInfo.login" type="text" placeholder="Логин">-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <div class="col-xs-12">-->
+<!--            <div class="row">-->
+<!--              <div class="col-xs-4">-->
+<!--                <div class="input-label">Роль</div>-->
+<!--              </div>-->
+<!--              <div class="col-xs-8">-->
+<!--                <input v-model="userInfo.role" type="text" placeholder="Роль" disabled>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <div class="col-xs-12">-->
+<!--            <div class="row">-->
+<!--              <div class="col-xs-4">-->
+<!--                <div class="input-label">Дата рождения</div>-->
+<!--              </div>-->
+<!--              <div class="col-xs-8">-->
+<!--                <input v-model="userInfo.date_of_birth" type="text" placeholder="Дата рождения" >-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <div class="col-xs-12">-->
+<!--            <div class="row">-->
+<!--              <div class="col-xs-4">-->
+<!--                <div class="input-label">О себе</div>-->
+<!--              </div>-->
+<!--              <div class="col-xs-8">-->
+<!--                                 <textarea v-model="userInfo.note" class="contact-textarea"-->
+<!--                                           placeholder="О себе" id="msg" name="msg"></textarea>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+          <!----------------------->
           <div class="col-xs-12">
             <hr/>
           </div>
@@ -153,8 +265,7 @@
             </button>
           </div>
 
-        </div>
-      </form>
+      </div></form>
     </div>
 
 <!--                        <pre>{{userInfo}}</pre>-->
@@ -181,30 +292,31 @@ export default {
 
     userModel : {
 
-        "user_id":     { type : 'text', label : '', value : '', },
-        "username":    { type : 'text', label : '', value : '', },
-        "email":       { type : 'text', label : '', value : '', },
-        "password":    { type : 'text', label : '', value : '', },
-        "login":       { type : 'text', label : '', value : '', },
-        "phone":       { type : 'text', label : '', value : '', },
-        "role":        { type : 'text', label : '', value : '', },
-        "photo":       { type : 'num', label : '', value : '', },
-        "active":      { type : 'text', label : '', value : '', },
-        "age":         { type : 'text', label : '', value : '', },
-        "sex":         { type : 'text', label : '', value : '', },
-        "address":     { type : 'text', label : '', value : '', },
-        "note":        { type : 'text', label : '', value : '', },
+        // "user_id":     { type : 'text', label : 'UserId', value : '', },
+        "username":    { type : 'text', label : 'Имя пользователя', value : '', },
+        "email":       { type : 'text', label : 'Email', value : '', },
+        // "password":    { type : 'text', label : 'Пароль', value : '', },
+        "login":       { type : 'text', label : 'Логин', value : '', },
+        "phone":       { type : 'text', label : 'Телефон', value : '', },
+        "role":        { type : 'text', label : 'Роль', value : '', },
+       // "photo":       { type : 'text', label : 'Фотография', value : '', },
+        "active":      { type : 'text', label : 'Статус', value : '', },
+        "age":         { type : 'text', label : 'Возраст', value : '', },
+        "sex":         { type : 'text', label : 'Пол', value : '', },
+        "address":     { type : 'text', label : 'Адрес', value : '', },
+        "date_of_birth": { type : 'text', label : 'Дата рождения', value : '', },
+        "note":        { type : 'textarea', label : 'О себе', value : '', },
 
-        "email_code":   { type : 'text', label : '', value : '', },
-        "phone_code":   { type : 'text', label : '', value : '', },
-        "email_verify": { type : 'text', label : '', value : '', },
-        "phone_verify": { type : 'text', label : '', value : '', },
-        "public_key":   { type : 'text', label : '', value : '', },
-        "private_key":  { type : 'text', label : '', value : '', },
-        "email_verified_at": { type : 'text', label : '', value : '', },
-        "created_at":    { type : 'text', label : '', value : '', },
-        "updated_at":    { type : 'text', label : '', value : '', },
-        "date_of_birth": { type : 'text', label : '', value : '', },
+        // "email_code":   { type : 'text', label : '', value : '', },
+        // "phone_code":   { type : 'text', label : '', value : '', },
+        // "email_verify": { type : 'text', label : '', value : '', },
+        // "phone_verify": { type : 'text', label : '', value : '', },
+        // "public_key":   { type : 'text', label : '', value : '', },
+        // "private_key":  { type : 'text', label : '', value : '', },
+        // "email_verified_at": { type : 'text', label : '', value : '', },
+
+        "created_at":    { type : 'text', label : 'Дата создания' , value : '', },
+        "updated_at":    { type : 'text', label : 'Дата изменения', value : '', },
 
     },
 
@@ -341,4 +453,10 @@ export default {
   display: flex;
 }
 
+.send-box {
+  border:1px #77adef solid; margin:0px 0px 14px 0px; padding:4px;
+  -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  box-shadow: 4px 4px 8px 4px rgba(34, 60, 80, 0.2);
+}
 </style>
