@@ -53,7 +53,8 @@
                     </div>
                   </div>
                   <div class="col-xs-8">
-                    <input v-model="user.email" required="true" type="text" placeholder="Email">
+                    <input @change="checkIsEmail($event)"
+                           v-model="user.email" required="true" type="text" placeholder="Email">
                   </div>
                 </div>
               </div>
@@ -161,26 +162,36 @@ export default {
     },
 
     validate() {
-      if (!this.user.email) {
-        alert('Вы не прописали email, это обязательное поле')
-        return false
-      }
+      const us = this.user;
 
-      if (!this.user.password) {
-        alert('Вы не установили пароль, это обязательное поле')
+      if(!this.validField(us.email, 'Вы не прописали email'))
         return false
-      }
 
-      if (!this.user.username) {
-        alert('Вы не прописали имя, это обязательное поле')
+      if(!this.validField(us.password, 'Вы не установили пароль'))
         return false
-      }
 
-      if (!this.user.login) {
+      if(!this.validField(us.username, 'Вы не прописали имя'))
+        return false
+
+      if (!this.user.login)
         this.user.login = this.user.username
-      }
 
       return true
+    },
+
+    async checkIsEmail(event) {
+        const check = await this.checkUserEmail(this.user.email);
+        if(check) {
+            alert('Такой email уже есть в системе,Вы не можете его использовать');
+            this.user.email = '';
+        }
+    },
+
+    validField(fieldValue, message){
+      if (fieldValue)
+        return true;
+      alert(message + ', это обязательное поле')
+      return false
     },
 
     registerResponseHandle(response) {

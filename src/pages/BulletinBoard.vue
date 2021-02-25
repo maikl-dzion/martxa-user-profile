@@ -21,6 +21,7 @@
                 </ul>
               </div>
 
+               <pre>{{categories}}</pre>
             </aside>
           </div>
 
@@ -115,6 +116,8 @@
 
              </div>
 
+
+
              <PreViewJson :items="boardItems" />
 
             </div>
@@ -148,6 +151,7 @@ export default {
         user_id     : '',
     },
     boardItems : [],
+    categories : [],
   }),
 
   /////////////////
@@ -162,12 +166,13 @@ export default {
 
   ///////////////////
   created () {
-    this.getCurrentUserInfo(); // получить информацию о текущем пользователе
-    this.getRootFilesPath();   // получить url для получения файлов
-    this.fetchUsers();
-    this.getBoardItems ();
-    this.getItem (2);
-    // this.deleteItem(1)
+      this.getCurrentUserInfo(); // получить информацию о текущем пользователе
+      this.getRootFilesPath();   // получить url для получения файлов
+      this.fetchUsers();
+      this.getBoardItems ();
+      this.getItem (2);
+      // this.deleteItem(1)
+      // this.getMenuCategories();
   },
 
   ////////////////
@@ -180,6 +185,17 @@ export default {
       'setPreloader',
       'setAlertInfo',
     ]),
+
+
+    // Получить все объявления
+    getMenuCategories() {
+      // this.setPreloader(true)
+      const url = '/bulliten-board/menu-categories';
+      this.send(url).then(response => {
+         this.setPreloader(false)
+         this.categories = response;
+      })
+    },
 
     // Получить все объявления
     getBoardItems () {

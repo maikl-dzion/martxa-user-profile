@@ -57,6 +57,19 @@ const Plugins = {
           setTimeout(fn, timer)
         },
 
+        setStoreUserInfo () {
+            this.userId = this.store('user_id')
+            const route = this.$router.currentRoute
+            if(route.name == 'user-register' || route.name == 'home')
+              return true;
+
+            if (!this.userId)
+              this.$router.push({ name : 'auth'})
+
+            this.fetchUser(this.userId);
+            this.userName = this.store('user_name')
+        },
+
         getCurrentUserInfo () {
             this.userId = this.store('user_id')
             if (!this.userId) {
@@ -65,15 +78,6 @@ const Plugins = {
             this.fetchUser(this.userId);
             this.userName = this.store('user_name')
         },
-
-        setStoreUserInfo () {
-            this.userId = this.store('user_id')
-            if (!this.userId)
-              this.$router.push('/page/auth')
-            this.fetchUser(this.userId);
-            this.userName = this.store('user_name')
-        },
-
 
         getUserInfo () {
           const userId = this.userId
@@ -95,6 +99,14 @@ const Plugins = {
           this.send(apiUrl).then(response => {
              this.store('root_path', response.root_path)
           })
+        },
+
+        async checkUserEmail(email) {
+          const apiUrl = '/get/user/' +email+ '/email';
+          const response = await this.send(apiUrl);
+          if(response.user_id)
+             return true
+          return false;
         },
 
         getRootFilesPath () {

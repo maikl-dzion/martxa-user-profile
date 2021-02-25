@@ -11,21 +11,24 @@ export default new Router({
 
     {
       path: '/',
+      name : 'home',
       component: Home
     },
 
     {
       path: '/page/auth',
+      name : 'auth',
       component: () => import('./pages/Auth')
     },
 
     {
-      path: '/page/users-list',
+      path : '/page/users-list',
       component: () => import('./pages/UsersList')
     },
 
     {
       path: '/page/register',
+      name : 'user-register',
       component: () => import('./pages/UserRegister')
     },
 

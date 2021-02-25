@@ -62,15 +62,22 @@
                        <h5 class="sidebar-title">Фотографии пользователя</h5>
                    </div>
 
+<!--                   <pre-view-json :items="fileAlbums"/>-->
+
                    <div class="row">
                      <div class="col-md-12 col-sm-6 col-xs-12 col">
                        <div class="footer-widget instagram-wrap">
-                         <ul><li v-for="(file) in userFiles" style="width:150px; border:1px gainsboro solid" >
-                             <a href="#" :key="file.file_id">
-                                 <img :src="rootPath + file.path" class="img-preview" style="width:100%;">
-                             </a>
-                             <div><button @click="deleteFile(file.file_id)" class="btn-style" style="width: 100%; border:0px;" >удалить</button></div>
-                         </li></ul>
+
+                         <MediaManager :files="userFiles"
+                                       :albums="fileAlbums"/>
+
+<!--                         <ul><li v-for="(file) in userFiles" style="width:150px; border:1px gainsboro solid" >-->
+<!--                             <a href="#" :key="file.file_id">-->
+<!--                                 <img :src="rootPath + file.path" class="img-preview" style="width:100%;">-->
+<!--                             </a>-->
+<!--                             <div><button @click="deleteFile(file.file_id)" class="btn-style" style="width: 100%; border:0px;" >удалить</button></div>-->
+<!--                         </li></ul>-->
+
                        </div>
                      </div>
                    </div>
@@ -166,6 +173,7 @@ import { mapGetters, mapActions } from 'vuex'
 import UserGeneralInfo from '@/components/user/UserGeneralInfo'
 import UserAvatar from '@/components/user/UserAvatar'
 import MultiFilesUploader from '@/components/MultiFilesUploader'
+import MediaManager from '@/components/app/MediaManager'
 
 export default {
 
@@ -178,13 +186,15 @@ export default {
       password: '',
       repeat_pwd: ''
     },
-    userFiles : [],
+    userFiles  : [],
+    fileAlbums : {},
   }),
 
   components: {
     UserGeneralInfo,
     MultiFilesUploader,
-    UserAvatar
+    UserAvatar,
+    MediaManager
   },
 
   created () {
@@ -267,7 +277,16 @@ export default {
         const apiUrl = '/user/get-files/' + this.userId
         this.send(apiUrl).then(response => {
             this.userFiles = response
+            this.getFileAlbums(this.userFiles)
         })
+    },
+
+    getFileAlbums(files) {
+         for(let i in files) {
+            const file = files[i];
+            if(file.folder_name)
+              this.fileAlbums[file.folder_name] = file.folder_name;
+         }
     },
 
   }
