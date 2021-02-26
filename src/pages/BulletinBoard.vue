@@ -10,18 +10,14 @@
           <!--- ЛЕВАЯ ПАНЕЛЬ ---->
           <div class="col-md-3 col-sm-6 col-xs-12" style="border:0px red solid ">
             <aside class="left-sidebar">
-
               <div class="mb-20 about-wrap user-menu">
-                <h3 class="sidebar-title" style="font-size: 19px">Категории объявлений</h3>
+                <h3 class="sidebar-title" style="font-size: 19px">Категории</h3>
                 <ul>
-                  <li><a @click="tab = 'user_info'">Основная информация</a></li>
-                  <li><a @click="tab = 'change_password'">Изменить пароль</a></li>
-                  <li><a @click="tab = 'photos'">Фотографии</a></li>
-                  <li><a @click="tab = 'info_details'">Подробная информация</a></li>
+                  <li v-for="(item) in categories" >
+                     <a @click="getCategoryItems(item)">{{item.name}}</a>
+                  </li>
                 </ul>
               </div>
-
-               <pre>{{categories}}</pre>
             </aside>
           </div>
 
@@ -29,8 +25,8 @@
           <div class="col-md-9 col-xs-12">
             <div class="blog-details-wrap">
 
-
-                 <div class="faq-form form-style" style="border:0px red solid; margin-bottom:20px;">
+                 <div class="faq-form form-style"
+                      style="border:1px gainsboro solid; margin-bottom:20px; padding:5px">
                   <form id="user-general-info" @submit.prevent="" >
                   <div class="row">
 
@@ -82,20 +78,19 @@
                       </div>
                     </div>
 
-                    <div class="col-xs-12"><hr/></div>
-
                     <div class="col-xs-12" >
                       <button @click="save()"
                               class="cont-submit btn-contact btn-style">Сохранить
                       </button>
                     </div>
+                    <div class="col-xs-12"><hr/></div>
 
                   </div>
                 </form>
               </div>
 
 
-             <div style="border: 1px red solid" >
+             <div style="border: 0px red solid" >
 
                  <div v-for="(item) in boardItems" >
                      <div class="blog-content">
@@ -106,7 +101,7 @@
                              <li><a href="#"><i class="fa fa-heart"></i> 5 Love</a></li>
                            </ul>
                          </div>
-                         <p>{{item.category_id}}</p>
+<!--                         <p>{{item.category_id}}</p>-->
                          <h3><a href="#">{{item.title}}</a></h3>
                          <p>{{item.description}}</p>
                          <p>{{item.price}}</p>
@@ -116,9 +111,7 @@
 
              </div>
 
-
-
-             <PreViewJson :items="boardItems" />
+<!--             <PreViewJson :items="boardItems" />-->
 
             </div>
           </div>
@@ -142,54 +135,45 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name : "BulletinBoard",
   data: () => ({
-    saveType : 'add',
-    itemModel: {
-        title       : '',
-        category_id : '',
-        description : '',
-        price       : '',
-        user_id     : '',
-    },
-    boardItems : [],
-    categories : [],
+      saveType : 'add',
+      itemModel: {
+          title       : '',
+          category_id : 0,
+          description : '',
+          price       : '',
+          user_id     : '',
+      },
+      boardItems : [],
+      categories : [],
   }),
 
   /////////////////
   computed: {
-
-    ...mapGetters([
-      'userInfo',
-      'getUsers',
-    ]),
-
   },
 
   ///////////////////
   created () {
-      this.getCurrentUserInfo(); // получить информацию о текущем пользователе
-      this.getRootFilesPath();   // получить url для получения файлов
-      this.fetchUsers();
-      this.getBoardItems ();
-      this.getItem (2);
+      // this.getCurrentUserInfo(); // получить информацию о текущем пользователе
+      // this.getRootFilesPath();   // получить url для получения файлов
+      // this.fetchUsers();
+      // this.getBoardItems ();
+      // this.getItem (2);
       // this.deleteItem(1)
-      // this.getMenuCategories();
+      this.getBoardItems ();
+      this.getMenuCategories();
   },
 
   ////////////////
   methods: {
 
-    ...mapActions([
-      'fetchUser',
-      'fetchUsers',
-      'setUserId',
-      'setPreloader',
-      'setAlertInfo',
-    ]),
-
+    getCategoryItems(item){
+        const categoryId = item.cat_id;
+        this.getBoardItems (categoryId);
+    },
 
     // Получить все объявления
     getMenuCategories() {
-      // this.setPreloader(true)
+      this.setPreloader(true)
       const url = '/bulliten-board/menu-categories';
       this.send(url).then(response => {
          this.setPreloader(false)
@@ -198,10 +182,11 @@ export default {
     },
 
     // Получить все объявления
-    getBoardItems () {
-      this.preloaderState = true
-      const url = '/bulliten-board';
+    getBoardItems (catId = 0) {
+      this.setPreloader(true)
+      const url = '/bulliten-board/list/' + catId;
       this.send(url).then(response => {
+         this.setPreloader(false)
          this.boardItems = response;
       })
     },
@@ -229,12 +214,12 @@ export default {
 
     // Создать объявление
     createItem () {
-      this.preloaderState = true
+      this.setPreloader(true)
       const data   = this.itemModel
       data.user_id = this.userId;
       const url = '/save/bulliten-board'
       this.send(url, 'post', data).then(response => {
-        this.preloaderState = false
+        this.setPreloader(false)
         this.getBoardItems()
         this.responseStatusHandle(response, 'Обявление успешно создано', 'Не удалось создать')
       })
@@ -281,18 +266,9 @@ export default {
       }
       return true
     },
-  },
 
-  //////////////////////
-  components: {
-    // UserGeneralInfo,
-    // MultiFilesUploader,
-    // UserAvatar
-  },
+  },  // --- Methods
 
-  /////////////////////
-  mounted () {
-  },
 
 }
 </script>

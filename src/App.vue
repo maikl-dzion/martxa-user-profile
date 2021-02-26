@@ -37,27 +37,16 @@ import AlertMessage from '@/components/app/AlertMessage'
 
 export default {
   name: 'App',
-  data() {
-    return {
+  data() { return {
       userId: 0,
-    }
-  },
+  }},
 
   created() {
-    this.userId = this.store('user_id')
-    this.setRootFilesPath()
+      this.userId = this.store('user_id')
+      this.setRootFilesPath()
   },
 
   methods: {
-
-    logout() {
-      this.userId = 0
-      this.storeRemove('user_name')
-      this.storeRemove('user_id')
-      this.setToken(null)
-      this.$router.push('/page/auth')
-    }
-
   },
 
   components : { NewPreloader, AlertMessage },
@@ -67,6 +56,7 @@ export default {
       this.userId = resp.user_id
     })
   },
+
 }
 </script>
 

@@ -24,20 +24,19 @@ export default new Vuex.Store({
     },
 
     setAlertInfo(context, data ) {
+        const color = (data.color) ? data.color : 'green'
+        const timer = (data.timer) ? data.timer : 10000;
+        const json  = (data.json)  ? data.json  : {};
 
-      const color = (data.color) ? data.color : 'green'
-      const timer = (data.timer) ? data.timer : 10000;
-      const json  = (data.json)  ? data.json  : {};
+        context.state._alertColor   = color
+        context.state._alertMessage = data.message;
+        context.state._alertJson    = json
 
-      context.state._alertColor   = color
-      context.state._alertMessage = data.message;
-      context.state._alertJson    = json
-
-      setTimeout(() => {
-        context.state._alertColor   = 'green';
-        context.state._alertMessage = '';
-        context.state._alertJson    = {};
-      }, timer)
+        setTimeout(() => {
+          context.state._alertColor   = 'green';
+          context.state._alertMessage = '';
+          context.state._alertJson    = {};
+        }, timer)
     },
 
   },

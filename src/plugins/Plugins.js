@@ -15,31 +15,27 @@ const Plugins = {
     Vue.mixin({
 
       data () { return {
-
           responseMessage: '',
           responseColor  : '',
           preloaderState: false,
           preloaderMessage: 'Подождите, идет сохранение',
-
           userId    : 0,
           userName  : '',
           rootPath  : '',
-
           usersList : [],
+      }},
 
-      } },
-
-      created () {
-          this.setStoreUserInfo();
-          this.getRootFilesPath();
-          this.fetchUsers();
-      },
+      // created () {
+      //     this.setStoreUserInfo();
+      //     this.getRootFilesPath();
+      //     this.fetchUsers();
+      // },
 
       computed : {
         ...mapGetters([
             'userInfo',
             'getUsers',
-            'getUsersList',
+            // 'getUsersList',
         ]),
       },
 
@@ -54,7 +50,15 @@ const Plugins = {
         ]),
 
         setTimer (fn, timer = 3000) {
-          setTimeout(fn, timer)
+            setTimeout(fn, timer)
+        },
+
+        logout() {
+            this.userId = 0
+            this.storeRemove('user_name')
+            this.storeRemove('user_id')
+            this.setToken(null)
+            this.$router.push('/page/auth')
         },
 
         setStoreUserInfo () {
