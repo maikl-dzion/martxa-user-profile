@@ -58,9 +58,6 @@
                  ></MultiFilesUploader>
 
                  <div>
-                   <div v-if="userFiles.length" class="mb-10 about-wrap user-menu">
-                       <h5 class="sidebar-title">Фотографии пользователя</h5>
-                   </div>
 
 <!--                   <pre-view-json :items="fileAlbums"/>-->
 

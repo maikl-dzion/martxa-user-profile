@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="customDropdownClose" >
 
     <NewPreloader/>
 
@@ -44,9 +44,14 @@ export default {
   created() {
       this.userId = this.store('user_id')
       this.setRootFilesPath()
+      this.setStoreUserInfo ();
   },
 
   methods: {
+    customDropdownClose() {
+      const eventName = 'dropdown-menu-close';
+      this.sendEventBus (eventName, { status : false});
+    }
   },
 
   components : { NewPreloader, AlertMessage },

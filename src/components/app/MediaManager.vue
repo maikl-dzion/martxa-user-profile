@@ -4,21 +4,22 @@
   <template v-if="getAlbums">
 
         <div class="mb-10 about-wrap user-menu">
-          <h5 class="sidebar-title">Фотоальбомы</h5>
+          <h5 class="sidebar-title" style="font-size:18px; font-weight: bold;">Фотоальбомы</h5>
         </div>
 
         <div style="display: flex">
             <div v-for="(name) in getAlbums"
                   @click="albumFilesShow(name)"
-                  style="width:150px; height:50px; border:1px gainsboro solid; margin:3px; background: sandybrown;
-                         text-align: center; border-radius: 5px; font-weight: bold; padding-top:10px; cursor:pointer;" >
+                  style="width:150px; height:50px; border:1px gainsboro solid; margin:3px; background: #b0c5de;
+                         text-align: center; border-radius: 5px; font-weight: bold; padding-top:10px; cursor:pointer;
+                         box-shadow: 6px 6px #989898, 12px 12px #6c6666;" >
                   <div>{{name}}</div>
             </div>
         </div>
 
 
         <div v-if="albumFiles.length" >
-            <div>Название альбома : {{albumName}}</div>
+            <div style="padding:9px; font-style: italic">Название альбома : {{albumName}}</div>
             <ul>
               <template v-for="(file) in albumFiles"  style="width:150px; border:1px gainsboro solid" >
                 <li  :key="file.file_id" style="width:150px; border:1px gainsboro solid">
@@ -34,6 +35,9 @@
         <hr/>
 
         <ul>
+          <div  class="mb-10 about-wrap user-menu">
+            <h5 class="sidebar-title" style="font-size:15px; font-weight: bold;" >Фотографии пользователя</h5>
+          </div>
           <template v-for="(file) in getFiles"  style="width:150px; border:1px gainsboro solid" >
               <li v-if="!getAlbums[file.folder_name]" :key="file.file_id"
                   style="width:150px; border:1px gainsboro solid">
@@ -47,6 +51,10 @@
 
   </template>
   <template v-else >
+
+        <div  class="mb-10 about-wrap user-menu">
+          <h5 class="sidebar-title" style="font-size:15px; font-weight: bold;" >Фотографии пользователя</h5>
+        </div>
 
         <ul><li v-for="(file) in getFiles" :key="file.file_id" style="width:150px; border:1px gainsboro solid" >
           <a href="#" :key="file.file_id">
@@ -80,6 +88,10 @@ export default {
            return this.albums;
         return false
      }
+  },
+
+  created() {
+     this.getRootFilesPath ()
   },
 
   methods : {

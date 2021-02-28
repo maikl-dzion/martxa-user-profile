@@ -49,6 +49,10 @@ export default {
       userName : '',
   }},
 
+  created() {
+    this.setStoreUserInfo ();
+  },
+
   methods: {
 
     logout () {

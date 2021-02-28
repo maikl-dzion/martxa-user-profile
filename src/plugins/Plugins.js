@@ -117,6 +117,16 @@ const Plugins = {
             this.rootPath = this.store('root_path')
         },
 
+        updateItemClassActive(elem, className, activeClass) {
+            let list = document.querySelectorAll(className);
+            for(let i in list) {
+              if(!list[i].style) continue;
+              let item = list[i];
+              item.classList.remove(activeClass)
+            }
+            elem.classList.add(activeClass);
+        },
+
         respInfoClear() {
             this.responseMessage = ''
             this.responseColor   = ''
