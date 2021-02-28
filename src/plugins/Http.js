@@ -30,78 +30,78 @@ const Http = {
       methods: {
 
         async send (url, method = 'get', data = null) {
-          const _url = this.apiUrl + url
-          const token = this.getToken()
-          axios.defaults.headers[HEADER_JWT_TOKEN_NAME] = token
-          const response = await axios[method](_url, data)
-          return response.data
+            const _url = this.apiUrl + url
+            const token = this.getToken()
+            axios.defaults.headers[HEADER_JWT_TOKEN_NAME] = token
+            const response = await axios[method](_url, data)
+            return response.data
         },
 
         setToken (token) {
-          localStorage.setItem(HEADER_JWT_TOKEN_NAME, token)
+             localStorage.setItem(HEADER_JWT_TOKEN_NAME, token)
         },
 
         getToken () {
-          return localStorage.getItem(HEADER_JWT_TOKEN_NAME)
+             return localStorage.getItem(HEADER_JWT_TOKEN_NAME)
         },
 
         // --- EVENT BUS -----
         sendEventBus (eventName, data = null) {
-          this.$eventBus.$emit(eventName, data)
+             this.$eventBus.$emit(eventName, data)
         },
 
         getEventBus (eventName, callBack) {
-          this.$eventBus.$on(eventName, (item) => {
-            callBack(item)
-          })
+            this.$eventBus.$on(eventName, (item) => {
+              callBack(item)
+            })
         },
 
         // -- LOCAL STORE SERVICE
         store (key, value = null) {
-          if (value) {
-            localStorage.setItem(key, value)
-          } else {
-            return localStorage.getItem(key)
-          }
+            if (value) {
+              localStorage.setItem(key, value)
+            } else {
+              return localStorage.getItem(key)
+            }
         },
 
         storeRemove (key) {
-          localStorage.removeItem(key)
+              localStorage.removeItem(key)
         },
 
         saveResponse (response, successMessage = null, errorMessage = null, param = null) {
 
-          this.setPreloader(false)
+            this.setPreloader(false)
 
-          let status = false
-          let info   = {}
-          let error  = {}
-          let json   = {}
+            let status = false
+            let info   = {}
+            let error  = {}
+            let json   = {}
 
-          let messageInfo = { message : successMessage, json : null }
-          if(param && param.color)
-            messageInfo['color'] = param.color;
+            let messageInfo = { message : successMessage, json : null }
+            if(param && param.color)
+              messageInfo['color'] = param.color;
 
-          let errorJson   = { message : errorMessage, color : 'red' };
+            let errorJson   = { message : errorMessage, color : 'red' };
 
-          if (response.error) {
-            error = response.error
-            console.log('Error Message : ', error);
-            errorJson['json'] = error
-            messageInfo = errorJson
-            alert(error);
-          } else {
-            if (response.save_result)
-              status = response.save_result
-            else
-              messageInfo = errorJson
-          }
+            if (response.error) {
+                error = response.error
+                console.log('Error Message : ', error);
+                errorJson['json'] = error
+                messageInfo = errorJson
+                alert(error);
+            } else {
+              if (response.save_result || response.result || response.status)
+                status = true
+              else
+                messageInfo = errorJson
+            }
 
-          this.setAlertInfo(messageInfo);
+            this.setAlertInfo(messageInfo);
 
-          return {
-            status, error, info
-          }
+            return {
+              status, error, info
+            }
         }
 
       } // --- Methods --

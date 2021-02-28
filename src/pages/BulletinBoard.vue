@@ -1,232 +1,125 @@
 <template>
-  <page-template>
-
-    <!-- blog-details-area start -->
+<page-template>
     <section class="blog-details-area1 ptb-101" style="border:0px red solid; ">
 
-      <div class="container-fluid">
-        <div class="row">
+        <div class="container-fluid"><div class="row">
 
-          <!--- ЛЕВАЯ ПАНЕЛЬ ---->
-          <div class="col-md-3 col-sm-6 col-xs-12" style="border:0px red solid ">
-            <aside class="left-sidebar">
-              <div class="mb-20 about-wrap user-menu">
-                <h3 class="sidebar-title" style="font-size: 18px; font-weight: bold">Категории</h3>
-                <ul>
-                  <li @click="getCategoryItems($event, {})" class="menu-category-item">
-                     <a>Показать все объявление</a>
-                  </li>
-                  <li v-for="(item) in categories"
-                      @click="getCategoryItems($event, item)"
-                      class="menu-category-item">
-                      <a>{{ item.name }} ({{item.items_count}})</a>
-                  </li>
-                </ul>
-              </div>
-            </aside>
-          </div>
+            <!--- ЛЕВАЯ ПАНЕЛЬ ---->
+            <div class="col-md-3 col-sm-6 col-xs-12" style="border:0px red solid ">
+              <aside class="left-sidebar">
+                <div class="mb-20 about-wrap user-menu">
+                  <h3 class="sidebar-title" style="font-size: 18px; font-weight: bold">Категории объявлений</h3>
+                  <ul>
+                    <li @click="getCategoryItems($event, {})" class="menu-category-item">
+                       <a>Показать все объявление ({{allItemsCount}})</a>
+                    </li>
+                    <li v-for="(item) in categories"
+                        @click="getCategoryItems($event, item)"
+                        class="menu-category-item">
+                        <a v-if="!item.items_count">{{ item.name }} ({{item.items_count}})</a>
+                        <a v-else >{{ item.name }} <span style="color:green; font-weight: bold">
+                                                       [ {{item.items_count}} ]</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </aside>
+            </div>
 
+            <!--- ПРАВАЯ ПАНЕЛЬ ---->
+            <div class="col-md-9 col-xs-12">
+              <div class="blog-details-wrap">
 
-          <!--- ПРАВАЯ ПАНЕЛЬ ---->
-          <div class="col-md-9 col-xs-12">
-            <div class="blog-details-wrap">
+                <p class="span-shadow" style="border: 0px red solid; width: 220px; padding:0px; margin-bottom:10px;" >
+                   <span @click="addFormState = !addFormState" class="btn-hover-effect square-list"
+                         style="width: 100%; margin:0px; background:#337ab7; border: 0px red solid;">
+                         Добавить объявление</span>
+                </p>
 
-<!--              <p class="span-shadow">-->
-<!--                <span class="btn-hover-effect square-out"  >ЭФФЕКТ 1</span>-->
-<!--                <span class="btn-hover-effect shadow-live" >ЭФФЕКТ 2</span>-->
-<!--                <span class="btn-hover-effect square-in"   >ЭФФЕКТ 3</span>-->
-<!--                <span class="btn-hover-effect square-list" >ЭФФЕКТ 4</span>-->
-<!--              </p>-->
+                <BoardItemForm
+                  v-if="addFormState"
+                  @save_response="saveResponseHandle" />
 
-              <p class="span-shadow" style="border: 0px red solid; width: 220px; padding:0px; margin-bottom:10px;" >
-                 <span @click="addFormState = !addFormState" class="btn-hover-effect square-list"
-                       style="width: 100%; margin:0px; background:#337ab7; border: 0px red solid;">
-                       Добавить объявление</span>
-              </p>
+                <div style="box-shadow: 0 20px 0 #3C93D5; height: 5px; margin:20px 0px 20px 0px"></div>
 
-<!--              <h3 class="sidebar-title" style="font-size: 16px">Добавить объявление</h3>-->
-              <div v-if="addFormState" class="faq-form form-style"
-                   style="border:1px gainsboro solid; margin-bottom:20px; padding:15px;
-                          box-shadow: 6px 6px #989898, 12px 12px #6c6666;">
-                <form id="user-general-info" @submit.prevent="">
-                  <div class="row">
+                <div style="border: 0px red solid; margin-top:60px; ">
+                    <h3 class="sidebar-title"
+                        style="font-size: 18px; font-weight: bold"> Объявления </h3>
+                    <h5 v-if="currentCategoryName" class="sidebar-title"
+                        style="font-size: 15px;">Категория : {{ currentCategoryName }} ({{boardItems.length}})</h5>
 
-                    <div class="col-xs-12">
-                      <div class="row">
-                        <div class="col-xs-4">
-                          <div class="input-label">
-                            <div>Наименование</div>
-                            <div style="color:red; font-weight: bold; margin-left:10px;">*</div>
-                          </div>
-                        </div>
-                        <div class="col-xs-8">
-                          <input v-model="itemModel.title" required="true" type="text" placeholder="Наименование">
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-xs-12">
-                      <div class="row">
-
-                        <div class="col-xs-4">
-                          <div class="input-label">Категория</div>
-                        </div>
-
-                        <div class="col-xs-8">
-
-                          <div class="mainmenu" style="width:100%;">
-                            <ul>
-                              <li style="border:1px grey solid; width: 100%; margin-bottom: 20px">
-
-                                <div class="mainmenu-panel" style="display: flex; width: 100%;">
-                                  <div style="width: 50%; padding:4px 4px 4px 7px;">{{ selectCatName }}</div>
-                                  <a @click="catMenuToggle = !catMenuToggle"
-                                     style="width: 50%; text-align:right; padding:4px; display: block; cursor:pointer;">
-                                    Выбрать категорию <i class="fa fa-angle-down"></i></a>
-                                </div>
-
-                                <ul v-if="catMenuToggle" class="megamenu-dropdown" style="">
-                                  <li v-for="(item, i) in categories"
-                                      class="megamenu__li-item">
-                                    <a @click="selectCategories(item)"
-                                       class="megamenu__li__a"
-                                       href="#">{{ item.name }}</a>
-                                  </li>
+                    <div v-for="(item) in boardItems">
+                          <!--  <pre>{{item}}</pre>-->
+                          <div class="blog-content" style="border:1px gainsboro solid; margin-bottom:10px;" >
+                              <div class="blog-meta">
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-user" ></i> {{item.username}}</a></li>
                                 </ul>
+                              </div>
 
-                              </li>
-                            </ul>
+                              <div>Категория : {{item.cat_name}}</div>
+                              <h3><a href="#">{{ item.title }}</a></h3>
+
+                              <div style="display: flex" >
+                                  <div style="width:200px;" >
+                                    <img v-if="item.files && item.files[0] && item.files[0].path" :src="rootPath +'/'+ item.files[0].path"
+                                         style="width: 100%" alt="">
+                                    <p>Цена : {{ item.price }}</p>
+                                  </div>
+                                  <div style="width:100%; margin-left:10px" >
+                                    <div v-if="item.short_desc" >{{ item.short_desc }}</div>
+                                    <div v-else >{{ item.description }}</div>
+                                  </div>
+                              </div>
+
+                              <a href="#" class="btn-style"
+                                 style="border:1px #b0c5de solid; width:100px; height: 32px; padding:2px;
+                                        margin:3px; text-align:center; font-style: italic; font-size: 11px; "
+                                 >Подробнее</a>
+
                           </div>
-
-                          <!--                          <div>{{selectCatName}}</div>-->
-                          <!--                          <div class="mainmenu" style="border: red 0px solid" ><ul ><li>-->
-                          <!--                            <a href="#">Выбрать категорию <i class="fa fa-angle-down"></i></a>-->
-                          <!--                            <ul class="megamenu"  >-->
-                          <!--                              <li v-for="(item, i) in categories"  >-->
-                          <!--                                <a @click="selectCategories(item)"-->
-                          <!--                                   class="mega-title1" href="#">{{item.name}}</a>-->
-                          <!--                                  <ul>-->
-                          <!--                                    <li><a href="about.html">About One</a></li>-->
-                          <!--                                    <li><a href="about2.html">About Two</a></li>-->
-                          <!--                                  </ul>-->
-                          <!--                              </li>-->
-                          <!--                            </ul>-->
-                          <!--                          </li></ul></div>-->
-
-                        </div>
-                      </div>
                     </div>
-
-                    <div class="col-xs-12">
-                      <div class="row">
-                        <div class="col-xs-4">
-                          <div class="input-label">Цена</div>
-                        </div>
-                        <div class="col-xs-8">
-                          <input v-model="itemModel.price" type="text" placeholder="Цена">
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-xs-12">
-                      <div class="row">
-                        <div class="col-xs-4">
-                          <div class="input-label">Описание</div>
-                        </div>
-                        <div class="col-xs-8">
-                                 <textarea v-model="itemModel.description" class="contact-textarea"
-                                           placeholder="Описание объявления"></textarea>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-xs-12">
-
-                      <FilesLoaderPreview
-                        @get_files_load="filesLoader"
-                      ></FilesLoaderPreview>
-
-                    </div>
-
-                    <div class="col-xs-12">
-                      <button @click="save()"
-                              class="cont-submit btn-contact btn-style">Сохранить
-                      </button>
-                    </div>
-                    <!--                    <div class="col-xs-12"><hr/></div>-->
-
-                  </div>
-                </form>
-              </div>
-
-              <div style="box-shadow: 0 20px 0 #3C93D5; height: 5px; margin:20px 0px 20px 0px"></div>
-
-              <div style="border: 0px red solid; margin-top:60px; ">
-                <h3 class="sidebar-title"
-                    style="font-size: 18px; font-weight: bold"> Объявления </h3>
-                <h5 v-if="currentCategoryName" class="sidebar-title"
-                    style="font-size: 15px;">Категория : {{ currentCategoryName }}</h5>
-
-                <div v-for="(item) in boardItems">
-
-                      <div class="blog-content" style="border:1px gainsboro solid; margin-bottom:10px;" >
-
-                          <div class="blog-meta">
-                            <ul>
-                                <li><a href="#"><i class="fa fa-user"   ></i> Admin</a></li>
-                                <li><a href="#"><i class="fa fa-comment"></i> 5 Comment</a></li>
-                                <li><a href="#"><i class="fa fa-heart"  ></i> 5 Love</a></li>
-                            </ul>
-                          </div>
-
-                          <!--  <p>{{item.category_id}}</p>-->
-                          <h3><a href="#">{{ item.title }}</a></h3>
-                          <p>{{ item.description }}</p>
-                          <p>Цена : {{ item.price }}</p>
-
-                          <a href="#" class="btn-style"
-                             style="border:1px #b0c5de solid; width:100px; height: 32px; padding:2px;
-                                    margin:3px; text-align:center; font-style: italic; font-size: 11px; "
-                             >Подробнее</a>
-
-                      </div>
 
                 </div>
 
-              </div>
-              <!--  <PreViewJson :items="boardItems" />-->
             </div>
-          </div>
+          </div><!--- /col-md-9 col-xs-12 --->
+          <!--- ./ ПРАВАЯ ПАНЕЛЬ ---->
 
-        </div>
-      </div>
-    </section>
-    <!-- blog-details-area end -->
+        </div></div>
 
-  </page-template>
+      <!--              <p class="span-shadow">-->
+      <!--                <span class="btn-hover-effect square-out"  >ЭФФЕКТ 1</span>-->
+      <!--                <span class="btn-hover-effect shadow-live" >ЭФФЕКТ 2</span>-->
+      <!--                <span class="btn-hover-effect square-in"   >ЭФФЕКТ 3</span>-->
+      <!--                <span class="btn-hover-effect square-list" >ЭФФЕКТ 4</span>-->
+      <!--              </p>-->
+
+   </section>
+</page-template>
 </template>
 
 <script>
 
 import {mapGetters, mapActions} from 'vuex'
 
-// import UserGeneralInfo from '@/components/user/UserGeneralInfo'
-// import UserAvatar from '@/components/user/UserAvatar'
-
 import FilesLoaderPreview from '@/components/FilesLoaderPreview'
+import BoardItemForm from '@/components/bulletin/BoardItemForm'
 
 export default {
   name: "BulletinBoard",
   data: () => ({
+
       saveType: 'add',
-      selectCatName: '',
-      catMenuToggle: false,
+      // selectCatName: '',
+      // catMenuToggle: false,
       currentCategoryName: '',
       addFormState : false,
+      allItemsCount : 0,
 
       itemModel: {
         title: '',
         category_id: 0,
+        short_desc: '',
         description: '',
         price: '',
         user_id: '',
@@ -242,55 +135,43 @@ export default {
 
   /////////////////
   components : {
-    FilesLoaderPreview
+    FilesLoaderPreview,
+    BoardItemForm
   },
 
   /////////////////
   created() {
-    // this.getCurrentUserInfo(); // получить информацию о текущем пользователе
-    // this.getRootFilesPath();   // получить url для получения файлов
-    // this.fetchUsers();
-    // this.getBoardItems ();
-    // this.getItem (2);
-    // this.deleteItem(1)
-    this.getBoardItems();
+    this.getRootFilesPath();
     this.getMenuCategories();
+    this.getCategoryItems();
   },
 
   ////////////////
   methods: {
 
-    filesLoader(files) {
-       this.itemFiles = files;
-       // this.saveResponse(response, 'Файлы успешно загружены', 'Не удалось загрузить файлы')
-    },
-
-    selectCategories(item) {
-        this.itemModel.category_id = item.cat_id;
-        this.selectCatName = item.name;
-        this.catMenuToggle = false;
-    },
-
-    getCategoryItems(event, item) {
+    getCategoryItems(event = null, item = null) {
 
         let categoryId = 0;
         this.currentCategoryName = 'Все Категории';
-        if(item.cat_id) {
+        if(item && item.cat_id) {
           categoryId = item.cat_id;
           this.currentCategoryName = item.name;
         }
+
         this.getBoardItems(categoryId);
 
-        const elem = event.target.parentElement;
-        const className = '.menu-category-item';
-        const activeClass = 'menu-active';
-        this.updateItemClassActive(elem, className, activeClass);
+        if(event) {
+            const elem      = event.target.parentElement;
+            const className = '.menu-category-item';
+            const activeClass = 'menu-active';
+            this.updateItemClassActive(elem, className, activeClass);
+        }
     },
 
-    // Получить все объявления
+    // Получить все категории
     getMenuCategories() {
         // this.setPreloader(true)
-        const url = '/bulliten-board/menu-categories';
+        const url = '/bulletin-board/menu-categories';
         this.send(url).then(response => {
           this.setPreloader(false)
           this.categories = response;
@@ -301,17 +182,19 @@ export default {
     getBoardItems(catId = 0) {
         this.setPreloader(true)
         catId = (catId) ? '/' + catId : '';
-        const url = '/bulliten-board/list' + catId;
+        const url = '/bulletin-board/list' + catId;
         this.send(url).then(response => {
             this.setPreloader(false)
             this.boardItems = response;
+            if(!catId)
+              this.allItemsCount = this.boardItems.length;
         })
     },
 
-    // Получить все объявления
+    // Получить 1 объявление
     getItem(itemId) {
         this.preloaderState = true
-        const url = '/bulliten-board/' + itemId;
+        const url = '/bulletin-board/' + itemId;
         this.send(url).then(response => {
           this.saveType = 'edit';
           this.itemModel = response;
@@ -321,7 +204,7 @@ export default {
     // Удалить объявление
     deleteItem(itemId) {
         this.preloaderState = true
-        const url = '/save/bulliten-board/' + itemId
+        const url = '/save/bulletin-board/' + itemId
         this.send(url, 'delete').then(response => {
           this.preloaderState = false
           this.getBoardItems()
@@ -329,78 +212,81 @@ export default {
         })
     },
 
-    // Создать объявление
-    createItem() {
-
-        if(!this.userInfo) {
-           alert('Для добавления объявлений нужна авторизация');
-           return false;
-        }
-
-        this.setPreloader(true)
-        const data   = this.itemModel
-        data.user_id = this.userInfo.user_id;
-        const url = '/save/bulliten-board'
-        this.send(url, 'post', data).then(response => {
-          this.setPreloader(false)
-          this.getBoardItems();
-          if(response.result) {
-              const insertId = response.result;
-              this.submitFilesToServer (this.itemFiles, insertId)
-              this.responseStatusHandle(response, 'Обявление успешно создано', 'Не удалось создать');
-          }
-        })
+    saveResponseHandle(response) {
+      this.getBoardItems();
+      this.getMenuCategories();
+      const res = this.saveResponse(response, 'Успешное сохранение', 'Не удалось сохранить')
+      // if (res.status) {} else {}
     },
 
-    // Обновить объявление
-    updateItem() {
-        const data = this.itemModel
-        const itemId = data.board_id
-        this.preloaderState = true;
-        const url = '/save/bulliten-board/' + itemId
-        this.send(url, 'put', data).then(response => {
-          this.preloaderState = false
-          this.getBoardItems()
-          this.responseStatusHandle(response, 'Обявление успешно обновлено', 'Не удалось обновить')
-        })
-    },
+    // selectCategories(item) {
+    //   this.itemModel.category_id = item.cat_id;
+    //   this.selectCatName = item.name;
+    //   this.catMenuToggle = false;
+    // },
 
-    save() {
-        switch (this.saveType) {
-          case 'add' :
-            this.createItem();
-            break;
+    // filesLoader(files) {
+    //   this.itemFiles = files;
+    // },
 
-          case 'edit' :
-            this.updateItem();
-            break;
-        }
-    },
-
-    // Отправка файлов на сервер
-    submitFilesToServer (formDataFiles, itemId) {
-        let userId = (this.userInfo.user_id) ? this.userInfo.user_id : 1;
-        const resource = 'bulliten-board';
-        const apiUrl = '/save/multiple-upload-files/' + resource + '/' + itemId + '/' + userId;
-        this.send(apiUrl, 'post', formDataFiles).then(response => {})
-    },
-
-    responseStatusHandle(response, successMessage = null, errorMessage = null, fn = null) {
-      this.preloaderState = false
-      const r = this.saveResponse(response)
-      if (r.status) {
-        this.responseMessage = successMessage
-        if (fn) {
-          fn(response)
-        }
-      } else {
-        this.responseMessage = errorMessage
-        this.responseColor = 'red'
-        console.log(r.error)
-        return false
-      }
-      return true
-    },
+    // // Создать объявление
+    // createItem() {
+    //
+    //     if(!this.userInfo) {
+    //        alert('Для добавления объявлений нужна авторизация');
+    //        return false;
+    //     }
+    //
+    //     this.setPreloader(true)
+    //     const data   = this.itemModel
+    //     data.user_id = this.userInfo.user_id;
+    //     const url = '/save/bulletin-board'
+    //     this.send(url, 'post', data).then(response => {
+    //       this.setPreloader(false)
+    //
+    //       this.getBoardItems();
+    //       this.getMenuCategories();
+    //
+    //       if(response.result) {
+    //           const insertId = response.result;
+    //           this.submitFilesToServer (this.itemFiles, insertId)
+    //           this.responseStatusHandle(response, 'Обявление успешно создано', 'Не удалось создать');
+    //       }
+    //     })
+    // },
+    //
+    // // Обновить объявление
+    // updateItem() {
+    //     const data = this.itemModel
+    //     const itemId = data.board_id
+    //     this.preloaderState = true;
+    //     const url = '/save/bulletin-board/' + itemId
+    //     this.send(url, 'put', data).then(response => {
+    //       this.preloaderState = false
+    //       this.getBoardItems()
+    //       this.responseStatusHandle(response, 'Обявление успешно обновлено', 'Не удалось обновить')
+    //     })
+    // },
+    //
+    // save() {
+    //     switch (this.saveType) {
+    //       case 'add' :
+    //         this.createItem();
+    //         break;
+    //
+    //       case 'edit' :
+    //         this.updateItem();
+    //         break;
+    //     }
+    // },
+    //
+    // // Отправка файлов на сервер
+    // submitFilesToServer (formDataFiles, itemId) {
+    //     let userId = (this.userInfo.user_id) ? this.userInfo.user_id : 1;
+    //     const resource = 'bulletin-board';
+    //     const apiUrl = '/save/multiple-upload-files/' + resource + '/' + itemId + '/' + userId;
+    //     this.send(apiUrl, 'post', formDataFiles).then(response => {})
+    // },
 
   },  // --- Methods
 
