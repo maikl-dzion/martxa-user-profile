@@ -11,7 +11,7 @@
 
             <div v-for="(name) in getAlbums" class="post-item">
                  <div @click="albumFilesShow(name)" class="post-item-wrap">
-                    <img src="/assets/images/folder-img.jpg">
+                    <img :src="assetsUrl + '/images/folder-img.jpg'">
                     <div class="line">
                         <a   class="post-link"><span>Посмотреть фото из альбома</span></a>
                     </div>

@@ -12,7 +12,7 @@
 
                     <div class="blog-img">
                       <img v-if="user.photo" :src="user.photo" style="width: 255px; height:255px;">
-                      <img v-else src="/assets/images/user-not-photo.jpg" style="width: 255px; height:255px;">
+                      <img v-else :src="assetsUrl + '/images/user-not-photo.jpg'" style="width: 255px; height:255px;">
                     </div>
 
                     <div class="blog-content">

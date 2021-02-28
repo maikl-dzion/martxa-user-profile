@@ -22,8 +22,11 @@ const Http = {
     Vue.mixin({
 
       data () {
+        const siteUrl = '/user-profile/front';
         return {
-          apiUrl: 'http://bolderfest.ru/user-profile/api/v1'
+            apiUrl    : 'http://bolderfest.ru/user-profile/api/v1',
+            assetsUrl : siteUrl + '/assets',
+            siteUrl   : siteUrl,
         }
       },
 

@@ -198,6 +198,9 @@ export default {
     this.getCurrentUserInfo();
     this.getRootFilesPath();
     this.fetchUsers();
+
+    let f = location.href;
+    // debugger
   },
 
   mounted () {

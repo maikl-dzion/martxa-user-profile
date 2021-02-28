@@ -2,7 +2,6 @@
 <div>
 
   <div class="author-wrap" style="border:1px gainsboro solid; padding:4px" >
-
     <div class="author-img" style="border-bottom:1px gainsboro solid">
         <img  :src="avatar" alt="" style="border-radius: 0px; width:100%;">
     </div>
@@ -33,8 +32,9 @@ export default {
   name: "UserAvatar",
   props: ['user', 'user_id'],
   data() {
+     const assetsUrl = this.assetsUrl;
      return {
-        avatar : '/assets/images/user-not-photo.jpg',
+        avatar : assetsUrl + '/images/user-not-photo.jpg',
      }
   },
 
