@@ -54,7 +54,7 @@ export default {
         // {url: '/', title: 'Главная'},
         {url: '/page/profile', title: 'Профиль'},
         {url: '/page/users-list', title: 'Пользователи'},
-        {url: '/page/bulliten-board', title: 'Доска объявлений'},
+        {url: '/page/bulletin-board', title: 'Доска объявлений'},
         {url: '/page/task-board', title: 'Доска задач'},
         // {url: '/page/register', title: 'Регистрация'},
         {url: '/page/admin-panel', title: 'Admin Page'},

@@ -33,8 +33,13 @@ export default new Router({
     },
 
     {
-      path: '/page/bulliten-board',
-      component: () => import('./pages/BulletinBoard')
+      path: '/page/bulletin-board',
+      component: () => import('./pages/BulletinBoardList')
+    },
+
+    {
+      path: '/page/bulletin-board/item/:item_id',
+      component: () => import('./pages/BulletinBoardItem')
     },
 
     {

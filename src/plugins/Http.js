@@ -84,7 +84,7 @@ const Http = {
 
             let errorJson   = { message : errorMessage, color : 'red' };
 
-            if (response.error) {
+            if (response.error && response.error.length) {
                 error = response.error
                 console.log('Error Message : ', error);
                 errorJson['json'] = error
