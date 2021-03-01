@@ -1,313 +1,231 @@
 <template>
   <page-template>
+    <section class="blog-details-area ptb-101" style="">
 
-    <!-- blog-details-area start -->
-    <section class="blog-details-area1 ptb-101" style="border:0px red solid; ">
+      <div class="container-fluid"><div class="row">
 
-<!--      <div class="container-fluid">-->
-<!--        <div class="row">-->
+        <!--- ЛЕВАЯ ПАНЕЛЬ ---->
+        <div class="col-md-3 col-sm-6 col-xs-12" style="border:0px red solid ">
+            <aside class="left-sidebar">
+              <div class="mb-20 about-wrap user-menu">
+                <h3 class="sidebar-title" style="font-size: 18px; font-weight: bold">Проекты</h3>
+                <ul>
+                    <li v-for="(item) in projectList"
+                        @click="getProjectItems($event, item)"
+                        class="menu-category-item" >
+                          <a v-if="!item.items_count">{{ item.name }} ({{item.items_count}})</a>
+                          <a v-else >{{ item.name }}
+                                     <span style="color:green; font-weight: bold"> [ {{item.items_count}} ]</span></a>
+                    </li>
+                </ul>
+              </div>
+            </aside>
+        </div>
 
-<!--          &lt;!&ndash;- ЛЕВАЯ ПАНЕЛЬ &#45;&#45;&ndash;&gt;-->
-<!--          <div class="col-md-3 col-sm-6 col-xs-12" style="border:0px red solid ">-->
-<!--            <aside class="left-sidebar">-->
+        <!--- ПРАВАЯ ПАНЕЛЬ ---->
+        <div class="col-md-9 col-xs-12">
+          <div class="blog-details-wrap">
 
-<!--              <div class="mb-20 about-wrap user-menu">-->
-<!--                <h3 class="sidebar-title" style="font-size: 19px">Категории объявлений</h3>-->
-<!--                <ul>-->
-<!--                  <li><a @click="tab = 'user_info'">Основная информация</a></li>-->
-<!--                  <li><a @click="tab = 'change_password'">Изменить пароль</a></li>-->
-<!--                  <li><a @click="tab = 'photos'">Фотографии</a></li>-->
-<!--                  <li><a @click="tab = 'info_details'">Подробная информация</a></li>-->
-<!--                  <li><a @click="tab = 'articles'">Статьи</a></li>-->
-<!--                  <li><a @click="tab = 'messages'">Сообщения</a></li>-->
-<!--                  <li><a @click="tab = 'declaration'">Объявления</a></li>-->
-<!--                  <li><a @click="tab = 'documents'">Документы</a></li>-->
-<!--                  <li><a @click="tab = 'orders'">Заказы</a></li>-->
-<!--                </ul>-->
-<!--              </div>-->
+            <p class="span-shadow" style="border: 0px red solid; width: 220px; padding:0px; margin-bottom:10px;" >
+                   <span @click="addFormState = !addFormState" class="btn-hover-effect square-list"
+                         style="width: 100%; margin:0px; background:#337ab7; border: 0px red solid;">
+                         Добавить задачу</span>
+            </p>
 
-<!--            </aside>-->
-<!--          </div>-->
+            <BoardItemForm
+              v-if="addFormState"
+              @save_response="saveResponseHandle" />
 
-<!--          &lt;!&ndash;- ПРАВАЯ ПАНЕЛЬ &#45;&#45;&ndash;&gt;-->
-<!--          <div class="col-md-9 col-xs-12">-->
-<!--            <div class="blog-details-wrap">-->
+            <div style="box-shadow: 0 20px 0 #3C93D5; height: 5px; margin:20px 0px 20px 0px"></div>
 
-<!--              <template v-if="tab == 'info_details'">-->
-<!--                user_info_details-->
-<!--                {{userTest}}-->
-<!--              </template>-->
-<!--              <template v-else-if="tab == 'photos'">-->
+            <div style="border: 0px red solid; margin-top:60px; ">
+              <h3 class="sidebar-title"
+                  style="font-size: 18px; font-weight: bold"> Объявления </h3>
+              <h5 v-if="currentCategoryName" class="sidebar-title"
+                  style="font-size: 15px;">Категория : {{ currentCategoryName }} ({{boardItems.length}})</h5>
 
-<!--                 <MultiFilesUploader-->
-<!--                   type="user"-->
-<!--                   :uid="userId"-->
-<!--                   @files_load="filesLoaded"-->
-<!--                 ></MultiFilesUploader>-->
+              <div v-for="(item) in boardItems">
+                <!--  <pre>{{item}}</pre>-->
+                <div class="blog-content" style="border:1px gainsboro solid; margin-bottom:10px;" >
+                  <div class="blog-meta">
+                    <ul>
+                      <li><a href="#"><i class="fa fa-user" ></i> {{item.username}}</a></li>
+                    </ul>
+                  </div>
 
-<!--                 <div>-->
-<!--                   <div v-if="userFiles.length" class="mb-10 about-wrap user-menu">-->
-<!--                       <h5 class="sidebar-title">Фотографии пользователя</h5>-->
-<!--                   </div>-->
+                  <div>Категория : {{item.cat_name}}</div>
+                  <h3><a href="#">{{ item.title }}</a></h3>
 
-<!--                   <div class="row">-->
-<!--                     <div class="col-md-12 col-sm-6 col-xs-12 col">-->
-<!--                       <div class="footer-widget instagram-wrap">-->
-<!--                         <ul><li v-for="(file) in userFiles" style="width:150px; border:1px gainsboro solid" >-->
-<!--                             <a href="#" :key="file.file_id">-->
-<!--                                 <img :src="rootPath + file.path" class="img-preview" style="width:100%;">-->
-<!--                             </a>-->
-<!--                             <div><button @click="deleteFile(file.file_id)" class="btn-style" style="width: 100%; border:0px;" >удалить</button></div>-->
-<!--                         </li></ul>-->
-<!--                       </div>-->
-<!--                     </div>-->
-<!--                   </div>-->
+                  <div style="display: flex" >
+                    <div style="width:200px;" >
+                      <img v-if="item.files && item.files[0] && item.files[0].path" :src="rootPath +'/'+ item.files[0].path"
+                           style="width: 100%" alt="">
+                      <p>Цена : {{ item.price }}</p>
+                    </div>
+                    <div style="width:100%; margin-left:10px" >
+                      <div v-if="item.short_desc" >{{ item.short_desc }}</div>
+                      <div v-else >{{ item.description }}</div>
+                    </div>
+                  </div>
 
-<!--                   <div><hr></div>-->
-<!--                 </div>-->
-<!--              </template>-->
-<!--              <template v-else-if="tab == 'articles'">-->
-<!--                user_articles-->
-<!--              </template>-->
-<!--              <template v-else-if="tab == 'orders'">-->
-<!--                user_orders-->
-<!--              </template>-->
-<!--              <template v-else-if="tab == 'change_password'">-->
-<!--                &lt;!&ndash;-  Изменение пароля  -&ndash;&gt;-->
-<!--                <div class="blog-details-content">-->
-<!--                  <h3 class="sidebar-title" style="font-style: italic; font-size: 17px">Изменить пароль</h3>-->
-<!--                  <hr/>-->
-<!--                  <div class="col-md-12 col-xs-12">-->
-<!--                    <div class="faq-form form-style">-->
-<!--                      <form @submit.prevent="">-->
-<!--                        <div class="row">-->
+                  <div style="display: flex" >
 
-<!--                          <div class="col-xs-12">-->
-<!--                            <div class="row">-->
-<!--                              <div class="col-xs-3">-->
-<!--                                <div class="input-label">-->
-<!--                                  <div>Новый пароль</div>-->
-<!--                                </div>-->
-<!--                              </div>-->
-<!--                              <div class="col-xs-5">-->
-<!--                                <input v-model="newPassword.password"-->
-<!--                                       required="true" type="text" placeholder="Новый пароль">-->
-<!--                              </div>-->
-<!--                            </div>-->
-<!--                          </div>-->
+                    <a href="#" class="btn-style"
+                       style="border:1px #b0c5de solid; width:180px; height: 32px; padding:2px; display: block;
+                                          margin:3px; text-align:center; font-style: italic; font-size: 11px; "
+                    >Подробнее</a>
 
-<!--                          <div class="col-xs-12">-->
-<!--                            <div class="row">-->
-<!--                              <div class="col-xs-3">-->
-<!--                                <div class="input-label">-->
-<!--                                  <div>Повторить пароль</div>-->
-<!--                                </div>-->
-<!--                              </div>-->
-<!--                              <div class="col-xs-5">-->
-<!--                                <input v-model="newPassword.repeat_pwd"-->
-<!--                                       required="true" type="text" placeholder="Новый пароль">-->
-<!--                              </div>-->
-<!--                            </div>-->
-<!--                          </div>-->
+                    <a v-if="userInfo.user_id == item.user_id"
+                       @click="deleteItem(item.board_id)" class="btn-style"
+                       style="border:1px #b0c5de solid; width:180px; height: 32px; padding:2px; display: block;
+                                          margin:3px; text-align:center; font-style: italic; font-size: 11px; cursor:pointer;"
+                       disabled="true"
+                    >Удалить объявление</a>
 
-<!--                          <div class="col-xs-12" style="color:red">-->
-<!--                            {{ newPwdCompareWarn }}-->
-<!--                          </div>-->
+                  </div>
 
-<!--                          <div class="col-xs-12">-->
-<!--                            <hr/>-->
-<!--                            <button @click="changePassword()"-->
-<!--                                    class="cont-submit btn-contact btn-style" name="submit"> Изменить пароль-->
-<!--                            </button>-->
-<!--                          </div>-->
+                </div>
+              </div>
 
-<!--                        </div>-->
-<!--                      </form>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                &lt;!&ndash;-  ./ Изменение пароля  -&ndash;&gt;-->
-<!--              </template>-->
-<!--              <template v-else-if="tab == 'user_info'">-->
-<!--                &lt;!&ndash;-  Основная информация о пользователе -&ndash;&gt;-->
-<!--                <UserGeneralInfo/>-->
-<!--                &lt;!&ndash;- ./ Основная информация о пользователе -&ndash;&gt;-->
-<!--              </template>-->
-<!--              <template v-else>-->
-<!--                   в разработке-->
-<!--              </template>-->
+            </div>
 
-<!--            </div>-->
-<!--          </div>-->
+          </div>
+        </div><!--- /col-md-9 col-xs-12 --->
+        <!--- ./ ПРАВАЯ ПАНЕЛЬ ---->
 
-<!--        </div>-->
-<!--      </div>-->
-
-
+      </div></div>
     </section>
-    <!-- blog-details-area end -->
-
   </page-template>
 </template>
 
 <script>
 
-import { mapGetters, mapActions } from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 
-import UserGeneralInfo from '@/components/user/UserGeneralInfo'
-import UserAvatar from '@/components/user/UserAvatar'
-import MultiFilesUploader from '@/components/MultiFilesUploader'
+import FilesLoaderPreview from '@/components/FilesLoaderPreview'
+import BoardItemForm from '@/components/bulletin/BoardItemForm'
 
 export default {
-  name : "BulletinBoard",
+  name: "BulletinBoard",
   data: () => ({
-    tab: 'user_info',
-    emailVerifyCode: '',
-    emailVerifyState: false,
-    phoneVerifyState: false,
 
-    newPassword: {
-      password: '',
-      repeat_pwd: ''
+    saveType: 'add',
+    // selectCatName: '',
+    // catMenuToggle: false,
+    currentCategoryName: '',
+    addFormState : false,
+    allItemsCount : 0,
+
+    itemModel: {
+      title: '',
+      category_id: 0,
+      short_desc: '',
+      description: '',
+      price: '',
+      user_id: '',
     },
 
-    userFiles : [],
-
+    projectList : [],
+    taskItems   : [],
+    taskFiles   : [],
   }),
 
-  components: {
-    UserGeneralInfo,
-    MultiFilesUploader,
-    UserAvatar
+  /////////////////
+  computed: {},
+
+  /////////////////
+  components : {
+    FilesLoaderPreview,
+    BoardItemForm
   },
 
-  created () {
-    this.getCurrentUserInfo();
+  /////////////////
+  created() {
     this.getRootFilesPath();
-    this.fetchUsers();
+    this.getProjectList();
+    // this.getCategoryItems();
   },
 
-  mounted () {
-    this.getUserFiles()
-  },
-
-  computed: {
-
-    ...mapGetters([
-        'userInfo',
-        // 'getUser',
-        'getUsers',
-    ]),
-
-    newPwdCompareWarn () {
-      return this.compareNewPassword()
-    }
-  },
-
+  ////////////////
   methods: {
 
-    ...mapActions([
-      'fetchUser',
-      'fetchUsers',
-      'setUserId',
-      'setPreloader',
-      'setAlertInfo',
-    ]),
-
-    // async getUsers() {
-    //    await this.$store.dispatch('fetchUsers')
-    //    let users  = this.$store.getters.getUsers
-    //    this.userTest = users
-    // },
-
-    filesLoaded(response) {
-       this.getUserFiles()
-       this.responseStatusHandle(response,
-                    'Файлы успешно загружены',
-                      'Не удалось загрузить файлы')
-    },
-
-    deleteFile(fileId) {
-      this.preloaderState = true
-      const apiUrl = '/delete/file/' + fileId
-      this.send(apiUrl, 'delete').then(response => {
-         this.preloaderState = false
-         this.getUserFiles()
-         this.responseStatusHandle(response, 'Файл удален', 'Файл не получилось удалить')
-      })
-    },
-
-    compareNewPassword () {
-      if (this.newPassword.password != this.newPassword.repeat_pwd) {
-        return 'Пароли не совпадают'
-      }
-      return ''
-    },
-
-    changePassword () {
-
-      if (!this.changePasswordValidate()) {
-        return false
-      }
-
-      this.preloaderState = true
-      const data = this.newPassword
-
-      const apiUrl = '/post/user/change-password/' + this.userId
-      this.send(apiUrl, 'put', data).then(response => {
-        this.responseStatusHandle(response, 'Пароль успешно изменен', 'Не удалось изменить пароль')
-      })
-    },
-
-    changePasswordValidate () {
-
-      if (!this.newPassword.password) {
-        return false
-      }
-
-      let message = this.compareNewPassword()
-
-      if (message) {
-        this.responseMessage = message
-        this.responseColor = 'red'
-        return false
-      }
-
-      this.respInfoClear()
-
-      return true
-    },
-
-    responseStatusHandle (response, successMessage = null, errorMessage = null, fn = null) {
-      this.preloaderState = false
-      const r = this.saveResponse(response)
-      if (r.status) {
-        this.responseMessage = successMessage
-        if (fn) {
-          fn(response)
-        }
-      } else {
-        this.responseMessage = errorMessage
-        this.responseColor = 'red'
-        console.log(r.error)
-        return false
-      }
-      return true
-    },
-
-    getUserFiles() {
-        const apiUrl = '/user/get-files/' + this.userId
-        this.send(apiUrl).then(response => {
-            this.userFiles = response
+    // Получить все категории
+    getProjectList() {
+        const url = '/task-board/project-list';
+        this.send(url).then(response => {
+          this.setPreloader(false)
+          this.projectList = response;
         })
     },
 
-  }
+    getProjectItems(event = null, item = null) {
+
+      // let categoryId = 0;
+      // this.currentCategoryName = 'Все Категории';
+      // if(item && item.cat_id) {
+      //   categoryId = item.cat_id;
+      //   this.currentCategoryName = item.name;
+      // }
+      //
+      // this.getBoardItems(categoryId);
+      //
+      // if(event) {
+      //   const elem      = event.target.parentElement;
+      //   const className = '.menu-category-item';
+      //   const activeClass = 'menu-active';
+      //   this.updateItemClassActive(elem, className, activeClass);
+      // }
+    },
+
+    // // Получить все объявления
+    // getBoardItems(catId = 0) {
+    //   this.setPreloader(true)
+    //   catId = (catId) ? '/' + catId : '';
+    //   const url = '/bulletin-board/list' + catId;
+    //   this.send(url).then(response => {
+    //     this.setPreloader(false)
+    //     this.boardItems = response;
+    //     if(!catId)
+    //       this.allItemsCount = this.boardItems.length;
+    //   })
+    // },
+    //
+    // // Получить 1 объявление
+    // getItem(itemId) {
+    //   this.preloaderState = true
+    //   const url = '/bulletin-board/' + itemId;
+    //   this.send(url).then(response => {
+    //     this.saveType = 'edit';
+    //     this.itemModel = response;
+    //   })
+    // },
+    //
+    // // Удалить объявление
+    // deleteItem(itemId) {
+    //   const url = '/save/bulletin-board/' + itemId
+    //   this.send(url, 'delete').then(response => {
+    //     this.getBoardItems();
+    //     this.getMenuCategories();
+    //     if(response) alert('Обявление удалено');
+    //     else         alert('Не получилось удалить, попробуйте еще раз');
+    //   })
+    // },
+    //
+    // saveResponseHandle(response) {
+    //   this.getBoardItems();
+    //   this.getMenuCategories();
+    //   const res = this.saveResponse(response, 'Успешное сохранение', 'Не удалось сохранить')
+    //   // if (res.status) {} else {}
+    // },
+
+
+  },  // --- Methods
+
 
 }
 </script>
 
-<style>
+<style >
 
 .user-menu ul li {
   cursor: pointer;
@@ -321,5 +239,173 @@ export default {
   border-bottom: 1px #296dc1 solid;
   display: flex;
 }
+
+.megamenu-dropdown {
+  position: absolute;
+  right: 0;
+  z-index: 9999;
+  transition: all .3s;
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  width: 590px;
+  box-shadow: 0px 2px 3px rgb(0 0 0 15%);
+  padding: 10px;
+  background: #fff;
+  border-top: 2px solid #296dc1;
+  text-align: left;
+  padding: 0px;
+}
+
+.megamenu__li-item {
+  width: 192px;
+  border: 1px gainsboro solid;
+  margin: 2px;
+  padding: 0px;
+  height: 28px;
+  float: left;
+}
+
+.megamenu__li__a {
+  font-size: 10px;
+  height: 100%;
+  padding: 0px !important;
+  text-align: center;
+  text-transform: none;
+  font-weight: 0;
+}
+
+.menu-category-item {
+  border-bottom: 1px gainsboro solid;
+}
+
+.menu-active a {
+  border-bottom: 1px #296dc1 solid !important;
+  color: #296dc1 !important;
+}
+
+
+.span-shadow {text-align:center}
+.span-shadow .btn-hover-effect {
+  display: inline-block;
+  margin: 5px;
+  padding: 7px 15px;
+  cursor: pointer;
+  border-radius: 0px;
+  transition: .2s linear;
+  color: white;
+  background:#337ab7;
+}
+
+.span-shadow .square-out {background:#3A2F28}
+.span-shadow .square-out:hover {
+  box-shadow: 0 0 0 2px white, 0 0 0 4px #3A2F28;
+}
+
+.span-shadow .shadow-live {background:#C1F1E4}
+.span-shadow .shadow-live:hover {
+  box-shadow: 200px 0 0 0 rgba(0,0,0,.3) inset;
+}
+
+.span-shadow .square-in {background:#D2973D}
+.span-shadow .square-in:hover {
+  box-shadow: 0 0 0 2px #D2973D inset, 0 0 0 4px white inset;
+}
+
+.span-shadow .square-list {
+  background: #C76637;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+.span-shadow .square-list:hover {
+  box-shadow: 2px 2px white, 4px 4px #C76637;
+  top: -4px;
+  left: -4px;
+}
+
+
+* {
+  box-sizing: border-box;
+}
+.product-inner {
+  width: 300px;
+  margin: 0 auto;
+  background: white;
+  text-align: center;
+  border-bottom: 2px solid #ebebec;
+  transition: .2s linear;
+}
+.product-inner:hover {
+  border-color: #bca480;
+}
+.product-wrap {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+.product-wrap img {
+  display: block;
+  width: 100%;
+}
+.actions {
+  position: absolute;
+  left: 0;
+  bottom: -20%;
+  width: 100%;
+  background: rgba(59, 62, 67, 0.75);
+  transition: .3s linear;
+}
+.product-inner:hover .actions {
+  bottom: 0;
+}
+.actions a {
+  text-decoration: none;
+  float: left;
+  width: 33.33333333333333%;
+  color: white;
+  padding: 15px 0;
+  transition: .2s linear;
+}
+.actions a:hover {
+  background: rgba(59, 62, 67, 0.85);
+}
+.actions a:before {
+  font-family: "FontAwesome";
+}
+.add-to-cart:before {
+  content: "\f07a";
+}
+.quickview:before {
+  content: "\f002";
+}
+.wishlist:before {
+  content: "\f08a";
+}
+.product-info {
+  padding-bottom: 10px;
+  font-family: 'Noto Sans', sans-serif;
+}
+.product-title {
+  margin: 0 0 10px 0;
+  font-family: 'Noto Sans', sans-serif;
+}
+.product-title a {
+  text-decoration: none;
+  color: #1e1e1e;
+  font-weight: 400;
+  font-size: 16px;
+}
+.price {
+  font-weight: bold;
+  color: #bca480;
+}
+
+
+/*.my-shadow {*/
+/*  box-shadow: inset 2px 2px 5px rgba(154, 147, 140, 0.5), 1px 1px 5px rgba(255, 255, 255, 1);*/
+/*  box-shadow: 0 2px 0 #3C93D5;*/
+/*  box-shadow: 2px 2px white, 4px 4px;*/
+/*}*/
+
 
 </style>
