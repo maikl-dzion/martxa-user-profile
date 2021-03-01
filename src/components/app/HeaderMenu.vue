@@ -1,24 +1,27 @@
 <template>
-  <div class="header-bottom" id="sticky-header">
+<div class="header-bottom" id="sticky-header1"
+    style="margin-bottom:10px;">
+
+    <div  class="col-sm-12 col-xs-12 slicknav_nav my__hidden-top-menu"
+          style="margin-bottom: 20px; ">
+          <div class="logo" ><h1>
+            <router-link tag="a" to="/"
+                         style="font-size: 17px; color:white" >На главную</router-link>
+          </h1></div>
+          <div style="margin: 0px 0px 20px 0px" ><ul>
+            <template v-for="(menu) in topMenu" >
+              <router-link tag="li" :to="menu.url" active-class="active"  >
+                <a style="font-size: 17px" >{{ menu.title }}</a>
+              </router-link>
+            </template>
+          </ul></div>
+    </div>
 
     <div class="container" style="padding: 0px;">
-      <div class="row" style="margin:0px !important; padding:0px !important; border:0px red solid;">
+      <div class="row" style="">
 
-        <div class="hidden-md hidden-lg col-sm-8 col-xs-6">
-            <div class="logo" style="font-size: 14px"><h1>
-              <router-link tag="a" to="/" >На главную</router-link>
-            </h1></div>
-            <div style="margin: 0px 0px 20px 0px" ><ul>
-                <template v-for="(menu) in topMenu" >
-                  <router-link tag="li" :to="menu.url" active-class="active"  >
-                    <a style="font-size: 17px" >{{ menu.title }}</a>
-                  </router-link>
-                </template>
-            </ul></div>
-        </div>
-
-        <div  class="col-md-11 hidden-sm hidden-xs" >
-              <div class="mainmenu" >
+        <div class="col-md-11 hidden-sm hidden-xs my__visible-top-menu" >
+             <div class="mainmenu" >
                 <ul id="navigation" >
                     <template v-for="(menu) in topMenu" >
                         <router-link tag="li" :to="menu.url" active-class="active"  >
@@ -26,22 +29,22 @@
                         </router-link>
                     </template>
                 </ul>
-              </div>
+             </div>
         </div>
 
-        <div class="col-md-1 col-sm-2 col-xs-3" style="margin: -5px 0px 0px 0px; padding: 0px;">
+        <div class="col-md-1 col-sm-2 col-xs-3 my__visible-top-menu " style="margin: -5px 0px 0px 0px; padding: 0px;">
           <div class="search-wrap text-right">
             <ul><li><a href="#"><i class="fa fa-search"></i></a></li></ul>
           </div>
         </div>
 
-        <div class="col-sm-2 clear col-xs-3 hidden-md hidden-lg">
-          <div class="responsive-menu-wrap floatright"></div>
+        <div class="col-sm-2 clear col-xs-3 hidden-md hidden-lg my__visible-top-menu ">
+            <div class="responsive-menu-wrap floatright"></div>
         </div>
 
       </div>
     </div>
-  </div>
+</div>
 </template>
 
 <script>
@@ -66,7 +69,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped >
 
 .header-bottom {
   height: 55px;
@@ -103,6 +106,20 @@ export default {
 
 .mainmenu ul li > a:after {
   bottom: 14px;
+}
+
+
+.my__hidden-top-menu {
+   display: none; background: #296dc1;
+}
+
+@media screen and (max-width: 990px) {
+  .my__hidden-top-menu {
+     display: block;
+  }
+  .my__visible-top-menu {
+     display: none;
+  }
 }
 
 </style>

@@ -6,7 +6,7 @@
       :message="preloaderMessage"
     ></Preloading>
 
-    <input type="file" id="file" ref="file" @change="handleFileUpload()"/>
+    <input type="file" id="file" ref="file" @change="handleFileUpload()" style="display: none" />
 
     <div style="text-align: center; border: 0px red solid; width: 100%" >
       <button @click="selectFile()" name="button"

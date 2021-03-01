@@ -1,6 +1,6 @@
 <template>
 <page-template>
-    <section class="blog-details-area1 ptb-101" style="border:0px red solid; ">
+    <section class="blog-details-area ptb-101" style="">
 
 <!--      <div class="post-block-out ">-->
 <!--            <div class="post-block">-->
@@ -35,10 +35,10 @@
 
 <!--        </div>-->
 
-        <div class="container-fluid"><div class="row">
+        <div class="container"><div class="row">
 
             <!--- ЛЕВАЯ ПАНЕЛЬ ---->
-            <div class="col-md-3 col-sm-6 col-xs-12" style="border:0px red solid ">
+            <div class="col-md-3 col-sm-6 col-xs-12" style="">
               <aside class="left-sidebar">
                 <div class="mb-20 about-wrap user-menu">
                   <h3 class="sidebar-title" style="font-size: 18px; font-weight: bold">Категории объявлений</h3>
@@ -59,7 +59,7 @@
             </div>
 
             <!--- ПРАВАЯ ПАНЕЛЬ ---->
-            <div class="col-md-9 col-xs-12">
+            <div class="col-md-9 col-sm-6 col-xs-12">
               <div class="blog-details-wrap">
 
                 <p class="span-shadow" style="border: 0px red solid; width: 220px; padding:0px; margin-bottom:10px;" >

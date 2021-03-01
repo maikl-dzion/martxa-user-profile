@@ -1,6 +1,6 @@
 <template>
 
-  <div class="header-middle bg-2" style="height: 55px; padding: 0px; margin: 0px;">
+  <div class="header-middle bg-2 my__header-middle" >
     <div class="container" style="height: 100%; padding-top: 0px;">
       <div class="row" >
 
@@ -53,15 +53,21 @@
 
 <script>
 export default {
-  name: "HeaderInfo"
+  name: "HeaderMiddle"
 }
 </script>
 
 <style scoped>
+
+.my__header-middle {
+    /*height: 55px;*/
+    padding: 0px; margin: 0px;
+}
+
 /* На верхнем уровне кода */
-@media screen and (max-width: 400px) {
-  .header-middle-right {
-     /*display: none !important;*/
+@media screen and (max-width: 1230px) {
+  .my__header-middle {
+    height: 100%;
   }
 }
 </style>
