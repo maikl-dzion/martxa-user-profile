@@ -158,7 +158,7 @@ export default {
 
         // "user_id":     { type : 'text', label : 'UserId', value : '', },
         "username":    { type : 'text', label : 'Имя пользователя', value : '', },
-        "email":       { type : 'text', label : 'Email', value : '', },
+        "email":       { type : 'email', label : 'Email', value : '', },
         // "password":    { type : 'text', label : 'Пароль', value : '', },
         "login":       { type : 'text', label : 'Логин', value : '', },
         "phone":       { type : 'text', label : 'Телефон', value : '', },
@@ -168,7 +168,7 @@ export default {
         "age":         { type : 'text', label : 'Возраст', value : '', },
         "sex":         { type : 'text', label : 'Пол', value : '', },
         "address":     { type : 'text', label : 'Адрес', value : '', },
-        "date_of_birth": { type : 'text', label : 'Дата рождения', value : '', },
+        "date_of_birth": { type : 'date', label : 'Дата рождения', value : '', },
         "note":        { type : 'textarea', label : 'О себе', value : '', },
 
         // "email_code":   { type : 'text', label : '', value : '', },
@@ -284,11 +284,10 @@ export default {
     saveUserInfo () {
       this.setPreloader(true)
       this.respInfoClear()
-      const data   = this.userInfo
-      const userId = this.userId
+      const data   = this.userInfo;
+      const userId = data.user_id;
       const apiUrl = '/post/user/update/' + userId
       this.send(apiUrl, 'put', data).then(this.responseUserInfoHandle)
-
     },
 
     responseUserInfoHandle (response) {
