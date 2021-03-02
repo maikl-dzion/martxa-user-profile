@@ -6,9 +6,6 @@ import store  from './store'
 import Plugins from './plugins/Plugins'
 import Http from './plugins/Http'
 
-import VueKanban from 'vue-kanban'
-Vue.use(VueKanban)
-
 Vue.use(Plugins)
 Vue.use(Http)
 
