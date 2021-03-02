@@ -35,7 +35,7 @@ const Plugins = {
         ...mapGetters([
             'userInfo',
             'getUsers',
-            // 'getUsersList',
+            'getUserId'
         ]),
       },
 

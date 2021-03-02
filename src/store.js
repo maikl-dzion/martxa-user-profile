@@ -24,6 +24,7 @@ export default new Vuex.Store({
     },
 
     setAlertInfo(context, data ) {
+
         const color = (data.color) ? data.color : 'green'
         const timer = (data.timer) ? data.timer : 10000;
         const json  = (data.json)  ? data.json  : {};

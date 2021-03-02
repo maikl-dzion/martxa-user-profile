@@ -45,6 +45,7 @@ export default {
       this.userId = this.store('user_id')
       this.setRootFilesPath()
       this.setStoreUserInfo ();
+      this.fetchUsers();
   },
 
   methods: {

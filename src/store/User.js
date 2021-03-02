@@ -19,6 +19,7 @@ const user = {
 
     setUser(state, data) {
       state.user = data
+      state.userId = data.user_id
     },
 
     setError(state, data) {
@@ -83,6 +84,7 @@ const user = {
       getUserId: state => {
         return state.userId
       },
+
   },
 
 }

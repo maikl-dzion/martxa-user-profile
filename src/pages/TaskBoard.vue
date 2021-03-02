@@ -2,7 +2,7 @@
   <page-template>
     <section class="blog-details-area ptb-101" style="">
 
-      <div class="container-fluid"><div class="row">
+      <div class="container"><div class="row">
 
         <!--- ЛЕВАЯ ПАНЕЛЬ ---->
         <div class="col-md-3 col-sm-6 col-xs-12" style="border:0px red solid ">
@@ -32,66 +32,37 @@
                          Добавить задачу</span>
             </p>
 
-            <BoardItemForm
-              v-if="addFormState"
-              @save_response="saveResponseHandle" />
+            <TaskItemForm
+                v-if="addFormState"
+                :users_list="getUsers"
+                :project_list="projectList"
+                @save_response="saveResponseHandle" />
 
             <div style="box-shadow: 0 20px 0 #3C93D5; height: 5px; margin:20px 0px 20px 0px"></div>
 
-            <div style="border: 0px red solid; margin-top:60px; ">
-              <h3 class="sidebar-title"
-                  style="font-size: 18px; font-weight: bold"> Объявления </h3>
-              <h5 v-if="currentCategoryName" class="sidebar-title"
-                  style="font-size: 15px;">Категория : {{ currentCategoryName }} ({{boardItems.length}})</h5>
+            <AppClassDecorator/>
 
-              <div v-for="(item) in boardItems">
-                <!--  <pre>{{item}}</pre>-->
-                <div class="blog-content" style="border:1px gainsboro solid; margin-bottom:10px;" >
-                  <div class="blog-meta">
-                    <ul>
-                      <li><a href="#"><i class="fa fa-user" ></i> {{item.username}}</a></li>
-                    </ul>
-                  </div>
-
-                  <div>Категория : {{item.cat_name}}</div>
-                  <h3><a href="#">{{ item.title }}</a></h3>
-
-                  <div style="display: flex" >
-                    <div style="width:200px;" >
-                      <img v-if="item.files && item.files[0] && item.files[0].path" :src="rootPath +'/'+ item.files[0].path"
-                           style="width: 100%" alt="">
-                      <p>Цена : {{ item.price }}</p>
-                    </div>
-                    <div style="width:100%; margin-left:10px" >
-                      <div v-if="item.short_desc" >{{ item.short_desc }}</div>
-                      <div v-else >{{ item.description }}</div>
-                    </div>
-                  </div>
-
-                  <div style="display: flex" >
-
-                    <a href="#" class="btn-style"
-                       style="border:1px #b0c5de solid; width:180px; height: 32px; padding:2px; display: block;
-                                          margin:3px; text-align:center; font-style: italic; font-size: 11px; "
-                    >Подробнее</a>
-
-                    <a v-if="userInfo.user_id == item.user_id"
-                       @click="deleteItem(item.board_id)" class="btn-style"
-                       style="border:1px #b0c5de solid; width:180px; height: 32px; padding:2px; display: block;
-                                          margin:3px; text-align:center; font-style: italic; font-size: 11px; cursor:pointer;"
-                       disabled="true"
-                    >Удалить объявление</a>
-
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
+<!--            <div style="border: 0px red solid; margin-top:60px; "></div>-->
 
           </div>
         </div><!--- /col-md-9 col-xs-12 --->
         <!--- ./ ПРАВАЯ ПАНЕЛЬ ---->
+
+        <!--- ПАНЕЛЬ ЗАДАЧ---->
+        <div class="col-md-12 col-sm-12 col-xs-12" style="border:0px red solid ">
+          <div class="blog-details-wrap">
+
+            <h3 class="sidebar-title" style="font-size: 18px; font-weight: bold"> Задачи </h3>
+            <h5 v-if="currentProjectName" class="sidebar-title"
+                style="font-size: 15px;">Проект : {{ currentProjectName }} ({{taskItems.length}})</h5>
+            <hr/>
+
+            <TasksPanel
+              :task_items ="taskItems" />
+
+          </div>
+        </div>
+        <!--- ./ ПАНЕЛЬ ЗАДАЧ---->
 
       </div></div>
     </section>
@@ -103,26 +74,29 @@
 import {mapGetters, mapActions} from 'vuex'
 
 import FilesLoaderPreview from '@/components/FilesLoaderPreview'
-import BoardItemForm from '@/components/bulletin/BoardItemForm'
+import TaskItemForm from '@/components/tasks/TaskItemForm';
+import TasksPanel   from '@/components/tasks/TasksPanel'
+import AppClassDecorator from '@/components/app/AppClassDecorator'
 
 export default {
   name: "BulletinBoard",
   data: () => ({
 
     saveType: 'add',
-    // selectCatName: '',
-    // catMenuToggle: false,
-    currentCategoryName: '',
-    addFormState : false,
-    allItemsCount : 0,
+    currentProjectName: '',
+    currentProjectId  : 0,
+    addFormState      : false,
+    allItemsCount     : 0,
 
     itemModel: {
-      title: '',
-      category_id: 0,
-      short_desc: '',
-      description: '',
-      price: '',
-      user_id: '',
+        name       : '',
+        project_id : 0,
+        to_user_id : 0,
+        task_status: 0,
+        user_id    : 0,
+        short_desc : '',
+        description: '',
+        final_date : '',
     },
 
     projectList : [],
@@ -131,65 +105,74 @@ export default {
   }),
 
   /////////////////
-  computed: {},
-
-  /////////////////
   components : {
     FilesLoaderPreview,
-    BoardItemForm
+    TaskItemForm,
+    TasksPanel,
+    AppClassDecorator
   },
 
   /////////////////
   created() {
-    this.getRootFilesPath();
-    this.getProjectList();
-    // this.getCategoryItems();
+      this.getRootFilesPath();
+      this.getProjectMenu();
+      // this.getTaskItems();
   },
 
   ////////////////
   methods: {
 
-    // Получить все категории
-    getProjectList() {
-        const url = '/task-board/project-list';
+    // Получить меню проектов
+    getProjectMenu() {
+        const url = '/task-board/project-menu';
         this.send(url).then(response => {
-          this.setPreloader(false)
-          this.projectList = response;
+            this.setPreloader(false)
+            this.projectList = response;
+            for(let i in this.projectList) {
+                const project = this.projectList[i];
+                this.getProjectItems({}, project);
+                return true;
+            }
         })
     },
 
     getProjectItems(event = null, item = null) {
+        const projectId = this.setProjectParam(item);
+        this.getTaskItems(projectId);
 
-      // let categoryId = 0;
-      // this.currentCategoryName = 'Все Категории';
-      // if(item && item.cat_id) {
-      //   categoryId = item.cat_id;
-      //   this.currentCategoryName = item.name;
-      // }
-      //
-      // this.getBoardItems(categoryId);
-      //
-      // if(event) {
-      //   const elem      = event.target.parentElement;
-      //   const className = '.menu-category-item';
-      //   const activeClass = 'menu-active';
-      //   this.updateItemClassActive(elem, className, activeClass);
-      // }
+        if(event && event.target && event.target.parentElement) {
+          const elem        = event.target.parentElement;
+          const className   = '.menu-category-item';
+          const activeClass = 'menu-active';
+          this.updateItemClassActive(elem, className, activeClass);
+        }
     },
 
-    // // Получить все объявления
-    // getBoardItems(catId = 0) {
-    //   this.setPreloader(true)
-    //   catId = (catId) ? '/' + catId : '';
-    //   const url = '/bulletin-board/list' + catId;
-    //   this.send(url).then(response => {
-    //     this.setPreloader(false)
-    //     this.boardItems = response;
-    //     if(!catId)
-    //       this.allItemsCount = this.boardItems.length;
-    //   })
-    // },
-    //
+    setProjectParam(item = null) {
+        let projectId = 0;
+        this.currentProjectName = 'Все задачи';
+        if(item && item.project_id) {
+            this.currentProjectId = projectId = item.project_id;
+            this.currentProjectName = item.name;
+        }
+        return projectId;
+    },
+
+    saveResponseHandle(response) {
+        this.getProjectMenu();
+        const res = this.saveResponse(response, 'Успешное сохранение', 'Не удалось сохранить')
+    },
+
+    // Получить задачи
+    getTaskItems(projectId = 0) {
+        const url = '/task-board/list/' + projectId;
+        this.send(url).then(response => {
+            this.setPreloader(false)
+            this.taskItems = response;
+            this.allItemsCount = (!projectId) ? this.taskItems.length : 0;
+        })
+    },
+
     // // Получить 1 объявление
     // getItem(itemId) {
     //   this.preloaderState = true
@@ -211,12 +194,6 @@ export default {
     //   })
     // },
     //
-    // saveResponseHandle(response) {
-    //   this.getBoardItems();
-    //   this.getMenuCategories();
-    //   const res = this.saveResponse(response, 'Успешное сохранение', 'Не удалось сохранить')
-    //   // if (res.status) {} else {}
-    // },
 
 
   },  // --- Methods
