@@ -5,25 +5,25 @@
       <div class="container"><div class="row">
 
         <!--- ЛЕВАЯ ПАНЕЛЬ ---->
-        <div class="col-md-3 col-sm-6 col-xs-12" style="border:0px red solid ">
-            <aside class="left-sidebar">
-              <div class="mb-20 about-wrap user-menu">
-                <h3 class="sidebar-title" style="font-size: 18px; font-weight: bold">Проекты</h3>
-                <ul>
-                    <li v-for="(item) in projectList"
-                        @click="getProjectItems($event, item)"
-                        class="menu-category-item" >
-                          <a v-if="!item.items_count">{{ item.name }} ({{item.items_count}})</a>
-                          <a v-else >{{ item.name }}
-                                     <span style="color:green; font-weight: bold"> [ {{item.items_count}} ]</span></a>
-                    </li>
-                </ul>
-              </div>
-            </aside>
-        </div>
+<!--        <div class="col-md-3 col-sm-6 col-xs-12" style="border:0px red solid ">-->
+<!--            <aside class="left-sidebar">-->
+<!--              <div class="mb-20 about-wrap user-menu">-->
+<!--                <h3 class="sidebar-title" style="font-size: 18px; font-weight: bold">Проекты</h3>-->
+<!--                <ul>-->
+<!--                    <li v-for="(item) in projectList"-->
+<!--                        @click="getProjectItems($event, item)"-->
+<!--                        class="menu-category-item" >-->
+<!--                          <a v-if="!item.items_count">{{ item.name }} ({{item.items_count}})</a>-->
+<!--                          <a v-else >{{ item.name }}-->
+<!--                                     <span style="color:green; font-weight: bold"> [ {{item.items_count}} ]</span></a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--              </div>-->
+<!--            </aside>-->
+<!--        </div>-->
 
-        <!--- ПРАВАЯ ПАНЕЛЬ ---->
-        <div class="col-md-9 col-xs-12">
+        <!---  ---->
+        <div class="col-md-12 col-xs-12">
           <div class="blog-details-wrap">
 
             <p class="span-shadow" style="border: 0px red solid; width: 220px; padding:0px; margin-bottom:10px;" >
@@ -38,15 +38,28 @@
                 :project_list="projectList"
                 @save_response="saveResponseHandle" />
 
-            <div style="box-shadow: 0 20px 0 #3C93D5; height: 5px; margin:20px 0px 20px 0px"></div>
+            <div v-if="addFormState" style="box-shadow: 0 20px 0 #3C93D5; height: 5px; margin:0px 0px 20px 0px"></div>
 
-            <AppClassDecorator/>
-
-<!--            <div style="border: 0px red solid; margin-top:60px; "></div>-->
+<!--            <AppClassDecorator/>-->
 
           </div>
         </div><!--- /col-md-9 col-xs-12 --->
-        <!--- ./ ПРАВАЯ ПАНЕЛЬ ---->
+        <!--- ./  ---->
+
+        <div class="col-md-12 col-xs-12" style="margin: 10px 0px 10px 0px" >
+          <div class="tags-wrap">
+            <h3 class="sidebar-title" style="font-size: 18px; font-weight: bold">Проекты</h3>
+            <ul>
+              <li v-for="(item) in projectList"
+                  @click="getProjectItems($event, item)"
+                  class="menu-category-item" style="cursor: pointer;" >
+                <a v-if="!item.items_count">{{ item.name }} ({{item.items_count}})</a>
+                <a v-else >{{ item.name }}
+                  <span style="color:green; font-weight: bold"> [ {{item.items_count}} ]</span></a>
+              </li>
+            </ul>
+          </div>
+        </div>
 
         <!--- ПАНЕЛЬ ЗАДАЧ---->
         <div class="col-md-12 col-sm-12 col-xs-12" style="border:0px red solid ">
@@ -56,6 +69,8 @@
             <h5 v-if="currentProjectName" class="sidebar-title"
                 style="font-size: 15px;">Проект : {{ currentProjectName }} ({{taskItems.length}})</h5>
             <hr/>
+
+<!--            <pre>{{taskItems}}</pre>-->
 
             <TasksPanel
               :task_items ="taskItems" />
@@ -106,10 +121,10 @@ export default {
 
   /////////////////
   components : {
-    FilesLoaderPreview,
-    TaskItemForm,
-    TasksPanel,
-    AppClassDecorator
+      FilesLoaderPreview,
+      TaskItemForm,
+      TasksPanel,
+      AppClassDecorator
   },
 
   /////////////////
@@ -141,10 +156,10 @@ export default {
         this.getTaskItems(projectId);
 
         if(event && event.target && event.target.parentElement) {
-          const elem        = event.target.parentElement;
-          const className   = '.menu-category-item';
-          const activeClass = 'menu-active';
-          this.updateItemClassActive(elem, className, activeClass);
+            const elem        = event.target.parentElement;
+            const className   = '.menu-category-item';
+            const activeClass = 'menu-active';
+            this.updateItemClassActive(elem, className, activeClass);
         }
     },
 
@@ -165,6 +180,7 @@ export default {
 
     // Получить задачи
     getTaskItems(projectId = 0) {
+        this.taskItems = [];
         const url = '/task-board/list/' + projectId;
         this.send(url).then(response => {
             this.setPreloader(false)

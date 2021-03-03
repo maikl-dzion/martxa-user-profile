@@ -1,3 +1,4 @@
+
 <template>
   <h1 @click="onClick">
     {{message}}

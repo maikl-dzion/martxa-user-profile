@@ -1,110 +1,114 @@
 <template><div>
 
-  <div style="display: flex" >
+<!--  <pre>{{task_items}}</pre>-->
 
-      <div class="list__task-panel js-cell"></div>
-      <div class="list__task-panel js-cell"></div>
-      <div class="list__task-panel js-cell"></div>
-      <div class="list__task-panel js-cell"></div>
+  <table class="task-items-table" >
 
-  </div>
+      <tr>
+        <th><div class="task-panel__caption" style="border-bottom:orange 2px solid;" >Назначено</div></th>
+        <th><div class="task-panel__caption" style="border-bottom:darkblue 2px solid;" >В работе</div></th>
+        <th><div class="task-panel__caption" style="border-bottom:red 2px solid;" >На проверке</div></th>
+        <th><div class="task-panel__caption" style="border-bottom:green 2px solid;" >Выполнено</div></th>
+      </tr>
 
-  <div class="task__card js-card" draggable="true" id="t1" >
-       <div class="task__card-header">Task 1</div>
-       <div class="task__card-info">Task description</div>
-  </div>
+      <tr>
+        <th><div class="task-panel__list"
 
-  <div class="task__card js-card" draggable="true" id="t1" >
-      <div class="task__card-header">Task 2</div>
-      <div class="task__card-info">Task description</div>
-  </div>
+             @dragenter="dragEnter"
+             @dragleave="dragLeave"
 
+             @drop="dragDrop($event)"
+             @dragover.prevent="cancel"
+             data-status-name="progress"
+             data-status-id=0 >
 
-<!--  <div class="hero">-->
-<!--    <div class="wrapper">-->
-<!--      <ul class="list">-->
+              <template v-for="(item) in getStatusList.start" >
+                <div class="task__card js-card" draggable="true"
+                     :id="'task-' + item.task_id"
+                     :data-task-id="item.task_id"
+                     @dragstart="dragStart($event)"
+                     @dragend="dragEnd($event)" >
 
-<!--        <li class="list__caption">Planned</li>-->
-<!--        <li class="list__caption">In dev</li>-->
-<!--        <li class="list__caption">QA</li>-->
-<!--        <li class="list__caption">Production</li>-->
+                     <TaskItemInfo :task="item" />
 
-<!--        <li class="list__cell js-cell">-->
+                </div>
+              </template>
 
-<!--          <div v-for="(i) in [1, 2, 3]"-->
-<!--               class="list__card js-card" draggable="true" :style="'margin-bottom:' + (i + 20)">-->
-<!--               <div class="list__card-header">task {{i+1}}</div>-->
-<!--               <div class="list__card-info">Task description</div>-->
-<!--          </div>-->
+        </div></th>
+        <th><div class="task-panel__list"
 
-<!--        </li>-->
+             @dragenter="dragEnter"
+             @dragleave="dragLeave"
+             @drop="dragDrop($event)"
+             @dragover.prevent="cancel"
+             data-status-name="progress"
+             data-status-id=1 >
 
-<!--        <li class="list__cell js-cell"></li>-->
-<!--        <li class="list__cell js-cell"></li>-->
-<!--        <li class="list__cell js-cell"></li>-->
+            <template v-for="(item) in getStatusList.progress" >
+              <div class="task__card js-card" draggable="true"
+                   :id="'task-' + item.task_id"
+                   :data-task-id="item.task_id"
+                   @dragstart="dragStart($event)"
+                   @dragend="dragEnd($event)" >
 
-<!--      </ul>-->
-<!--    </div>-->
-<!--  </div>-->
+                   <TaskItemInfo :task="item" />
 
-  <pre>{{taskItems}}</pre>
+              </div>
+            </template>
+
+        </div></th>
+        <th><div class="task-panel__list"
+
+             @dragenter="dragEnter"
+             @dragleave="dragLeave"
+             @drop="dragDrop($event)"
+             @dragover.prevent="cancel"
+             data-status-name="progress"
+             data-status-id=2 >
+
+            <template v-for="(item) in getStatusList.checked" >
+              <div class="task__card js-card" draggable="true"
+                   :id="'task-' + item.task_id"
+                   :data-task-id="item.task_id"
+                   @dragstart="dragStart($event)"
+                   @dragend="dragEnd($event)" >
+
+                   <TaskItemInfo :task="item" />
+              </div>
+            </template>
+
+        </div></th>
+        <th><div class="task-panel__list"
+
+             @dragenter="dragEnter"
+             @dragleave="dragLeave"
+             @drop="dragDrop($event)"
+             @dragover.prevent="cancel"
+             data-status-name="progress"
+             data-status-id=3 >
+
+            <template v-for="(item) in getStatusList.done" >
+              <div class="task__card js-card" draggable="true"
+                   :id="'task-' + item.task_id"
+                   :data-task-id="item.task_id"
+                   @dragstart="dragStart($event)"
+                   @dragend="dragEnd($event)" >
+
+                   <TaskItemInfo :task="item" />
+              </div>
+            </template>
+
+        </div></th>
+
+      </tr>
+
+  </table>
 
 </div></template>
 
 <script>
 
-const dragAndDrop = () => {
-
-    const cards  = document.querySelectorAll('.js-card');
-    const cells  = document.querySelectorAll('.js-cell');
-
-    const dragStart = function (e) {
-      console.log(e);
-      setTimeout(() => {
-        this.classList.add('hide');
-      }, 0);
-    };
-
-    const dragEnd = function () {
-      this.classList.remove('hide');
-    };
-
-    const dragOver = function (evt) {
-      evt.preventDefault();
-    };
-
-    const dragEnter = function (evt) {
-      evt.preventDefault();
-      this.classList.add('hovered');
-    };
-
-    const dragLeave = function () {
-      this.classList.remove('hovered');
-    };
-
-    const dragDrop = function () {
-      this.append(card);
-      this.classList.remove('hovered');
-    };
-
-    cells.forEach(cell => {
-      cell.addEventListener('dragover', dragOver);
-      cell.addEventListener('dragenter', dragEnter);
-      cell.addEventListener('dragleave', dragLeave);
-      cell.addEventListener('drop', dragDrop);
-    });
-
-
-    cards.forEach(cell => {
-        cell.addEventListener('dragstart', dragStart);
-        cell.addEventListener('dragend'  , dragEnd);
-    });
-
-
-};
-
-import DragDrop from 'vue-drag-n-drop'
-import CustomTask from '@/components/tasks/CustomTask'
+import TaskItemInfo   from '@/components/tasks/TaskItemInfo';
 
 export default {
   name: "TasksPanel",
@@ -112,189 +116,264 @@ export default {
 
   data() {
     return {
+        selectTaskId : 0,
+        dragItem : {},
+        dropItem : {},
 
+        statusList : {
+            'start' : [],
+            'progress' : [],
+            'checked' : [],
+            'done' : [],
+        },
     }
   },
 
   computed : {
-      taskItems () {
+
+      getTaskItems () {
          return this.task_items;
+      },
+
+      getStatusList() {
+        return this.getStatusRender ()
       }
   },
 
-  components: {
-    DragDrop,
-    CustomTask,
+  components : {
+    TaskItemInfo
   },
-
 
   methods : {
 
-      dragRun() {
-        dragAndDrop();
+      taskStatusesClear(){
+          let list = {
+              'start' : [],
+              'progress' : [],
+              'checked' : [],
+              'done' : [],
+          };
+          this.statusList = list;
       },
 
-      save(received){
-        console.log("Received:", received)
+      getStatusRender () {
+          this.taskStatusesClear();
+          const tasks = this.task_items
+          for(let i in tasks) {
+              let task  = tasks[i];
+              let fname = 'start';
+              switch (task.task_status) {
+                  case 1 : fname = 'progress'; break;
+                  case 2 : fname = 'checked'; break;
+                  case 3 : fname = 'done'; break;
+                  // default : break;
+              }
+              this.statusList[fname].push(task);
+          }
+          return this.statusList;
       },
 
-      doneMarked(data) {
-        data.done = true;
-        alert(data.id);
+
+      dragStart(event) {
+
+           this.dragItem = {};
+           this.selectTaskId = 0;
+           this.selectTaskId = event.target.dataset.taskId;
+           this.dragItem = event.target;
+
+            setTimeout(() => {
+               event.target.classList.add('hide');
+            }, 0);
+
+           console.log('drag-start', this.selectTaskId);
       },
 
-      originalBucketDropEvent(result) {
-        console.log("Original: ", result);
+      dragDrop(event) {
+          let elem = event.target;
+          const statusName = event.target.dataset.statusName;
+          const statusId = parseInt(event.target.dataset.statusId);
+          this.changeTaskStatus(statusId);
+          // event.target.append(this.dragItem);
+
+          elem.classList.remove('hovered');
+          elem.classList.remove('_padding-top');
+          console.log('drop', statusName, statusId);
       },
 
-      destinationBucketDropEvent(columnName, result) {
-        // alert(columnName);
-        console.log("Destination: ", columnName, result)
+      dragEnd(event) {
+          const taskId = event.target.dataset.taskId;
+          console.log('end', taskId);
+      },
+
+      dragEnter(event) {
+         // this.dropItem = {};
+         event.preventDefault();
+         let elem = event.target;
+         elem.classList.add('hovered');
+         elem.classList.add('_padding-top');
+
+         // this.dropItem = event.target;
+         // this.dropItem.preventDefault();
+         // this.dropItem.classList.add('hovered');
+         // elem.classList.add('_padding-top');
+      },
+
+      dragLeave(event) {
+
+          let elem = event.target;
+          elem.classList.remove('hovered');
+          elem.classList.remove('_padding-top');
+
+          //this.dropItem.classList.remove('hovered');
+          // event.target = elem;
+          console.log('dragLeave', elem);
+      },
+
+      changeTaskStatus(statusId) {
+          for(let i in this.getTaskItems){
+              let task = this.getTaskItems[i];
+              if(task.task_id != this.selectTaskId)
+                continue
+              this.getTaskItems[i].task_status = statusId;
+              this.updateItem(this.getTaskItems[i])
+              this.getStatusRender ();
+              return true;
+          }
+          return false;
+      },
+
+      // Изменить задачу
+      async updateItem(data, callback = null) {
+          const itemId = data.task_id
+          const url = '/save/task-board/' + itemId;
+          const response = await this.send(url, 'put', data);
+          // this.saveResponse(response, 'Успешное сохранение', 'Не удалось сохранить')
+          if(callback)
+            callback(response);
+          return response;
       },
 
       cancel() {
-        console.log("Cancel hit");
+        // console.log("Cancel hit");
       },
   },
 
-  mounted () {
-    this.dragRun()
-  }
 }
+
+// const dragAndDrop = () => {
+//       const cards  = document.querySelectorAll('.js-card');
+//       const cells  = document.querySelectorAll('.js-cell');
+//       const dragStart = function (e) {
+//         console.log(e);
+//         setTimeout(() => {
+//           this.classList.add('hide');
+//         }, 0);
+//       };
+//       const dragEnd = function () {
+//         this.classList.remove('hide');
+//       };
+//       const dragOver = function (evt) {
+//         evt.preventDefault();
+//       };
+//       const dragEnter = function (evt) {
+//         evt.preventDefault();
+//         this.classList.add('hovered');
+//       };
+//       const dragLeave = function () {
+//         this.classList.remove('hovered');
+//       };
+//       const dragDrop = function () {
+//         this.append(card);
+//         this.classList.remove('hovered');
+//       };
+//       cells.forEach(cell => {
+//         cell.addEventListener('dragover', dragOver);
+//         cell.addEventListener('dragenter', dragEnter);
+//         cell.addEventListener('dragleave', dragLeave);
+//         cell.addEventListener('drop', dragDrop);
+//       });
+//       cards.forEach(cell => {
+//         cell.addEventListener('dragstart', dragStart);
+//         cell.addEventListener('dragend'  , dragEnd);
+//       });
+// };
+
+
 </script>
+
 
 <style scoped>
 
-
-/*#app {*/
-/*    font-family: 'Avenir', Helvetica, Arial, sans-serif;*/
-/*    -webkit-font-smoothing: antialiased;*/
-/*    -moz-osx-font-smoothing: grayscale;*/
-/*    text-align: center;*/
-/*    color: #2c3e50;*/
-/*    margin-top: 60px;*/
-/*}*/
-
-
-.list__task-panel {
-    flex-basis: calc(25% - 5px);
-    margin: 5px;
-    min-height: 250px;
-    list-style: none;
-    box-shadow: 0px 0px 7px 5px rgba(0,0,0,0.2);
-    background-color:#f0f2f5;;
+.task-items-table {
+   width: 100%;
+   border-collapse: collapse; /* Убираем двойные линии между ячейками */
 }
 
+.task-items-table td, .task-items-table th {
+  width: 25%;
+  text-align: center;
+  vertical-align: top;
+  padding: 5px; /* Поля вокруг содержимого таблицы */
+  border: 0px solid gainsboro; /* Параметры рамки */
+}
+
+/******************************/
+/**** Task Items Panel *******/
+
+.task-panel__list {
+    width: 100%;
+    min-height: 250px;
+    list-style: none;
+    box-shadow: 0px 0px 3px 1px rgba(0,0,0,0.2);
+    background-color:#f0f2f5;
+    padding:5px !important;
+    /*padding-top:35px !important;*/
+}
+
+.task-panel__caption {
+    width: 100%;
+    font-weight: bold;
+    color: #0747a6;
+    border-bottom:grey 1px solid;
+}
+
+/******************************/
+/******** Task Item ***********/
 
 .task__card {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    text-align: center;
-    min-height: 120px;
+
+    border: 1px #b0c5de solid;
+    background: white;
+    margin-bottom: 10px;
+    padding:1px;
+    font-size: 12px;
+    font-weight: normal;
+    box-shadow: 0px 0px 4px 2px rgba(0,0,0,0.2);
     cursor: all-scroll;
+
 }
 
 .task__card-header {
-  text-transform: lowercase;
-  font-weight: bold;
-  padding: 12px 20px;
-  background-color: #0747a6;
-  color: white;
+    font-style: italic;
+    border: #b0c5de 0px solid;
+    background-color: #0747a6;
+    color:white;
+    font-weight: bold;
+    font-size: 13px;
+    min-height: 32px;
+
 }
 
 .task__card-info {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #eff5ff;
-  flex-grow: 1;
-  padding: 12px 20px;
-  font-size: 14px;
-  text-transform: uppercase;
-  font-weight: 600;
+    margin:4px;
+    padding:3px;
+    border: gray 0px solid;
+    background-color: #eff5ff;
 }
 
-/**, *::before, *::after {*/
-/*  box-sizing: border-box;*/
-/*  padding: 0;*/
-/*  margin: 0;*/
-/*}*/
 
-/*body {*/
-/*  font-family: Arial, sans-serif;*/
-/*  font-size: 16px;*/
-/*  line-height: normal;*/
-/*  font-weight: 400;*/
-/*}*/
-
-
-
-
-
-.hero {
-  width: 100%;
-  min-height: 100vh;
-}
-
-.wrapper {
-  max-width: 1024px;
-  margin: 0 auto;
-}
-
-.list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin: 100px 0;
-}
-
-.list__cell {
-  flex-basis: calc(25% - 40px);
-  min-height: 150px;
-  margin: 20px;
-  list-style: none;
-  box-shadow: 0px 0px 7px 5px rgba(0,0,0,0.2);
-  overflow: hidden;
-  background-color:#f0f2f5;;
-}
-
-.list__caption {
-  width: calc(25% - 40px);
-  margin: 0 20px;
-  list-style: none;
-  font-weight: bold;
-  color: #0747a6;
-}
-
-.list__card {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  text-align: center;
-  min-height: 100%;
-  cursor: all-scroll;
-}
-
-.list__card-header {
-  text-transform: lowercase;
-  font-weight: bold;
-  padding: 12px 20px;
-  background-color: #0747a6;
-  color: white;
-}
-
-.list__card-info {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #eff5ff;
-  flex-grow: 1;
-  padding: 12px 20px;
-  font-size: 14px;
-  text-transform: uppercase;
-  font-weight: 600;
+._padding-top {
+    padding-top: 100px !important;
 }
 
 .hovered {
@@ -304,5 +383,6 @@ export default {
 .hide {
   display: none;
 }
+
 
 </style>
