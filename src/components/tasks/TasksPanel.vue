@@ -1,61 +1,107 @@
 <template><div>
 
-   <pre>{{stories}}</pre>
+  <div style="display: flex" >
 
-  <drag-drop
-    :dropzones="dropGroups"
-    :dropzonesTitle="'XYZ Company Teams'"
-    :originalData="stories"
-    :originalTitle="'Tasks to be distributed'"
-    :inPlace="true"
-    :enableSave="true"
-    :enableCancel="true"
-    @dropInOriginalBucket="originalBucketDropEvent"
-    @dropInDestinationBucket="destinationBucketDropEvent"
-    @save="save"
-    @cancel="cancel">
+      <div class="list__task-panel js-cell"></div>
+      <div class="list__task-panel js-cell"></div>
+      <div class="list__task-panel js-cell"></div>
+      <div class="list__task-panel js-cell"></div>
 
-      <template #dd-card="{ cardData }">
-        <custom-task :data="cardData" @done="doneMarked"/>
-      </template>
-
-  </drag-drop>
-
-
-
-  <div class="hero">
-    <div class="wrapper">
-      <ul class="list">
-
-        <li class="list__caption">Planned</li>
-        <li class="list__caption">In dev</li>
-        <li class="list__caption">QA</li>
-        <li class="list__caption">Production</li>
-
-        <li class="list__cell js-cell">
-
-          <div v-for="(i) in [1, 2, 3]"
-               class="list__card js-card" draggable="true" :style="'margin-bottom:' + (i + 20)">
-               <div class="list__card-header">task {{i+1}}</div>
-               <div class="list__card-info">Task description</div>
-          </div>
-
-        </li>
-
-        <li class="list__cell js-cell"></li>
-        <li class="list__cell js-cell"></li>
-        <li class="list__cell js-cell"></li>
-
-      </ul>
-    </div>
   </div>
 
+  <div class="task__card js-card" draggable="true" id="t1" >
+       <div class="task__card-header">Task 1</div>
+       <div class="task__card-info">Task description</div>
+  </div>
+
+  <div class="task__card js-card" draggable="true" id="t1" >
+      <div class="task__card-header">Task 2</div>
+      <div class="task__card-info">Task description</div>
+  </div>
+
+
+<!--  <div class="hero">-->
+<!--    <div class="wrapper">-->
+<!--      <ul class="list">-->
+
+<!--        <li class="list__caption">Planned</li>-->
+<!--        <li class="list__caption">In dev</li>-->
+<!--        <li class="list__caption">QA</li>-->
+<!--        <li class="list__caption">Production</li>-->
+
+<!--        <li class="list__cell js-cell">-->
+
+<!--          <div v-for="(i) in [1, 2, 3]"-->
+<!--               class="list__card js-card" draggable="true" :style="'margin-bottom:' + (i + 20)">-->
+<!--               <div class="list__card-header">task {{i+1}}</div>-->
+<!--               <div class="list__card-info">Task description</div>-->
+<!--          </div>-->
+
+<!--        </li>-->
+
+<!--        <li class="list__cell js-cell"></li>-->
+<!--        <li class="list__cell js-cell"></li>-->
+<!--        <li class="list__cell js-cell"></li>-->
+
+<!--      </ul>-->
+<!--    </div>-->
+<!--  </div>-->
 
   <pre>{{taskItems}}</pre>
 
 </div></template>
 
 <script>
+
+const dragAndDrop = () => {
+
+    const cards  = document.querySelectorAll('.js-card');
+    const cells  = document.querySelectorAll('.js-cell');
+
+    const dragStart = function (e) {
+      console.log(e);
+      setTimeout(() => {
+        this.classList.add('hide');
+      }, 0);
+    };
+
+    const dragEnd = function () {
+      this.classList.remove('hide');
+    };
+
+    const dragOver = function (evt) {
+      evt.preventDefault();
+    };
+
+    const dragEnter = function (evt) {
+      evt.preventDefault();
+      this.classList.add('hovered');
+    };
+
+    const dragLeave = function () {
+      this.classList.remove('hovered');
+    };
+
+    const dragDrop = function () {
+      this.append(card);
+      this.classList.remove('hovered');
+    };
+
+    cells.forEach(cell => {
+      cell.addEventListener('dragover', dragOver);
+      cell.addEventListener('dragenter', dragEnter);
+      cell.addEventListener('dragleave', dragLeave);
+      cell.addEventListener('drop', dragDrop);
+    });
+
+
+    cards.forEach(cell => {
+        cell.addEventListener('dragstart', dragStart);
+        cell.addEventListener('dragend'  , dragEnd);
+    });
+
+
+};
 
 import DragDrop from 'vue-drag-n-drop'
 import CustomTask from '@/components/tasks/CustomTask'
@@ -66,57 +112,7 @@ export default {
 
   data() {
     return {
-      stories: [
-          {
-            title: 'Strategy 101',
-            description: 'Create a draft of business plan',
-            time: '3 days',
-            done: false,
-            id : 1,
-          },
-          {
-            title: 'Strategy 102',
-            description: 'Finalize the plan',
-            time: '4 days',
-            done: false,
-            id : 2,
-          },
-          {
-            title: 'Tech diagram',
-            description: 'Draw the tech data',
-            time: '4 days',
-            done: false,
-            id : 3,
-          },
-          {
-            title: 'Place Holder',
-            description: 'Data Science Team',
-            time: '5 days',
-            done: false,
-            id : 4,
-          }
-      ],
 
-      dropGroups: [
-        {
-          name: 'Новая задача',
-          children: []
-        },
-        {
-          name: 'В работе',
-          children: []
-        },
-        {
-          name: 'На проверке',
-          children: []
-        },
-
-        {
-          name: 'Выполнена',
-          children: []
-        }
-
-      ]
     }
   },
 
@@ -133,6 +129,10 @@ export default {
 
 
   methods : {
+
+      dragRun() {
+        dragAndDrop();
+      },
 
       save(received){
         console.log("Received:", received)
@@ -155,56 +155,10 @@ export default {
       cancel() {
         console.log("Cancel hit");
       },
-
   },
 
   mounted () {
-
-    // const dragAndDrop = () => {
-    //
-    //       const card = document.querySelector('.js-card');
-    //       const cells = document.querySelectorAll('.js-cell');
-    //
-    //       const dragStart = function () {
-    //         setTimeout(() => {
-    //           this.classList.add('hide');
-    //         }, 0);
-    //       };
-    //
-    //       const dragEnd = function () {
-    //         this.classList.remove('hide');
-    //       };
-    //
-    //       const dragOver = function (evt) {
-    //         evt.preventDefault();
-    //       };
-    //
-    //       const dragEnter = function (evt) {
-    //         evt.preventDefault();
-    //         this.classList.add('hovered');
-    //       };
-    //
-    //       const dragLeave = function () {
-    //         this.classList.remove('hovered');
-    //       };
-    //
-    //       const dragDrop = function () {
-    //         this.append(card);
-    //         this.classList.remove('hovered');
-    //       };
-    //
-    //       cells.forEach(cell => {
-    //         cell.addEventListener('dragover', dragOver);
-    //         cell.addEventListener('dragenter', dragEnter);
-    //         cell.addEventListener('dragleave', dragLeave);
-    //         cell.addEventListener('drop', dragDrop);
-    //       });
-    //
-    //       card.addEventListener('dragstart', dragStart);
-    //       card.addEventListener('dragend', dragEnd);
-    // };
-
-    // dragAndDrop();
+    this.dragRun()
   }
 }
 </script>
@@ -212,13 +166,54 @@ export default {
 <style scoped>
 
 
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+/*#app {*/
+/*    font-family: 'Avenir', Helvetica, Arial, sans-serif;*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    -moz-osx-font-smoothing: grayscale;*/
+/*    text-align: center;*/
+/*    color: #2c3e50;*/
+/*    margin-top: 60px;*/
+/*}*/
+
+
+.list__task-panel {
+    flex-basis: calc(25% - 5px);
+    margin: 5px;
+    min-height: 250px;
+    list-style: none;
+    box-shadow: 0px 0px 7px 5px rgba(0,0,0,0.2);
+    background-color:#f0f2f5;;
+}
+
+
+.task__card {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    text-align: center;
+    min-height: 120px;
+    cursor: all-scroll;
+}
+
+.task__card-header {
+  text-transform: lowercase;
+  font-weight: bold;
+  padding: 12px 20px;
+  background-color: #0747a6;
+  color: white;
+}
+
+.task__card-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eff5ff;
+  flex-grow: 1;
+  padding: 12px 20px;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 600;
 }
 
 /**, *::before, *::after {*/
@@ -233,6 +228,10 @@ export default {
 /*  line-height: normal;*/
 /*  font-weight: 400;*/
 /*}*/
+
+
+
+
 
 .hero {
   width: 100%;
