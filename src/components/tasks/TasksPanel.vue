@@ -18,40 +18,36 @@
         </th>
       </tr>
 
-      <tr>
+      <tr> <template v-for="(tasks, stateKey) in tasksStatusList">
 
-        <template v-for="(stateName, key) in taskStateList">
-          <th :key="stateName">
-            <div class="task-panel__list"
-                 @dragenter="dragEnter"
-                 @dragleave="dragLeave"
-                 @drop="dragDrop($event)"
-                 @dragover="dragOver($event)"
-                 :data-status-name="stateName"
-                 :data-status-id="key">
+          <th :key="stateKey">
+              <div class="task-panel__list"
+                   @dragenter="dragEnter"
+                   @dragleave="dragLeave"
+                   @drop="dragDrop($event)"
+                   @dragover="dragOver($event)"
+                   :data-status-id="stateKey">
 
-              <!----- task list ------>
-              <template v-for="(item) in taskList">
-                <div v-if="item.task_status == key"
-                     class="task__card js-card"
-                     draggable="true"
-                     :id="'task-' + item.task_id"
-                     :data-task-id="item.task_id"
-                     @dragstart="dragStart($event)"
-                     @dragend="dragEnd($event)">
-                     <TaskItemInfo :task="item"/>
-                </div>
-              </template>
-              <!----- task list ------>
+                   <!----- task list ------>
+                   <template v-for="(item) in tasks" >
+                        <div class="task__card js-card"
+                             draggable="true"  :key="item.task_id"
+                             :id="'task-' + item.task_id"
+                             :data-task-id="item.task_id"
+                             @dragstart="dragStart($event)"
+                             @dragend="dragEnd($event)">
 
-            </div>
+                             <TaskItemInfo :task="item" @delete_task="deleteTask"/>
+
+                        </div>
+                    </template>
+                    <!----- task list ------>
+              </div><!--- ./task-panel__list --->
           </th>
-        </template>
 
-      </tr>
+      </template></tr>
+
     </table>
-
-<!--    <pre>{{taskList}}</pre>-->
 
   </div>
 </template>
@@ -63,7 +59,7 @@ import TaskItemInfo from '@/components/tasks/TaskItemInfo';
 export default {
 
   name: "TasksPanel",
-  props: ['task_items'],
+  props: ['task_items', 'project_id'],
 
   data() {
 
@@ -75,35 +71,22 @@ export default {
       tasks   : [],
       dropZoneClass : 'task-panel__list',
 
-      // statusList: {
-      //   'start': [],
-      //   'progress': [],
-      //   'checked': [],
-      //   'done': [],
-      // },
-
-      taskStateList: {
-        0: 'start',
-        1: 'progress',
-        2: 'checked',
-        3: 'done',
+      tasksStateList: {
+        0: [],
+        1: [],
+        2: [],
+        3: [],
       },
     }
   },
 
   computed: {
 
-    taskList() {
-      this.tasks = this.task_items;
-      for (let i in this.tasks)
-        if(!this.tasks[i].task_status)
-          this.tasks[i].task_status = 0;
-      return this.tasks;
+    tasksStatusList() {
+        this.tasks = this.task_items;
+        return this.tasksStatusRender (this.tasks)
     },
 
-    // getStatusList() {
-    //   return this.getStatusRender ()
-    // }
   },
 
   components: {
@@ -112,52 +95,35 @@ export default {
 
   methods: {
 
-    taskStatusesClear() {
-      let list = {
-        'start': [],
-        'progress': [],
-        'checked': [],
-        'done': [],
-      };
-      this.statusList = list;
+    statusesClear() {
+        this.tasksStateList = {
+            0: [], 1: [], 2: [], 3: [],
+        };
     },
 
-    getStatusRender() {
-      this.taskStatusesClear();
-      const tasks = this.task_items
-      for (let i in tasks) {
-        let task = tasks[i];
-        let fname = 'start';
-        switch (task.task_status) {
-          case 1 :
-            fname = 'progress';
-            break;
-          case 2 :
-            fname = 'checked';
-            break;
-          case 3 :
-            fname = 'done';
-            break;
-          // default : break;
+    tasksStatusRender(tasks) {
+        this.statusesClear();
+        for (let i in tasks) {
+            let task  = tasks[i];
+            const status = (task.task_status) ? task.task_status : 0;
+            this.tasksStateList[status].push(task);
         }
-        this.statusList[fname].push(task);
-      }
-      return this.statusList;
+        return this.tasksStateList;
     },
 
     changeTaskStatus(statusId) {
-      let tasks = this.taskList;
-      for (let i in tasks) {
-          if (tasks[i].task_id != this.selectTaskId)
-            continue;
+        let tasks = this.tasks;
+        for (let i in tasks) {
+            if (tasks[i].task_id != this.selectTaskId)
+              continue;
 
-          let task = tasks[i];
-          tasks[i].task_status = statusId;
-          this.updateItem(task)
-          // this.getStatusRender();
-          return true;
-      }
-      return false;
+            let task = tasks[i];
+            tasks[i].task_status = statusId;
+            this.updateItem(task)
+            // this.getStatusRender();
+            return true;
+        }
+        return false;
     },
 
     // Обновить задачу
@@ -171,13 +137,25 @@ export default {
         return response;
     },
 
+    async deleteTask(taskId) {
+      const url = '/save/task-board/' + taskId;
+      const response = await this.send(url, 'delete');
+      for (let i in this.tasks) {
+         if(this.tasks[i].task_id == taskId) {
+             delete this.tasks[i];
+             return true;
+         }
+      }
+    },
+
     checkDropZoneClass(elem) {
       const dropZoneClass = this.dropZoneClass;
       if(elem.classList.contains(dropZoneClass))
         return elem;
-
-      let parent = elem.parentElement;
-      return this.checkDropZoneClass(parent);
+      else  {
+        let parent = elem.parentElement;
+        return this.checkDropZoneClass(parent);
+      }
     },
 
     ///////////////////////////////////////
@@ -207,6 +185,7 @@ export default {
     // Бросаем елемент над dropzone
     dragDrop(event) {
       let elem = this.checkDropZoneClass(event.target);
+      console.log(elem);
       // const statusName = elem.dataset.statusName;
       const statusId = parseInt(elem.dataset.statusId);
       this.changeTaskStatus(statusId);

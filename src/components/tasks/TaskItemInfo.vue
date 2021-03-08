@@ -7,9 +7,17 @@
       <div style="text-align: justify; padding-left:6px; border-left: 0px #0747a6 solid">{{ item.short_desc }}</div>
     </div>
 
-    <a  @click="contentShow = !contentShow" class="btn-style"
-       style="border: 1px solid rgb(176, 197, 222); width: 95px; height: 27px; padding: 0px; display: block; cursor: pointer;
+    <div style="display: flex">
+
+      <a  @click="contentShow = !contentShow" class="btn-style"
+          style="border: 1px solid rgb(176, 197, 222); width: 50%; height: 27px; padding: 0px; display: block; cursor: pointer;
               margin: 3px; text-align: center; font-style: italic; font-size: 11px;">Подробнее </a>
+
+      <a  @click="deleteItem()" class="btn-style"
+          style="border: 1px solid rgb(176, 197, 222); width: 50%; height: 27px; padding: 0px; display: block; cursor: pointer;
+              margin: 3px; text-align: center; font-style: italic; font-size: 11px;"> Удалить </a>
+    </div>
+
 
     <div v-if="contentShow" >
 
@@ -92,6 +100,13 @@ export default {
     item() {
       return this.task;
     }
+  },
+
+  methods : {
+    deleteItem() {
+        const taskId = this.item.task_id;
+        this.$emit('delete_task', taskId);
+    },
   }
 
 }
