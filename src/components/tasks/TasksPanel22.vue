@@ -2,7 +2,6 @@
   <div>
 
     <table class="task-items-table">
-
       <tr>
         <th>
           <div class="task-panel__caption" style="border-bottom:orange 2px solid;">Назначено</div>
@@ -17,7 +16,6 @@
           <div class="task-panel__caption" style="border-bottom:green 2px solid;">Выполнено</div>
         </th>
       </tr>
-
       <tr>
 
         <template v-for="(stateName, key) in taskStateList">
@@ -51,7 +49,7 @@
       </tr>
     </table>
 
-<!--    <pre>{{taskList}}</pre>-->
+    <pre>{{taskList}}</pre>
 
   </div>
 </template>
@@ -95,9 +93,11 @@ export default {
 
     taskList() {
       this.tasks = this.task_items;
+
       for (let i in this.tasks)
         if(!this.tasks[i].task_status)
           this.tasks[i].task_status = 0;
+
       return this.tasks;
     },
 
