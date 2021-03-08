@@ -22,13 +22,39 @@
 
         <div class="col-md-11 hidden-sm hidden-xs my__visible-top-menu" >
              <div class="mainmenu" >
+
                 <ul id="navigation" >
                     <template v-for="(menu) in topMenu" >
                         <router-link tag="li" :to="menu.url" active-class="active"  >
                              <a style="font-size: 14px;">{{ menu.title }}</a>
                         </router-link>
                     </template>
+
+                    <li><a> Сервисы <i class="fa fa-angle-down"></i></a>
+                      <ul class="submenu">
+                        <li><a href="http://bolderfest.ru/pg-admin-interface/v2"
+                               target="_blank"> Web Postgres</a></li>
+
+                        <li><a href="http://bolderfest.ru/faximile/front/app"
+                               target="_blank"> Faximile </a></li>
+
+                        <li><a href="http://bolderfest.ru/pg-admin-interface/v2"
+                               target="_blank"> Web Postgres</a></li>
+
+                        <li><a href="http://bolderfest.ru/FindText"
+                               target="_blank"> Find Text</a></li>
+
+                        <li><a href="http://bolderfest.ru/iac-dashboard"
+                               target="_blank"> Widget Dashboard</a></li>
+
+                        <li><a href="http://bolderfest.ru/basisportal/web"
+                               target="_blank"> Children Portal</a></li>
+
+                      </ul>
+                    </li>
+
                 </ul>
+
              </div>
         </div>
 
