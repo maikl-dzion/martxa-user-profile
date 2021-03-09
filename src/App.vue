@@ -27,6 +27,14 @@
        <router-view></router-view>
     </transition>
 
+    <!--- Анимированные button (примеры) --->
+<!--    <div class="span-shadow">-->
+<!--      <button class="btn-hover-effect square-out"  >ЭФФЕКТ 1</button>-->
+<!--      <button class="btn-hover-effect shadow-live" >ЭФФЕКТ 2</button>-->
+<!--      <button class="btn-hover-effect square-in"   >ЭФФЕКТ 3</button>-->
+<!--      <button class="btn-hover-effect square-list" >ЭФФЕКТ 4</button>-->
+<!--    </div>-->
+
   </div>
 </template>
 
@@ -75,6 +83,7 @@ export default {
   opacity: 0.9;
 }
 
+
 /* Анимации появления и исчезновения могут иметь */
 /* различные продолжительности и динамику.       */
 /*.fade-appe-enter-active {*/
@@ -87,5 +96,41 @@ export default {
 /*  transform: translateX(10px);*/
 /*  opacity: 0;*/
 /*}*/
+
+</style>
+
+
+<style>
+
+  .span-shadow .square-out {background:#3A2F28}
+  .span-shadow .square-out:hover {
+    box-shadow: 0 0 0 2px white, 0 0 0 4px #3A2F28;
+  }
+
+  .span-shadow .shadow-live {background:#C1F1E4}
+  .span-shadow .shadow-live:hover {
+    box-shadow: 200px 0 0 0 rgba(0,0,0,.3) inset;
+  }
+
+  .span-shadow .square-in {background:#D2973D}
+  .span-shadow .square-in:hover {
+    box-shadow: 0 0 0 2px #D2973D inset, 0 0 0 4px white inset;
+  }
+
+  .span-shadow .square-list {
+    background: #C76637;
+    position: relative;
+    top: 0;
+    left: 0;
+  }
+  .span-shadow .square-list:hover {
+    box-shadow: 2px 2px white, 4px 4px #C76637;
+    top: -4px;
+    left: -4px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
 
 </style>

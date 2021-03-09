@@ -1,6 +1,7 @@
 <template>
 <div class="faq-form form-style"
      style="border:1px gainsboro solid; margin-bottom:20px; padding:15px; box-shadow: 6px 6px #989898, 12px 12px #6c6666;">
+
      <form id="user-general-info" @submit.prevent="" ><div class="row">
 
           <div class="col-xs-12">
@@ -134,7 +135,9 @@ export default {
 
   /////////////////
   created() {
-    this.getMenuCategories();
+     this.getMenuCategories();
+     if(this.board_id)
+       this.getItem (this.board_id)
   },
 
   ////////////////
@@ -161,12 +164,11 @@ export default {
     },
 
     // Получить 1 объявление
-    getItem(itemId) {
-        this.preloaderState = true
-        const url = '/bulletin-board/' + itemId;
+    getItem (itemId) {
+        const url = '/bulletin-board/item/' + itemId
         this.send(url).then(response => {
-          this.saveType = 'edit';
-          this.itemModel = response;
+          this.saveType = 'edit'
+          this.itemModel = response
         })
     },
 
@@ -203,14 +205,14 @@ export default {
 
     // Обновить объявление
     updateItem() {
-        const data = this.itemModel
+        const data   = this.itemModel
         const itemId = data.board_id
-        this.preloaderState = true;
+        this.setPreloader(true)
         const url = '/save/bulletin-board/' + itemId
         this.send(url, 'put', data).then(response => {
-          this.preloaderState = false
-          this.getBoardItems()
-          this.responseStatusHandle(response, 'Обявление успешно обновлено', 'Не удалось обновить')
+            this.setPreloader(false)
+            this.getBoardItems()
+            this.responseStatusHandle(response, 'Обявление успешно обновлено', 'Не удалось обновить')
         })
     },
 
