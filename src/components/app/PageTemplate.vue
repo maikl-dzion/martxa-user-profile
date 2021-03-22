@@ -2,8 +2,8 @@
   <div>
     <HeaderPanel/>
 
-    <div class="container" >
-       <div style="height: 40px; background: none"></div>
+    <div class="container"  style="border:0px red solid; margin-bottom: 30px; padding:2px; ">
+       <div style="height: 10px; background: none"></div>
        <slot></slot>
     </div>
 
