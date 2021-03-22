@@ -9,6 +9,8 @@ const user = {
     users  : [],
     userFiles : [],
     errors : [],
+    // selectUserId : 0,
+    // selectUser   : {},
   },
 
   mutations: {

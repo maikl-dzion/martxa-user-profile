@@ -1,8 +1,8 @@
 <template>
 <div>
 
-  <div class="author-wrap" style="border:1px gainsboro solid; padding:4px" >
-    <div class="author-img" style="border-bottom:1px gainsboro solid">
+  <div class="author-wrap" style="border:0px gainsboro solid; padding:0px; background: inherit" >
+    <div class="author-img" style="border-bottom:0px gainsboro solid">
         <img  :src="avatar" alt="" style="border-radius: 0px; width:100%;">
     </div>
 

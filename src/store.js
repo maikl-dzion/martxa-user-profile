@@ -10,7 +10,7 @@ export default new Vuex.Store({
      preloder : false,
      preloaderMessage : 'Подождите, идет запрос к серверу',
 
-     _alertColor   : 'green',
+     _alertColor   : 'lime',
      _alertMessage : '',
      _alertJson    : {},
   },
@@ -25,8 +25,8 @@ export default new Vuex.Store({
 
     setAlertInfo(context, data ) {
 
-        const color = (data.color) ? data.color : 'green'
-        const timer = (data.timer) ? data.timer : 10000;
+        const color = (data.color) ? data.color : 'lime'
+        const timer = (data.timer) ? data.timer : 20000;
         const json  = (data.json)  ? data.json  : {};
 
         context.state._alertColor   = color
@@ -34,7 +34,7 @@ export default new Vuex.Store({
         context.state._alertJson    = json
 
         setTimeout(() => {
-          context.state._alertColor   = 'green';
+          context.state._alertColor   = 'lime';
           context.state._alertMessage = '';
           context.state._alertJson    = {};
         }, timer)
