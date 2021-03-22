@@ -16,7 +16,7 @@
                 <ul>
                   <li><router-link tag="a" to="/" >На главную</router-link></li>
                   <li><span style="color:white" >|</span></li>
-                  <li><router-link tag="a" to="/page/register" >Регистрация</router-link></li>
+                  <li><router-link tag="a" to="/user-register" >Регистрация</router-link></li>
                   <li><span style="color:white" >|</span></li>
                   <template v-if="userId" >
                     <li><a @click="logout" href="#" >Выход</a></li>
@@ -26,7 +26,7 @@
                     </div> </li>
                   </template>
                   <template v-else >
-                    <li><router-link tag="a" to="/page/auth" >Войти</router-link></li>
+                    <li><router-link tag="a" to="/auth" >Войти</router-link></li>
                   </template>
                 </ul>
             </div>
@@ -57,7 +57,7 @@ export default {
         this.storeRemove('user_id')
         this.setToken(null)
         this.fetchUser(0)
-        this.$router.push('/page/auth')
+        this.$router.push('/auth')
     }
 
   },

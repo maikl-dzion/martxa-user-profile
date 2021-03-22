@@ -6,7 +6,7 @@
           <div class="col-md-3 col-sm-6 col-xs-12  col wow fadeInUp" data-wow-delay=".1s">
             <div class="footer-widget footer-logo">
               <h1>Bolderfest.ru</h1>
-              <p>Приветствум Вас на сайте</p>
+              <p>Приветствуем Вас на сайте</p>
               <ul>
                 <li><i class="fa fa-phone"></i> +7 906 248 62 09</li>
                 <li><i class="fa fa-envelope"></i> dzion67@mail.ru</li>

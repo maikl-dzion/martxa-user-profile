@@ -1,7 +1,7 @@
-import InfoMessage from '../components/app/InfoMessage'
-import Preloading from '../components/app/Preloading'
-import PageTemplate from '../components/app/PageTemplate'
-import PreViewJson from '../components/app/PreViewJson'
+import InfoMessage  from '@/components/app/InfoMessage'
+import Preloading   from '@/components/app/Preloading'
+import PageTemplate from '@/components/app/PageTemplate'
+import PreViewJson  from '@/components/app/PreViewJson'
 import { mapGetters, mapActions } from 'vuex'
 
 const Plugins = {
@@ -24,12 +24,6 @@ const Plugins = {
           rootPath  : '',
           usersList : [],
       }},
-
-      // created () {
-      //     this.setStoreUserInfo();
-      //     this.getRootFilesPath();
-      //     this.fetchUsers();
-      // },
 
       computed : {
         ...mapGetters([
@@ -62,22 +56,24 @@ const Plugins = {
         },
 
         setStoreUserInfo () {
+
             this.userId = this.store('user_id')
             const route = this.$router.currentRoute
             if(route.name == 'user-register' || route.name == 'home')
               return true;
 
             if (!this.userId)
-              this.$router.push({ name : 'auth'})
+              this.$router.push('/auth')
 
             this.fetchUser(this.userId);
             this.userName = this.store('user_name')
+
         },
 
         getCurrentUserInfo () {
             this.userId = this.store('user_id')
             if (!this.userId) {
-              this.$router.push('/page/auth')
+              this.$router.push('/auth')
             }
             this.fetchUser(this.userId);
             this.userName = this.store('user_name')
@@ -130,6 +126,19 @@ const Plugins = {
         respInfoClear() {
             this.responseMessage = ''
             this.responseColor   = ''
+        },
+
+        htmlElemsRender (elems, fn = null) {
+          let results = []
+          for (let i in elems) {
+            let elem = elems[i]
+            if (fn) {
+              let res = fn(elem)
+              if (res == -1) return true
+              results.push(res)
+            }
+          }
+          return results
         },
 
       } // --- Methods

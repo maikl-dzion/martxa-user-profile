@@ -57,6 +57,14 @@ const user = {
          context.state.userId = userId
       },
 
+      setUserInfo(context, data) {
+         context.commit('setUser', data)
+      },
+
+      clearUserInfo(context) {
+          context.state.userId = 0
+          context.state.user = {}
+      },
   },
 
   getters: {

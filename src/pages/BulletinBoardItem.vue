@@ -5,7 +5,7 @@
       <div class="container">
 
         <router-link
-          tag="a" to="/page/bulletin-board" class="btn-style"
+          tag="a" to="/bulletin-board" class="btn-style"
           style="border:1px #b0c5de solid; width:180px; height: 32px; padding:2px; display: block;
                  margin:0px 0px 0px 0px; text-align:center; font-style: italic; font-size: 11px; position: absolute"
         > Вернуться в каталог

@@ -60,7 +60,7 @@
 
                     <div>Категория : {{ item.cat_name }}</div>
                     <h3>
-                      <router-link tag="a" :to="'/page/bulletin-board/item/' + item.board_id"  >
+                      <router-link tag="a" :to="'/bulletin-board/item/' + item.board_id"  >
                         {{ item.title }}
                       </router-link>
                     </h3>
@@ -81,7 +81,7 @@
                     <div style="display: flex">
 
                       <router-link
-                        tag="a" :to="'/page/bulletin-board/item/' + item.board_id" class="btn-style"
+                        tag="a" :to="'/bulletin-board/item/' + item.board_id" class="btn-style"
                         style="border:1px #b0c5de solid; width:180px; height: 32px; padding:2px; display: block;
                                           margin:3px; text-align:center; font-style: italic; font-size: 11px; "
                       > Подробнее

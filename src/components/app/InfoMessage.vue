@@ -1,12 +1,11 @@
 <template>
-<div>
-  <div v-if="getMessage" class="blog-details-content" style="max-width:30%;">
+<div v-if="getMessage"
+    class="blog-details-content" style="max-width:30%;">
     <blockquote
-      :style="'border-radius: 0px; padding: 6px; background:' + getColor " >
-        {{getMessage}}
-        <slot></slot>
+      :style="'text-align:center; border-radius: 0px; padding: 6px 6px 6px 12px; background:' + getColor">
+          <div v-html="getMessage" ></div>
+          <slot></slot>
       </blockquote>
-  </div>
 </div>
 </template>
 
@@ -19,9 +18,9 @@ export default {
         return this.message
      },
 
-    getColor() {
-      return this.color
-    }
+     getColor() {
+        return this.color
+     }
   }
 
 }

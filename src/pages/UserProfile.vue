@@ -59,22 +59,12 @@
 
                  <div>
 
-<!--                   <pre-view-json :items="fileAlbums"/>-->
-
                    <div class="row">
                      <div class="col-md-12 col-sm-6 col-xs-12 col">
                        <div class="footer-widget instagram-wrap">
 
                          <MediaManager :files="userFiles"
                                        :albums="fileAlbums"/>
-
-<!--                         <ul><li v-for="(file) in userFiles" style="width:150px; border:1px gainsboro solid" >-->
-<!--                             <a href="#" :key="file.file_id">-->
-<!--                                 <img :src="rootPath + file.path" class="img-preview" style="width:100%;">-->
-<!--                             </a>-->
-<!--                             <div><button @click="deleteFile(file.file_id)" class="btn-style" style="width: 100%; border:0px;" >удалить</button></div>-->
-<!--                         </li></ul>-->
-
                        </div>
                      </div>
                    </div>
@@ -144,9 +134,7 @@
                 <!---  ./ Изменение пароля  --->
               </template>
               <template v-else-if="tab == 'user_info'">
-                <!---  Основная информация о пользователе --->
                 <UserGeneralInfo/>
-                <!--- ./ Основная информация о пользователе --->
               </template>
               <template v-else>
                    в разработке

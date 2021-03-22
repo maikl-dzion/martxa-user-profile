@@ -16,49 +16,53 @@ export default new Router({
     },
 
     {
-      path: '/page/auth',
+      path: '/auth',
       name : 'auth',
       component: () => import('./pages/Auth')
     },
 
     {
-      path : '/page/users-list',
-      component: () => import('./pages/UsersList')
-    },
-
-    {
-      path: '/page/register',
+      path: '/user-register',
       name : 'user-register',
       component: () => import('./pages/UserRegister')
     },
 
     {
-      path: '/page/bulletin-board',
+      path: '/user-profile',
+      name : 'user-profile',
+      component: () => import('./pages/UserProfile')
+    },
+
+
+    {
+      path : '/users-list',
+      component: () => import('./pages/UsersList')
+    },
+
+
+    {
+      path: '/bulletin-board',
       component: () => import('./pages/BulletinBoardList')
     },
 
     {
-      path: '/page/bulletin-board/item/:item_id',
+      path: '/bulletin-board/item/:item_id',
       component: () => import('./pages/BulletinBoardItem')
     },
 
     {
-      path: '/page/task-board',
+      path: '/task-board',
       component: () => import('./pages/TaskBoard')
     },
 
-    {
-      path: '/page/profile',
-      component: () => import('./pages/UserProfile')
-    },
 
     {
-      path: '/page/admin-panel',
+      path: '/admin-panel',
       component: () => import('./pages/AdminPanel')
     },
 
     {
-      path: '/page/tests',
+      path: '/tests',
       component: () => import('./pages/TestsPanel')
     },
   ]
