@@ -1,134 +1,268 @@
 <template>
   <page-template>
-    <section class="blog-area1 ptb-1403 bg-3" style="border: 0px red solid">
-      <div class="container-fluid" style="border: 0px green solid">
-        <div class="row" style="border: 0px blue solid">
 
-          <div class="col-md-9 col-xs-12">
-            <div class="row">
-              <template v-for="(user) in getUsers">
-                <div class="col-sm-4 col-xs-12 col">
-                  <div class="blog-wrap mb-30">
+    <!-- blog-details-area start -->
+    <section class="blog-details-area1 ptb-101" style="border:0px red solid; ">
 
-                    <div class="blog-img">
-                      <img v-if="user.photo" :src="user.photo" style="width: 255px; height:255px;">
-                      <img v-else :src="assetsUrl + '/images/user-not-photo.jpg'" style="width: 255px; height:255px;">
+      <div style="border:0px red solid;">
+
+        <h3 class="sidebar-title" style="background: #296dc1; padding: 15px; color:white;">Список пользователей</h3>
+
+        <div class="row" style="background: #296dc1; padding: 0px; margin: 0px;">
+
+<!--          <pre>{{getUsers}}</pre>-->
+
+          <!--- ЛЕВАЯ ПАНЕЛЬ ---->
+          <div class="col-md-6 col-sm-6 col-xs-12" style="border:0px orange solid; padding:4px 10px 10px 10px" >
+            <aside class="left-sidebar" style="padding: 0px" >
+
+              <div class="mb-20 about-wrap user-menu user-profile-menu">
+                <ul><li v-for="(user) in getUsers" :key="user.user_id" >
+
+                    <div style="display: flex; margin-top: 20px;">
+                        <img :src="user.avatar" style="width:70px; margin-right: 2px;">
+                        <div @click="selectedUser($event, user)" class="user-list-card" style="width:100%; border: 1px white solid" >
+                            <div>{{user.username}}</div>
+                            <div>{{user.role_name}}</div>
+                        </div>
                     </div>
 
-                    <div class="blog-content">
-
-                      <div class="blog-meta">
-                        <ul>
-                          <li><a href="#"><i class="fa fa-user"></i> {{ user.login }}</a></li>
-                          <li><a href="#"><i class="fa fa-comment"></i> 5 Comment</a></li>
-                          <li><a href="#"><i class="fa fa-heart"></i> {{ user.phone }}</a></li>
-                        </ul>
-                      </div>
-
-                      <h3><a href="blog.html">{{ user.name }}</a></h3>
-                      <p>{{ user.note }}</p>
-                      <a href="blog.html" class="btn-style">Подробнее</a>
-
-                    </div>
-                  </div>
-                </div>
-              </template>
-            </div>
-          </div>
-
-          <div class="col-md-3 col-sm-6 col-xs-12 col">
-            <aside class="right-sidebar1">
-              <div class="search-sidebar mb-30">
-                <form action="#">
-                  <input type="text" name="search" placeholder="Search Here">
-                  <button type="button" name="button"><i class="fa fa-search"></i></button>
-                </form>
-              </div>
-
-              <div class="category-wrap mb-30">
-                <h3 class="sidebar-title">Category</h3>
-                <ul>
-                  <li><a href="#">Investments</a></li>
-                  <li><a href="#">Budgets</a></li>
-                  <li><a href="#">Accounting</a></li>
-                  <li><a href="#">Portfolios</a></li>
-                  <li><a href="#">Wealth</a></li>
-                  <li><a href="#">Business</a></li>
-                  <li><a href="#">Corporate</a></li>
-                </ul>
-              </div>
-              <div class="related-post mb-30">
-
-              </div>
-
-              <div class="archive-wrap mb-30">
-
-              </div>
-
-              <div class="tags-wrap">
-                <h3 class="sidebar-title">Post Tags</h3>
-                <ul>
-                  <li><a href="#">html</a></li>
-                  <li><a href="#">css</a></li>
-                  <li><a href="#">javascript</a></li>
-                  <li><a href="#">business</a></li>
-                  <li><a href="#">corporate</a></li>
-                  <li><a href="#">php</a></li>
-                  <li><a href="#">dolor</a></li>
-                  <li><a href="#">amet</a></li>
-                </ul>
+                </li></ul>
               </div>
 
             </aside>
+          </div>
+          <!--- ПРАВАЯ ПАНЕЛЬ ---->
+          <div class="col-md-6 col-sm-6 col-xs-12"
+               style="background: white; border: 1px #296dc1 solid; height: 100%" >
+              <div class="blog-details-wrap" style="padding-top:20px;" >
+
+                <template v-if="tab == 'users_list'">
+                  <UserInfoEditForm :user="selectUser"/>
+                </template>
+
+              </div>
           </div>
 
         </div>
       </div>
     </section>
+    <!-- blog-details-area end -->
 
   </page-template>
 </template>
 
 <script>
-import {mapGetters, mapActions } from "vuex";
+
+import { mapGetters, mapActions } from 'vuex'
+
+import UserInfoEditForm from '@/components/admin/UserInfoEditForm'
+import UserAvatar from '@/components/user/UserAvatar'
+import MultiFilesUploader from '@/components/MultiFilesUploader'
+import MediaManager from '@/components/app/MediaManager'
 
 export default {
-  name: "UsersList",
-  data() {
-    return {
-    }
+
+  data: () => ({
+    tab: 'users_list',
+    emailVerifyCode: null,
+    emailVerifyState: false,
+    phoneVerifyState: false,
+    newPassword: {
+      password: '',
+      repeat_pwd: ''
+    },
+    userFiles : [],
+    usersList : [],
+    fileAlbums: {},
+    selectUser : {},
+  }),
+
+  components: {
+    UserInfoEditForm,
+    MultiFilesUploader,
+    UserAvatar,
+    MediaManager
   },
 
-  computed : {
-
-     getUsersInfo() {
-         for(let key in this.getUsers) {
-             let user = this.getUsers[key];
-             let userId = user.user_id
-             this.getUserAvatar(userId).then(avatar => {
-                 this.getUsers[key].photo = avatar
-             })
-         }
-     },
-
+  created () {
+    this.getCurrentUserInfo()
+    this.getRootFilesPath()
+    this.fetchUsers()
   },
+
+  mounted () {
+    this.getUserFiles()
+    // this.loadingUsersAvatar();
+  },
+
 
   methods: {
 
-    async getUserAvatar(userId) {
-        const apiUrl = '/user/get-avatar/' + userId
-        const response = await this.send(apiUrl)
-        let avatar = '/assets/images/user-not-photo.jpg'
-        if(response)
-          avatar = response
-        return avatar
+    ...mapActions([
+        'fetchUser',
+        'fetchUsers',
+        'setUserId',
+        'setPreloader',
+        'setAlertInfo',
+    ]),
+
+    filesLoaded (response) {
+      this.getUserFiles()
+      this.saveResponse(response, 'Файлы успешно загружены', 'Не удалось загрузить файлы')
     },
 
-  },
+    deleteFile (fileId) {
+      this.setPreloader(true)
+      const apiUrl = '/delete/file/' + fileId
+      this.send(apiUrl, 'delete').then(response => {
+        this.getUserFiles()
+        this.saveResponse(response, 'Файл удален', 'Файл не получилось удалить')
+      })
+    },
+
+    compareNewPassword () {
+      if (this.newPassword.password != this.newPassword.repeat_pwd) {
+        return 'Пароли не совпадают'
+      }
+      return ''
+    },
+
+    changePassword () {
+      if (!this.changePasswordValidate()) return false
+      const data = this.newPassword
+      const apiUrl = '/post/user/change-password/' + this.userId
+      this.setPreloader(true)
+      this.send(apiUrl, 'put', data).then(response => {
+        this.saveResponse(response, 'Пароль успешно изменен', 'Не удалось изменить пароль')
+      })
+    },
+
+    changePasswordValidate () {
+      if (!this.newPassword.password) {
+        return false
+      }
+      let message = this.compareNewPassword()
+      if (message) {
+        this.responseMessage = message
+        this.responseColor = 'red'
+        return false
+      }
+      this.respInfoClear()
+      return true
+    },
+
+    responseStatusHandle (response, successMessage = null, errorMessage = null, fn = null) {
+      const res = this.saveResponse(response, successMessage, errorMessage)
+      if (fn) fn(res)
+      return true
+    },
+
+    getUserFiles () {
+      const apiUrl = '/user/get-files/' + this.userId
+      this.send(apiUrl).then(response => {
+        this.userFiles = response
+        this.getFileAlbums(this.userFiles)
+      })
+    },
+
+    getFileAlbums (files) {
+      for (let i in files) {
+        const file = files[i]
+        if (file.folder_name) {
+          this.fileAlbums[file.folder_name] = file.folder_name
+        }
+      }
+    },
+
+    selectedUser(event, user){
+      const activeClass = 'user-menu-active';
+      let aMenuList = document.querySelectorAll('.user-profile-menu li div');
+      this.htmlElemsRender(aMenuList, (elem) => {
+        if(elem && elem.classList)
+          elem.classList.remove(activeClass)
+      });
+      let target = event.target;
+      const cl = target.classList.contains('user-list-card')
+      if(!cl) {
+        target = event.target.parentNode;
+      }
+      target.classList.add(activeClass);
+      this.selectUser = user;
+    },
+
+    async getUserAvatar(userId) {
+        const apiUrl = '/user/get-avatar/' + userId
+        const avatar = await this.send(apiUrl)
+        let avatarUrl = (avatar) ? avatar : '/assets/images/user-not-avatar.jpg';
+        return avatarUrl
+    },
+
+    async loadingUsersAvatar() {
+
+        for(let key in this.getUsers) {
+            let user = this.getUsers[key];
+            const avatar = await  this.getUserAvatar(user.user_id)
+            this.getUsers[key]['avatar'] = avatar
+        }
+    },
+
+  }
 
 }
 </script>
 
-<style scoped>
+<style>
+
+
+.input-label {
+  color: #296dc1;
+  font-style: italic;
+  border-bottom: 1px #296dc1 solid;
+  display: flex;
+}
+
+.user-profile-menu li {
+  border: 0px red solid;
+  padding: 0px !important;
+  list-style: none;
+}
+
+
+.user-profile-menu li a {
+  font-size: 13px;
+  font-weight: bold;
+  color:white;
+  cursor: pointer;
+  display: block;
+  text-decoration: none;
+  padding:10px;
+  width: 100%;
+}
+
+.user-profile-menu li a:hover {
+  /*border-bottom: 1px red solid;*/
+  color: orange;
+}
+
+.user-menu-active {
+  background: white;
+  color: black !important;
+}
+
+.about-wrap ul li:before {
+  display: none;
+  content: "";
+}
+
+.user-list-card  {
+   padding:5px;
+}
+
+.user-list-card div {
+   color:orange;
+}
 
 </style>
+
+

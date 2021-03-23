@@ -28,8 +28,8 @@ const Plugins = {
       computed : {
         ...mapGetters([
             'userInfo',
+            'getUserId',
             'getUsers',
-            'getUserId'
         ]),
       },
 
@@ -129,16 +129,29 @@ const Plugins = {
         },
 
         htmlElemsRender (elems, fn = null) {
-          let results = []
-          for (let i in elems) {
-            let elem = elems[i]
-            if (fn) {
-              let res = fn(elem)
-              if (res == -1) return true
-              results.push(res)
+            let results = []
+            for (let i in elems) {
+                let elem = elems[i]
+                if (fn) {
+                    let res = fn(elem, i)
+                    if (res == -1) return true
+                    results.push(res)
+                }
             }
-          }
-          return results
+            return results
+        },
+
+        forRender (items, fn = null) {
+            let results = []
+            for (let i in items) {
+                let item = items[i]
+                if (fn) {
+                  let res = fn(item, i)
+                  if (res == -1) return true
+                  results.push(res)
+                }
+            }
+            return results
         },
 
       } // --- Methods

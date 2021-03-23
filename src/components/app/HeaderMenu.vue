@@ -92,7 +92,7 @@ export default {
         { url: '/bulletin-board', title: 'Доска объявлений' },
         { url: '/task-board', title: 'Доска задач' },
         // {url: '/page/register', title: 'Регистрация'},
-        { url: '/admin-panel', title: 'Admin Page' },
+        { url: '/admin-panel', title: 'Admin Panel' },
         { url: '/tests', title: 'Tests' },
       ]
     }
