@@ -86,13 +86,12 @@ export default {
   data () {
     return {
       topMenu: [
-        // {url: '/', title: 'Главная'},
         { url: '/user-profile', title: 'Профиль' },
         { url: '/users-list', title: 'Пользователи' },
         { url: '/bulletin-board', title: 'Доска объявлений' },
         { url: '/task-board', title: 'Доска задач' },
-        // {url: '/page/register', title: 'Регистрация'},
         { url: '/admin-panel', title: 'Admin Panel' },
+        { url: '/train-service', title: 'Меню поездов' },
         { url: '/tests', title: 'Tests' },
       ]
     }

@@ -33,10 +33,15 @@ export default new Router({
       component: () => import('./pages/UserProfile')
     },
 
-
     {
       path : '/users-list',
       component: () => import('./pages/UsersList')
+    },
+
+    {
+      path: '/train-service',
+      name : 'train-service',
+      component: () => import('./pages/TrainService')
     },
 
 

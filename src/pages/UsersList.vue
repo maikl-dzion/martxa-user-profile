@@ -75,7 +75,7 @@
                                       <ul class="ul-info">
                                         <li class="li-info">
                                           <span class="title-info">Телефон : </span>
-                                          <span class="info">{{user.pnone}}</span>
+                                          <span class="info">{{user.phone}}</span>
                                         </li>
                                         <li class="li-info">
                                           <span class="title-info">Website : </span>
