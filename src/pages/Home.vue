@@ -5,7 +5,7 @@
 
       <div style="display: block">
 
-        <img src="/assets/images/fon/fon-6.jpg" alt="" style="position: relative; margin-bottom: 20px; width: 60%; float:left">
+        <img src="assets/images/fon/fon-6.jpg" alt="" style="position: relative; margin-bottom: 20px; width: 60%; float:left">
 
         <div class="universal_component_wrapper universal_component_wrapper_tablet_block"
              style="margin-left:20px; width: 38%; text-align: justify; float: right">
@@ -92,7 +92,7 @@
               нового.</p>
         </div>
 
-        <img src="/assets/images/fon/fon-11.jpg" style="width: 60%;position: relative; margin-bottom: 20px; margin-left: 20px; float: right">
+        <img src="assets/images/fon/fon-11.jpg" style="width: 60%;position: relative; margin-bottom: 20px; margin-left: 20px; float: right">
 
       </div><div style="clear: both"></div>
 
